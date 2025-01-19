@@ -1,5 +1,3 @@
----
-
 # **Project Structure Documentation**
 
 ## **1. Adapters**
