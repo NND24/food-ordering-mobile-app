@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/navigation_messages"
+        android:icon="@drawable/shortcut_messages_state"
+        app:labelVisibilityMode="labeled"
+        android:title="@string/nav_messages"/>
+    <item
+        android:id="@+id/navigation_orders"
+        android:icon="@drawable/shortcut_orders_state"
+        app:labelVisibilityMode="labeled"
+        android:title="@string/nav_orders" />
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/shortcut_home_state"
+        app:labelVisibilityMode="labeled"
+        android:title="@string/nav_home"/>
+    <item
+        android:id="@+id/navigation_favorites"
+        android:icon="@drawable/shortcut_favorites_state"
+        app:labelVisibilityMode="labeled"
+        android:title="@string/nav_favorites" />
+    <item
+        android:id="@+id/navigation_settings"
+        android:icon="@drawable/shortcut_settings_state"
+        app:labelVisibilityMode="labeled"
+        android:title="@string/nav_account" />
+</menu>

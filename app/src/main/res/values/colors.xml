@@ -1,5 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <!-- Main Colors -->
+    <color name="mainColor">#fc6011</color>
+
+    <!-- Primary Colors -->
+    <color name="primaryColor">#fc6011</color> <!-- Màu chủ đạo -->
+    <color name="primaryVariant">#FD5C0A</color> <!-- Phiên bản đậm hơn -->
+    <color name="onPrimary">#636464</color> <!-- Màu nội dung trên nền chủ đạo -->
+
+    <!-- Secondary Colors -->
+    <color name="secondaryColor">#636464</color> <!-- Màu phụ, xanh lam nhạt -->
+    <color name="secondaryVariant">#4a4b4d</color> <!-- Phiên bản đậm hơn -->
+    <color name="onSecondary">#636464</color> <!-- Màu nội dung trên nền phụ -->
+
+    <!-- Tertiary Colors -->
+    <color name="tertiaryColor">#a4a5a8</color> <!-- Màu thứ ba -->
+    <color name="onTertiary">#a4a5a8</color> <!-- Màu nội dung trên nền thứ ba -->
+
+    <!-- Background and Surface -->
+    <color name="backgroundColor">#FFFFFF</color> <!-- Màu nền chính, trắng -->
+    <color name="onBackground">#000000</color> <!-- Màu nội dung trên nền chính -->
+    <color name="surfaceColor">#FFFFFF</color> <!-- Màu bề mặt, trắng -->
+    <color name="onSurface">#000000</color> <!-- Màu nội dung trên bề mặt -->
+
+    <!-- Error Colors -->
+    <color name="errorColor">#B00020</color> <!-- Màu lỗi, đỏ -->
+    <color name="onError">#FFFFFF</color> <!-- Màu nội dung trên nền lỗi -->
+
+    <!-- Outline and Borders -->
+    <color name="outlineColor">#E0E0E0</color> <!-- Màu đường viền, xám nhạt -->
+    <color name="primaryBorderColor">#a3a3a3a3</color>
+    <color name="secondaryBorderColor">#e0e0e0a3</color>
+
+    <!-- Button Colors -->
+    <color name="buttonNormal">#757575</color> <!-- Màu nút mặc định -->
+    <color name="buttonTextColor">#FFFFFF</color> <!-- Màu chữ trên nút -->
+    <color name="controlHighlight">#E8EAF6</color>
+    <color name="controlActivated">#fff</color> <!-- Màu khi kích hoạt -->
+    <color name="controlNormal">#757575</color> <!-- Màu khi bình thường, xám -->
+
+    <!-- Status Bar and Navigation Bar -->
+    <color name="statusBarColor">#fff</color> <!-- Màu thanh trạng thái -->
+    <color name="navigationBarColor">#FFFFFF</color> <!-- Màu thanh điều hướng -->
+
+    <!-- Custom Colors -->
+    <color name="facebookBgColor">#4267B2</color> <!-- Nền nút Facebook -->
+    <color name="googleBgColor">#DB4437</color> <!-- Nền nút Google -->
+    <color name="transparentColor">#00000000</color>
+    <color name="placeholderColor">#e8e9e9</color>
+    <color name="whiteColor">#ffffff</color>
+    <color name="blackColor">#000000</color>
+    <color name="colorTransparentWhite">#cccccc</color>
 </resources>

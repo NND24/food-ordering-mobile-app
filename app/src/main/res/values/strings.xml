@@ -1,3 +1,36 @@
 <resources>
-    <string name="app_name">food_ordering_mobile_app</string>
+    <string name="app_name">PTIT FOOD</string>
+    <string name="cart_icon">Cart</string>
+    <string name="notification_icon">Notifi</string>
+    <string name="nav_messages">Messages</string>
+    <string name="nav_orders" translatable="false">Orders</string>
+    <string name="nav_home">Home</string>
+    <string name="nav_favorites">Favorites</string>
+    <string name="nav_account">Account</string>
+    <string name="title_home">Home</string>
+    <string name="title_settings">Settings</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="login">Login</string>
+    <string name="loginWithFacebook">Login with Facebook</string>">
+    <string name="loginWithGoogle">Login with Google</string>">
+    <string name="register">Register</string>
+    <string name="forgotPassword">Forgot Password</string>
+    <string name="confirmOTP">Confirm OTP</string>
+    <string name="resetPassword">Reset Password</string>">
+    <string name="start">Start</string>
+    <string name="skip">Skip</string>
+    <string name="next">Continue</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="confirmPassword">Confirm Password</string>">
+    <string name="phonenumber">Phonenumber</string>
+    <string name="dontHaveAccount">Don\'t have an account?</string>">
+    <string name="youAlreadyHaveAccount">You already have an account?</string>">
+    <string name="resendOTP">Resend OTP</string>">
+    <string name="or">Or</string>">
+    <string name="send">Send</string>">
+
+    <string name="introduce1" translatable="false">Tìm đồ ăn bạn muốn</string>
+    <string name="introduce1_1" translatable="false">Khám phá những món ăn ngon nhất từ hơn 1.000</string>
+    <string name="introduce1_2" translatable="false">nhà hàng và giao hàng nhanh chóng đến tận nhà bạn.</string>
 </resources>

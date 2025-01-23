@@ -1,9 +1,43 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.Food_ordering_mobile_app" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
-    </style>
+<resources>
+    <!-- Base application theme -->
+    <style name="Theme.FoodOrderingApp" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Primary colors -->
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryVariant">@color/primaryVariant</item>
+        <item name="colorOnPrimary">@color/onPrimary</item>
 
-    <style name="Theme.Food_ordering_mobile_app" parent="Base.Theme.Food_ordering_mobile_app" />
+        <!-- Secondary colors -->
+        <item name="colorSecondary">@color/secondaryColor</item>
+        <item name="colorSecondaryVariant">@color/secondaryVariant</item>
+        <item name="colorOnSecondary">@color/onSecondary</item>
+
+        <!-- Tertiary colors -->
+        <item name="colorTertiary">@color/tertiaryColor</item>
+        <item name="colorOnTertiary">@color/onTertiary</item>
+
+        <!-- Background colors -->
+        <item name="android:colorBackground">@color/backgroundColor</item>
+        <item name="colorOnBackground">@color/onBackground</item>
+
+        <!-- Surface colors -->
+        <item name="colorSurface">@color/surfaceColor</item>
+        <item name="colorOnSurface">@color/onSurface</item>
+
+        <!-- Error colors -->
+        <item name="colorError">@color/errorColor</item>
+        <item name="colorOnError">@color/onError</item>
+
+        <!-- Outline and borders -->
+        <item name="colorOutline">@color/outlineColor</item>
+
+        <!-- Button colors -->
+        <item name="colorButtonNormal">@color/buttonNormal</item>
+        <item name="colorControlHighlight">@color/controlHighlight</item>
+        <item name="colorControlActivated">@color/controlActivated</item>
+        <item name="colorControlNormal">@color/controlNormal</item>
+
+        <!-- Status bar and navigation bar -->
+        <item name="android:statusBarColor">@color/statusBarColor</item>
+        <item name="android:navigationBarColor">@color/navigationBarColor</item>
+    </style>
 </resources>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/backgroundColor"
+    tools:context=".ui.common.IntroduceActivity"
+    android:layout_marginBottom="20dp">
+
+    <ImageView
+        android:id="@+id/image_slide"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:src="@drawable/on_boarding_1" />
+
+    <FrameLayout
+        android:id="@+id/introPhotoLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="420dp"
+        android:background="@color/whiteColor"
+        android:foregroundGravity="bottom"
+        android:paddingVertical="60dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/image_slide">
+
+            <TextView
+                android:id="@+id/title_slide"
+                style="@style/text_view_color_theme_style"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingHorizontal="70dp"
+                android:text="@string/introduce1"
+                android:textAlignment="center"
+                android:textSize="22sp" />
+
+            <TextView
+                android:id="@+id/description_slide_1"
+                style="@color/onPrimary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/title_slide"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:text="@string/introduce1_1"
+                android:textSize="14sp" />
+            <TextView
+                android:id="@+id/description_slide_2"
+                style="@color/onPrimary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/description_slide_1"
+                android:gravity="center"
+                android:text="@string/introduce1_2"
+                android:textSize="14sp" />
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_below="@+id/description_slide_2" />
+
+        </RelativeLayout>
+    </FrameLayout>
+</RelativeLayout>
