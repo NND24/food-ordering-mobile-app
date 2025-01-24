@@ -4,34 +4,78 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
-import com.example.food_ordering_mobile_app.databinding.FragmentHomeBinding;
+import com.example.food_ordering_mobile_app.R;
+import com.example.food_ordering_mobile_app.adapters.BigRestaurantAdapter;
+import com.example.food_ordering_mobile_app.adapters.CategoryAdapter;
+import com.example.food_ordering_mobile_app.adapters.RestaurantAdapter;
+import com.example.food_ordering_mobile_app.models.Category;
+import com.example.food_ordering_mobile_app.models.Restaurant;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class HomeFragment extends Fragment {
+    private CategoryAdapter categoryAdapter;
+    private List<Category> categoryList;
+    private RecyclerView categoryRecyclerView;
+    private RecyclerView restaurantRecyclerView;
+    private RestaurantAdapter restaurantAdapter;
+    private List<Restaurant> restaurantList;
 
-    private FragmentHomeBinding binding;
-
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        HomeViewModel homeViewModel =
-                new ViewModelProvider(this).get(HomeViewModel.class);
-
-        binding = FragmentHomeBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
-
-        final TextView textView = binding.textHome;
-        homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
-        return root;
-    }
+    private RecyclerView bigRestaurantRecyclerView;
+    private BigRestaurantAdapter bigRestaurantAdapter;
+    private List<Restaurant> bigRestaurantList;
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
+
+        categoryRecyclerView = view.findViewById(R.id.categoryRecyclerView);
+        categoryRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+
+        categoryList = new ArrayList<>();
+        categoryList.add(new Category(String.valueOf(R.drawable.cat_3), "Cơm"));
+        categoryList.add(new Category(String.valueOf(R.drawable.cat_4), "Pho"));
+        categoryList.add(new Category(String.valueOf(R.drawable.cat_offer), "Banh Mi"));
+        categoryList.add(new Category(String.valueOf(R.drawable.cat_sri), "Bun"));
+        categoryList.add(new Category(String.valueOf(R.drawable.cat_sri), "Bun"));
+        categoryList.add(new Category(String.valueOf(R.drawable.cat_sri), "Bun"));
+        categoryList.add(new Category(String.valueOf(R.drawable.cat_sri), "Bun"));
+        categoryList.add(new Category(String.valueOf(R.drawable.cat_sri), "Bun"));
+
+        categoryAdapter = new CategoryAdapter(getContext(), categoryList);
+        categoryRecyclerView.setAdapter(categoryAdapter);
+
+        restaurantRecyclerView = view.findViewById(R.id.restaurantRecyclerView);
+        restaurantRecyclerView.setLayoutManager(new LinearLayoutManager(getContext())); // Use LinearLayoutManager
+
+        restaurantList = new ArrayList<>();
+        // Add your restaurant data to restaurantList
+        restaurantList.add(new Restaurant("Minute by tuk tuk", "Cafe", 4.9, 124, "Western food", String.valueOf(R.drawable.item_1)));
+        restaurantList.add(new Restaurant("Phở Lý Quoc Su", "Mỳ", 3.4, 200, "Món ăn ngon", String.valueOf(R.drawable.item_2)));
+
+        restaurantAdapter = new RestaurantAdapter(getContext(), restaurantList);
+        restaurantRecyclerView.setAdapter(restaurantAdapter);
+
+        bigRestaurantRecyclerView = view.findViewById(R.id.bigRestaurantRecyclerView);
+        bigRestaurantRecyclerView.setLayoutManager(new LinearLayoutManager(getContext())); // Use LinearLayoutManager
+
+        bigRestaurantList = new ArrayList<>();
+        // Add your restaurant data to restaurantList
+        bigRestaurantList.add(new Restaurant("Minute by tuk tuk", "Cafe", 4.9, 124, "Western food",String.valueOf(R.drawable.item_1)));
+        bigRestaurantList.add(new Restaurant("Phở Lý Quoc Su", "Mỳ", 3.4, 200, "Món ăn ngon",String.valueOf(R.drawable.item_2)));
+
+        bigRestaurantAdapter = new BigRestaurantAdapter(getContext(), bigRestaurantList);
+        bigRestaurantRecyclerView.setAdapter(bigRestaurantAdapter);
+
+        return view;
     }
 }

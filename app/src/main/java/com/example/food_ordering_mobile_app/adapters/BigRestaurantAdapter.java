@@ -17,12 +17,12 @@ import com.example.food_ordering_mobile_app.models.Restaurant;
 
 import java.util.List;
 
-public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.ViewHolder> {
+public class BigRestaurantAdapter extends RecyclerView.Adapter<BigRestaurantAdapter.ViewHolder> {
     private Context context;
 
     private List<Restaurant> restaurantList;
 
-    public RestaurantAdapter(Context context, List<Restaurant> restaurantList) {
+    public BigRestaurantAdapter(Context context, List<Restaurant> restaurantList) {
         this.context = context;
         this.restaurantList = restaurantList;
     }
@@ -31,7 +31,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context)
-                .inflate(R.layout.item_restaurant, parent, false);
+                .inflate(R.layout.item_big_restaurant, parent, false);
         return new ViewHolder(view);
     }
 
