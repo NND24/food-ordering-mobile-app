@@ -34,6 +34,17 @@
         <item name="android:paddingRight">30dp</item>
     </style>
 
+    <style name="filter_button_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">35dp</item>
+        <item name="android:background">@drawable/custom_button_filter</item>
+        <item name="android:textColor">@color/onPrimary</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingRight">10dp</item>
+        <item name="android:drawablePadding">8dp</item>
+    </style>
+
     <style name="text_view_color_theme_style">
         <item name="android:textColor">@color/onPrimary</item>
         <item name="android:textStyle">bold</item>
@@ -52,5 +63,11 @@
         <item name="android:gravity">left|center</item>
     </style>
 
-
+    <style name="RoundedCornerImage">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">160dp</item>
+        <item name="android:scaleType">centerCrop</item>
+        <item name="android:src">@drawable/dess_1</item>
+        <item name="android:background">@drawable/rounded_corners</item> <!-- Thêm drawable bo tròn cho ảnh -->
+    </style>
 </resources>

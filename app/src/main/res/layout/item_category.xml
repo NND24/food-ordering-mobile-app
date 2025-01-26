@@ -1,24 +1,45 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:gravity="center"
+    android:background="@color/backgroundColor"
     android:layout_marginEnd="20dp">
 
-    <ImageView
-        android:id="@+id/categoryImage"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:src="@drawable/ic_launcher_background" />
+    <FrameLayout
+        android:id="@+id/imgContainer"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:background="@drawable/category_border">
+
+        <ImageView
+            android:id="@+id/categoryImage"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:padding="3dp"
+            android:background="@drawable/category_border"
+            android:src="@drawable/ic_launcher_background" />
+
+        <ImageView
+            android:id="@+id/checkIcon"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_gravity="top|right"
+            android:src="@drawable/ic_check_box_circle_active_16"
+            />
+    </FrameLayout>
 
     <TextView
         android:id="@+id/categoryName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="5dp"
         android:text="Danh mục"
         android:textColor="@color/onPrimary"
-        android:textSize="14sp"
+        android:textSize="16sp"
         android:gravity="center" />
+
+
+
+
 </LinearLayout>

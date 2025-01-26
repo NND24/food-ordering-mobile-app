@@ -22,40 +22,21 @@
         android:state_pressed="true"
         android:state_enabled="true" >
         <shape android:shape="rectangle">
-            <solid android:color="@color/mainColor" />
+            <solid android:color="@color/primaryColor" />
             <padding android:left="7dp"
                 android:top="7dp"
                 android:right="7dp"
                 android:bottom="7dp" />
             <stroke
                 android:width="2dp"
-                android:color="#1D3A70" />
-            <corners android:radius= "99dp" />
-        </shape>
-    </item>
-    <item
-        android:state_focused="true"
-        android:state_enabled="true">
-        <shape android:shape="rectangle">
-            <gradient
-                android:startColor="#F7D358"
-                android:centerColor="#DF7401"
-                android:endColor="#F7D358"
-                android:angle="90"/>
-            <padding android:left="7dp"
-                android:top="7dp"
-                android:right="7dp"
-                android:bottom="7dp" />
-            <stroke
-                android:width="2dip"
-                android:color="#FFFFFF" />
+                android:color="@color/primaryColor" />
             <corners android:radius= "99dp" />
         </shape>
     </item>
     <item
         android:state_enabled="true">
         <shape android:shape="rectangle">
-            <solid android:color="@color/mainColor"/>
+            <solid android:color="@color/primaryColor"/>
             <padding android:left="7dp"
                 android:top="7dp"
                 android:right="7dp"

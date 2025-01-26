@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.food_ordering_mobile_app.R;
 import com.example.food_ordering_mobile_app.models.Restaurant;
 
@@ -48,7 +49,7 @@ public class BigRestaurantAdapter extends RecyclerView.Adapter<BigRestaurantAdap
         int resourceId = Integer.parseInt(restaurant.getRestaurantAvatar());
         Glide.with(context)
                 .load(resourceId)
-                .transform(new RoundedCorners(8))
+                .apply(RequestOptions.bitmapTransform(new RoundedCorners(8)))
                 .into(holder.restaurantAvatar);
     }
 

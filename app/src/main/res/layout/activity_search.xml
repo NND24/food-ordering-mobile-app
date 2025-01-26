@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="0dp"
+    android:background="@color/backgroundColor"
+    tools:context=".ui.customer.search.SearchActivity">
+
+    <LinearLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:elevation="15dp"
+        android:background="@color/backgroundColor"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                android:textColor="@color/onPrimary"
+                android:text="Xin chào Đạt" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <ImageButton
+                android:id="@+id/imageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/backgroundColor"
+                android:src="@drawable/ic_notification_24" />
+
+            <Space
+                android:layout_width="20dp"
+                android:layout_height="wrap_content" />
+
+            <ImageButton
+                android:id="@+id/imageButton2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/backgroundColor"
+                android:src="@drawable/ic_cart_24" />
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="20dp" />
+
+        <EditText
+            android:id="@+id/loginTextViewUsername"
+            android:inputType="textEmailAddress"
+            android:drawableStart="@drawable/ic_search_24"
+            android:hint="@string/findFood"
+            android:layout_height="45dp"
+            style="@style/custom_input" />
+    </LinearLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/header"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/categoryRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"/>
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="20dp">
+
+                    <Button
+                        android:drawableLeft="@drawable/ic_filter_16"
+                        android:layout_marginRight="15dp"
+                        style="@style/filter_button_style"
+                        android:text="1"
+                        android:onClick="openFilterAll" />
+
+                    <Button
+                        style="@style/filter_button_style"
+                        android:drawableLeft="@drawable/ic_arrow_up_down_16"
+                        android:layout_marginRight="15dp"
+                        android:text="Lọc theo"
+                        android:onClick="openFilterBy" />
+
+                    <Button
+                        style="@style/filter_button_style"
+                        android:drawableLeft="@drawable/ic_promotion_16"
+                        android:layout_marginRight="15dp"
+                        android:text="Tùy chọn quán"
+                        android:onClick="openFilterRestaurantOptions"/>
+
+                    <Button
+                        style="@style/filter_button_style"
+                        android:drawableLeft="@drawable/ic_delivery_16"
+                        android:layout_marginRight="15dp"
+                        android:text="Phí giao hàng"
+                        android:onClick="openFilterDeliveryFee"/>
+
+                    <Button
+                        style="@style/filter_button_style"
+                        android:drawableLeft="@drawable/ic_dollar_16"
+                        android:layout_marginRight="15dp"
+                        android:text="Giá"
+                        android:onClick="openFilterPrice"/>
+
+                    <TextView
+                        android:id="@+id/textView2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Làm mới"
+                        android:textSize="16sp"
+                        android:textColor="@color/colorLink"/>
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingHorizontal="20dp">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/restaurantRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

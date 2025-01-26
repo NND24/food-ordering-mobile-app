@@ -44,7 +44,7 @@
 
             <TextView
                 android:id="@+id/description_slide_1"
-                style="@color/onPrimary"
+                android:textColor="@color/onPrimary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/title_slide"
@@ -54,7 +54,7 @@
                 android:textSize="14sp" />
             <TextView
                 android:id="@+id/description_slide_2"
-                style="@color/onPrimary"
+                android:textColor="@color/onPrimary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/description_slide_1"

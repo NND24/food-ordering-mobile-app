@@ -14,6 +14,12 @@
         android:theme="@style/Theme.FoodOrderingApp"
         tools:targetApi="31">
         <activity
+            android:name=".ui.customer.search.SearchActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.customer.search.FilterAllActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.common.LoginActivity"
             android:exported="false" />
         <activity
@@ -33,6 +39,18 @@
             android:exported="false" />
         <activity
             android:name=".ui.customer.MainCustomerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.customer.search.FilterPriceActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.customer.search.FilterDeliveryFeeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.customer.search.FilterRestaurantOptionsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.customer.search.FilterByActivity"
             android:exported="false" />
         <activity
             android:name=".ui.common.SplashActivity"

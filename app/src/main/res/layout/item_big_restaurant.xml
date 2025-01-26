@@ -4,14 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:layout_marginTop="20dp">
+    android:background="@drawable/rounded_corners"
+    android:layout_marginTop="10dp">
 
     <ImageView
         android:id="@+id/restaurantAvatar"
-        android:layout_width="match_parent"
-        android:layout_height="160dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/dess_1" />
+        style="@style/RoundedCornerImage" />
 
     <LinearLayout
         android:layout_width="match_parent"

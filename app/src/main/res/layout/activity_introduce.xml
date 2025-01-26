@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/backgroundColor"
     tools:context=".ui.common.IntroduceActivity">
 
     <LinearLayout
@@ -18,7 +19,8 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
             android:text="@string/skip"
-            style="@style/text_view_color_theme_style"
+            android:textColor="@color/onPrimary"
+            android:textSize="18sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             />

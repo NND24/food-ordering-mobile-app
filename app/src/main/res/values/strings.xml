@@ -10,6 +10,7 @@
     <string name="title_home">Home</string>
     <string name="title_settings">Settings</string>
     <string name="title_notifications">Notifications</string>
+    <string name="title_search">Search</string>
     <string name="login">Login</string>
     <string name="loginWithFacebook">Login with Facebook</string>">
     <string name="loginWithGoogle">Login with Google</string>">

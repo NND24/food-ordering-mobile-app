@@ -182,7 +182,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/register"
-            android:textColor="@color/mainColor"
+            android:textColor="@color/primaryColor"
             android:textSize="16sp"
             android:onClick="redirectToRegisterPage"/>
     </LinearLayout>

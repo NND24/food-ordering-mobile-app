@@ -1,11 +1,13 @@
 package com.example.food_ordering_mobile_app.ui.customer.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
@@ -16,6 +18,8 @@ import com.example.food_ordering_mobile_app.adapters.CategoryAdapter;
 import com.example.food_ordering_mobile_app.adapters.RestaurantAdapter;
 import com.example.food_ordering_mobile_app.models.Category;
 import com.example.food_ordering_mobile_app.models.Restaurant;
+import com.example.food_ordering_mobile_app.ui.customer.MainCustomerActivity;
+import com.example.food_ordering_mobile_app.ui.customer.search.SearchActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +55,17 @@ public class HomeFragment extends Fragment {
         categoryList.add(new Category(String.valueOf(R.drawable.cat_sri), "Bun"));
         categoryList.add(new Category(String.valueOf(R.drawable.cat_sri), "Bun"));
 
-        categoryAdapter = new CategoryAdapter(getContext(), categoryList);
+        CategoryAdapter categoryAdapter = new CategoryAdapter(requireContext(), categoryList, category -> {
+            // Chuyển đến SearchActivity
+            Intent intent = new Intent(requireContext(), SearchActivity.class);
+
+
+            // Gửi dữ liệu category qua Intent (nếu cần)
+            intent.putExtra("category_name", category.getName());
+
+            startActivity(intent);
+        });
+
         categoryRecyclerView.setAdapter(categoryAdapter);
 
         restaurantRecyclerView = view.findViewById(R.id.restaurantRecyclerView);
@@ -70,7 +84,7 @@ public class HomeFragment extends Fragment {
 
         bigRestaurantList = new ArrayList<>();
         // Add your restaurant data to restaurantList
-        bigRestaurantList.add(new Restaurant("Minute by tuk tuk", "Cafe", 4.9, 124, "Western food",String.valueOf(R.drawable.item_1)));
+        bigRestaurantList.add(new Restaurant("Minute by tuk tuk", "Cafe", 4.9, 124, "Western food",String.valueOf(R.drawable.res_1)));
         bigRestaurantList.add(new Restaurant("Phở Lý Quoc Su", "Mỳ", 3.4, 200, "Món ăn ngon",String.valueOf(R.drawable.item_2)));
 
         bigRestaurantAdapter = new BigRestaurantAdapter(getContext(), bigRestaurantList);
