@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -16,12 +15,12 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.bumptech.glide.Glide;
 import com.example.food_ordering_mobile_app.R;
 
-public class SettingsFragment extends Fragment {
+public class ProfileFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_settings, container, false);
+        View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         // Accessing the ImageView after the view has been inflated
         ImageView avatar = view.findViewById(R.id.avatar);
@@ -32,20 +31,12 @@ public class SettingsFragment extends Fragment {
                 .circleCrop()  // Make the image circular
                 .into(avatar);
 
-        LinearLayout profileContainer = view.findViewById(R.id.profile_container);
+        TextView backBtn = view.findViewById(R.id.backBtn);
 
-        profileContainer.setOnClickListener(v -> {
+        backBtn.setOnClickListener(v -> {
             Bundle bundle = new Bundle();
-            NavHostFragment.findNavController(SettingsFragment.this)
-                    .navigate(R.id.action_settings_to_profile, bundle);
-        });
-
-        Button paymentMethodBtn = view.findViewById(R.id.payment_method_btn);
-
-        paymentMethodBtn.setOnClickListener(v -> {
-            Bundle bundle = new Bundle();
-            NavHostFragment.findNavController(SettingsFragment.this)
-                    .navigate(R.id.action_settings_to_payment_method, bundle);
+            NavHostFragment.findNavController(ProfileFragment.this)
+                    .navigate(R.id.action_profile_to_settings, bundle);
         });
 
         return view;

@@ -63,6 +63,31 @@
         <item name="android:gravity">left|center</item>
     </style>
 
+    <style name="custom_input_password">
+        <item name="android:background">@drawable/custom_input_password</item>
+        <item name="android:drawablePadding">20dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:paddingStart">20dp</item>
+        <item name="android:paddingEnd">20dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/secondaryColor</item>
+        <item name="android:textColorHint">@color/tertiaryColor</item>
+        <item name="android:gravity">left|center</item>
+    </style>
+
+    <style name="custom_button_password">
+        <item name="android:background">@drawable/custom_button_password</item>
+        <item name="android:paddingStart">10dp</item>
+        <item name="android:paddingEnd">10dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/secondaryColor</item>
+        <item name="android:textColorHint">@color/tertiaryColor</item>
+        <item name="android:gravity">left|center</item>
+    </style>
+
     <style name="RoundedCornerImage">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">160dp</item>

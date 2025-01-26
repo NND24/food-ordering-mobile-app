@@ -53,13 +53,26 @@
             android:layout_width="match_parent"
             android:layout_height="20dp"/>
 
-        <EditText
-            android:id="@+id/loginTextViewPassword"
-            android:hint="@string/password"
-            android:inputType="textPassword"
-            android:drawableStart="@drawable/ic_lock_24"
-            android:drawableEnd="@drawable/ic_eye_show_24"
-            style="@style/custom_input" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/txtPassword"
+                style="@style/custom_input_password"
+                android:drawableStart="@drawable/ic_lock_24"
+                android:hint="@string/password"
+                android:layout_weight="1"
+                android:inputType="textPassword" />
+
+            <ImageButton
+                android:id="@+id/btnShowPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                app:srcCompat="@drawable/ic_eye_show_24"
+                style="@style/custom_button_password" />
+        </LinearLayout>
 
     </LinearLayout>
 

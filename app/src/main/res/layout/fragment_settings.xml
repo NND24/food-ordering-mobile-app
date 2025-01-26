@@ -4,20 +4,177 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.dashboard.DashboardFragment">
+    android:padding="0dp"
+    android:background="@color/backgroundColor"
+    tools:context=".ui.customer.settings.SettingsFragment">
 
-    <TextView
-        android:id="@+id/text_dashboard"
+
+    <LinearLayout
+        android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
+        android:orientation="vertical"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="10dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/profile_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Xin chào Đạt"
+                android:layout_marginRight="10dp"
+                android:textColor="@color/onPrimary"
+                android:textSize="28sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/editProfileBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_pencil_24" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:id="@+id/avatar"
+                android:layout_width="53dp"
+                android:layout_height="53dp"
+                android:scaleType="centerCrop"
+                android:padding="3dp"
+                android:background="@drawable/category_border"
+                android:src="@drawable/dess_1" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:text="DASHBOARD"/>
+        app:layout_constraintTop_toBottomOf="@id/header">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_button_setting"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="12dp"
+                android:drawableLeft="@drawable/ic_notification_24"
+                android:drawableRight="@drawable/ic_arrow_right_24"
+                android:gravity="start|center_vertical"
+                android:textAllCaps="false"
+                android:text="@string/notifications"
+                android:textSize="16dp"
+                android:drawablePadding="15dp"/>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="15dp" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_button_setting"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="12dp"
+                android:drawableLeft="@drawable/ic_cart_24"
+                android:drawableRight="@drawable/ic_arrow_right_24"
+                android:gravity="start|center_vertical"
+                android:textAllCaps="false"
+                android:text="@string/cart_icon"
+                android:textSize="16dp"
+                android:drawablePadding="15dp"/>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="15dp" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_button_setting"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="12dp"
+                android:drawableLeft="@drawable/ic_location_24"
+                android:drawableRight="@drawable/ic_arrow_right_24"
+                android:gravity="start|center_vertical"
+                android:textAllCaps="false"
+                android:text="@string/location"
+                android:textSize="16dp"
+                android:drawablePadding="15dp"/>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="15dp" />
+
+            <Button
+                android:id="@+id/payment_method_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_button_setting"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="12dp"
+                android:drawableLeft="@drawable/ic_credit_card_24"
+                android:drawableRight="@drawable/ic_arrow_right_24"
+                android:gravity="start|center_vertical"
+                android:textAllCaps="false"
+                android:text="@string/payment_methods"
+                android:textSize="16dp"
+                android:drawablePadding="15dp"/>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="15dp" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_button_setting"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="12dp"
+                android:drawableLeft="@drawable/ic_setting_24"
+                android:drawableRight="@drawable/ic_arrow_right_24"
+                android:gravity="start|center_vertical"
+                android:textAllCaps="false"
+                android:text="@string/setting"
+                android:textSize="16dp"
+                android:drawablePadding="15dp"/>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="15dp" />
+
+            <Button
+                style="@style/button_style"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="login"
+                android:text="@string/logout" />
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

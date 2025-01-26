@@ -35,4 +35,21 @@
     <string name="introduce1" translatable="false">Tìm đồ ăn bạn muốn</string>
     <string name="introduce1_1" translatable="false">Khám phá những món ăn ngon nhất từ hơn 1.000</string>
     <string name="introduce1_2" translatable="false">nhà hàng và giao hàng nhanh chóng đến tận nhà bạn.</string>
+    <string name="setting">Setting</string>
+    <string name="logout">Logout</string>
+    <string name="notifications">Notifications</string>
+    <string name="favorite">Favorite</string>
+    <string name="location">Location</string>
+    <string name="payment_methods">Payment Methods</string>
+    <string name="save">Save</string>
+    <string name="name">Name</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="profile">Profile</string>
+    <string name="all_payment_methods">All payment methods</string>
+    <string name="card">Card</string>
+    <string name="add_card">Add card</string>
+    <string name="input_card_number">Input Card Number</string>
+    <string name="input_security_code">Input Security Code</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
 </resources>
