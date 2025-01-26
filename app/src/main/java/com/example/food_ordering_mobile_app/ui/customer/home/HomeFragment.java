@@ -31,7 +31,6 @@ public class HomeFragment extends Fragment {
     private RecyclerView restaurantRecyclerView;
     private RestaurantAdapter restaurantAdapter;
     private List<Restaurant> restaurantList;
-
     private RecyclerView bigRestaurantRecyclerView;
     private BigRestaurantAdapter bigRestaurantAdapter;
     private List<Restaurant> bigRestaurantList;

@@ -56,9 +56,9 @@
     </fragment>
 
     <fragment
-        android:id="@+id/notifications"
-        android:name="com.example.food_ordering_mobile_app.ui.customer.notifications.NotificationsFragment"
+        android:id="@+id/favorites"
+        android:name="com.example.food_ordering_mobile_app.ui.customer.favorites.FavoritesFragment"
         android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        tools:layout="@layout/fragment_favorites" />
 
 </navigation>

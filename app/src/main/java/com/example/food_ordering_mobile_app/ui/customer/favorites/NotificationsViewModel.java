@@ -1,4 +1,4 @@
-package com.example.food_ordering_mobile_app.ui.customer.notifications;
+package com.example.food_ordering_mobile_app.ui.customer.favorites;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
