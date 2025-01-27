@@ -61,4 +61,10 @@
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_favorites" />
 
+    <fragment
+        android:id="@+id/orders"
+        android:name="com.example.food_ordering_mobile_app.ui.customer.orders.OrdersFragment"
+        android:label="@string/orders"
+        tools:layout="@layout/fragment_orders" />
+
 </navigation>

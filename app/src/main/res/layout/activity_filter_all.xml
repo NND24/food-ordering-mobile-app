@@ -509,7 +509,7 @@
                 android:layout_marginBottom="10dp"
                 android:background="@drawable/custom_button_normal"
                 android:paddingVertical="10dp"
-                android:text="Áp dụng"
+                android:text="@string/apply"
                 android:textColor="@color/whiteColor"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -521,7 +521,7 @@
                 android:background="@drawable/custom_button_white"
                 android:backgroundTint="@null"
                 android:paddingVertical="10dp"
-                android:text="Làm mới"
+                android:text="@string/refresh"
                 android:textColor="@color/onPrimary"
                 android:textSize="18sp"
                 android:textStyle="bold"

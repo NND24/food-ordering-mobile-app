@@ -52,4 +52,14 @@
     <string name="input_security_code">Input Security Code</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
+    <string name="orders">Orders</string>
+    <string name="favorites">Favorites</string>
+    <string name="current_orders">Current orders</string>
+    <string name="track_order_progress">Track order progress</string>
+    <string name="refresh">Refresh</string>
+    <string name="apply">Apply</string>
+    <string name="dish">dish</string>
+    <string name="reorder">Reorder</string>
+    <string name="rating">Rating</string>
+    <string name="history">History</string>
 </resources>

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:padding="0dp"
     android:background="@color/backgroundColor"
-    tools:context=".ui.customer.favorites.FavoritesFragment">
+    tools:context=".ui.customer.orders.OrdersFragment">
 
     <LinearLayout
         android:id="@+id/header"
@@ -30,7 +30,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/favorites"
+                android:text="@string/orders"
                 android:textColor="@color/onPrimary"
                 android:textSize="28sp"
                 android:textStyle="bold" />
@@ -80,8 +80,51 @@
                 android:paddingHorizontal="20dp"
                 android:paddingVertical="10dp">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/current_orders"
+                        android:textColor="@color/onPrimary"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/favoriteRecyclerView"
+                    android:id="@+id/orderCurrentRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/history"
+                        android:textColor="@color/onPrimary"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/orderHistoryRecyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </LinearLayout>
