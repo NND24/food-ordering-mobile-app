@@ -18,6 +18,6 @@ public class FilterByActivity extends AppCompatActivity {
     }
 
     public void closeFilter(View view) {
-        finish();
+        onBackPressed();
     }
 }

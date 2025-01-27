@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -74,7 +73,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
             holder.itemView.setOnClickListener(v -> {
                 selectedPosition = currentPosition;  // Set selected position
-                Log.d("CategoryAdapter", "Selected position: " + selectedPosition);
                 notifyDataSetChanged();  // Refresh the list to show the updated selection
                 if (onCategoryClickListener != null) {
                     onCategoryClickListener.onCategoryClick(category);  // Notify listener

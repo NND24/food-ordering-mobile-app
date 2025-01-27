@@ -8,14 +8,14 @@
     <fragment
         android:id="@+id/home"
         android:name="com.example.food_ordering_mobile_app.ui.customer.home.HomeFragment"
-        android:label="@string/title_home"
+        android:label="@string/home"
         tools:layout="@layout/fragment_home">
     </fragment>
 
     <fragment
         android:id="@+id/settings"
         android:name="com.example.food_ordering_mobile_app.ui.customer.settings.SettingsFragment"
-        android:label="@string/title_settings"
+        android:label="@string/settings"
         tools:layout="@layout/fragment_settings">
         <action
             android:id="@+id/action_settings_to_profile"
@@ -58,7 +58,7 @@
     <fragment
         android:id="@+id/favorites"
         android:name="com.example.food_ordering_mobile_app.ui.customer.favorites.FavoritesFragment"
-        android:label="@string/title_notifications"
+        android:label="@string/notifications"
         tools:layout="@layout/fragment_favorites" />
 
     <fragment
@@ -66,5 +66,11 @@
         android:name="com.example.food_ordering_mobile_app.ui.customer.orders.OrdersFragment"
         android:label="@string/orders"
         tools:layout="@layout/fragment_orders" />
+
+    <fragment
+        android:id="@+id/messages"
+        android:name="com.example.food_ordering_mobile_app.ui.customer.messages.MessagesFragment"
+        android:label="@string/messages"
+        tools:layout="@layout/fragment_messages" />
 
 </navigation>

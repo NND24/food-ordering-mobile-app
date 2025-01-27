@@ -58,7 +58,6 @@ public class HomeFragment extends Fragment {
             // Chuyển đến SearchActivity
             Intent intent = new Intent(requireContext(), SearchActivity.class);
 
-
             // Gửi dữ liệu category qua Intent (nếu cần)
             intent.putExtra("category_name", category.getName());
 

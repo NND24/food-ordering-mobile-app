@@ -64,8 +64,6 @@
             android:layout_height="20dp" />
 
         <EditText
-            android:id="@+id/loginTextViewUsername"
-            android:inputType="textEmailAddress"
             android:drawableStart="@drawable/ic_search_24"
             android:hint="@string/findFood"
             android:layout_height="45dp"

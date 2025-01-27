@@ -21,6 +21,6 @@ public class FilterAllActivity extends AppCompatActivity {
     }
 
     public void closeFilter(View view) {
-        finish();
+        onBackPressed();
     }
 }

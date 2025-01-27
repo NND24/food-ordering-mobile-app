@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/backgroundColor"
+    android:fitsSystemWindows="true"
     tools:context=".ui.customer.search.FilterAllActivity">
 
     <LinearLayout
