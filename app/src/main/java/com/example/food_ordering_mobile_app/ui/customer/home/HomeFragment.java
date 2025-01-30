@@ -7,18 +7,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.food_ordering_mobile_app.R;
-import com.example.food_ordering_mobile_app.adapters.BigRestaurantAdapter;
+import com.example.food_ordering_mobile_app.adapters.RestaurantBigAdapter;
 import com.example.food_ordering_mobile_app.adapters.CategoryAdapter;
 import com.example.food_ordering_mobile_app.adapters.RestaurantAdapter;
 import com.example.food_ordering_mobile_app.models.Category;
 import com.example.food_ordering_mobile_app.models.Restaurant;
-import com.example.food_ordering_mobile_app.ui.customer.MainCustomerActivity;
+import com.example.food_ordering_mobile_app.ui.customer.restaurant.RestaurantActivity;
 import com.example.food_ordering_mobile_app.ui.customer.search.SearchActivity;
 
 import java.util.ArrayList;
@@ -32,7 +30,7 @@ public class HomeFragment extends Fragment {
     private RestaurantAdapter restaurantAdapter;
     private List<Restaurant> restaurantList;
     private RecyclerView bigRestaurantRecyclerView;
-    private BigRestaurantAdapter bigRestaurantAdapter;
+    private RestaurantBigAdapter restaurantBigAdapter;
     private List<Restaurant> bigRestaurantList;
 
     @Override
@@ -74,7 +72,10 @@ public class HomeFragment extends Fragment {
         restaurantList.add(new Restaurant("Minute by tuk tuk", "Cafe", 4.9, 124, "Western food", String.valueOf(R.drawable.item_1)));
         restaurantList.add(new Restaurant("Phở Lý Quoc Su", "Mỳ", 3.4, 200, "Món ăn ngon", String.valueOf(R.drawable.item_2)));
 
-        restaurantAdapter = new RestaurantAdapter(getContext(), restaurantList);
+        restaurantAdapter = new RestaurantAdapter(getContext(), restaurantList, restaurant -> {
+            Intent intent = new Intent(requireContext(), RestaurantActivity.class);
+            startActivity(intent);
+        });
         restaurantRecyclerView.setAdapter(restaurantAdapter);
 
         bigRestaurantRecyclerView = view.findViewById(R.id.bigRestaurantRecyclerView);
@@ -85,8 +86,11 @@ public class HomeFragment extends Fragment {
         bigRestaurantList.add(new Restaurant("Minute by tuk tuk", "Cafe", 4.9, 124, "Western food",String.valueOf(R.drawable.res_1)));
         bigRestaurantList.add(new Restaurant("Phở Lý Quoc Su", "Mỳ", 3.4, 200, "Món ăn ngon",String.valueOf(R.drawable.item_2)));
 
-        bigRestaurantAdapter = new BigRestaurantAdapter(getContext(), bigRestaurantList);
-        bigRestaurantRecyclerView.setAdapter(bigRestaurantAdapter);
+        restaurantBigAdapter = new RestaurantBigAdapter(getContext(), bigRestaurantList, restaurant -> {
+            Intent intent = new Intent(requireContext(), RestaurantActivity.class);
+            startActivity(intent);
+        });
+        bigRestaurantRecyclerView.setAdapter(restaurantBigAdapter);
 
         return view;
     }

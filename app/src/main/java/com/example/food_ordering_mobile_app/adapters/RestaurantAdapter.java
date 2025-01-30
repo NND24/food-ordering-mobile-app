@@ -19,12 +19,21 @@ import java.util.List;
 
 public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.ViewHolder> {
     private Context context;
-
     private List<Restaurant> restaurantList;
+    private OnRestaurantClickListener onRestaurantClickListener;
+    public interface OnRestaurantClickListener {
+        void onRestaurantClick(Restaurant restaurant);
+    }
 
     public RestaurantAdapter(Context context, List<Restaurant> restaurantList) {
         this.context = context;
         this.restaurantList = restaurantList;
+    }
+
+    public RestaurantAdapter(Context context, List<Restaurant> restaurantList, OnRestaurantClickListener onRestaurantClickListener) {
+        this.context = context;
+        this.restaurantList = restaurantList;
+        this.onRestaurantClickListener = onRestaurantClickListener;
     }
 
     @NonNull
@@ -50,6 +59,12 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
                 .load(resourceId)
                 .transform(new RoundedCorners(8))
                 .into(holder.restaurantAvatar);
+
+        holder.itemView.setOnClickListener(v -> {
+            if (onRestaurantClickListener != null) {
+                onRestaurantClickListener.onRestaurantClick(restaurant);
+            }
+        });
     }
 
     @Override

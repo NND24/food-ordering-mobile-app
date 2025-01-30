@@ -22,6 +22,10 @@
     <color name="chatBgColor">#e3e3e5</color>
     <color name="facebookBgColor">#4267B2</color> <!-- Nền nút Facebook -->
     <color name="googleBgColor">#DB4437</color> <!-- Nền nút Google -->
+    <color name="grayBgColor">#20000000</color>
+    <color name="transparentBgColor">#00000000</color>
+    <color name="reviewBgColor">#e6e6e6</color>
+    <color name="ratingBgColor">#80E6E6E6</color>
 
     <!-- Error Colors -->
     <color name="errorColor">#B00020</color> <!-- Màu lỗi, đỏ -->

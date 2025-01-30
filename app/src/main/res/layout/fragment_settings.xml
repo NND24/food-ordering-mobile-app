@@ -79,15 +79,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/custom_button_setting"
-                android:paddingHorizontal="20dp"
-                android:paddingVertical="12dp"
                 android:drawableLeft="@drawable/ic_notification_24"
                 android:drawableRight="@drawable/ic_arrow_right_24"
+                android:drawablePadding="15dp"
                 android:gravity="start|center_vertical"
-                android:textAllCaps="false"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="12dp"
                 android:text="@string/notifications"
-                android:textSize="16dp"
-                android:drawablePadding="15dp"/>
+                android:textAllCaps="false"
+                android:textSize="16dp" />
 
             <Space
                 android:layout_width="match_parent"

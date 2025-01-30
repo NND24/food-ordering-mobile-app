@@ -18,21 +18,30 @@ import com.example.food_ordering_mobile_app.models.Restaurant;
 
 import java.util.List;
 
-public class BigRestaurantAdapter extends RecyclerView.Adapter<BigRestaurantAdapter.ViewHolder> {
+public class RestaurantBigAdapter extends RecyclerView.Adapter<RestaurantBigAdapter.ViewHolder> {
     private Context context;
-
     private List<Restaurant> restaurantList;
+    private OnRestaurantClickListener onRestaurantClickListener;
+    public interface OnRestaurantClickListener {
+        void onRestaurantClick(Restaurant restaurant);
+    }
 
-    public BigRestaurantAdapter(Context context, List<Restaurant> restaurantList) {
+    public RestaurantBigAdapter(Context context, List<Restaurant> restaurantList) {
         this.context = context;
         this.restaurantList = restaurantList;
+    }
+
+    public RestaurantBigAdapter(Context context, List<Restaurant> restaurantList, OnRestaurantClickListener onRestaurantClickListener) {
+        this.context = context;
+        this.restaurantList = restaurantList;
+        this.onRestaurantClickListener = onRestaurantClickListener;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context)
-                .inflate(R.layout.item_big_restaurant, parent, false);
+                .inflate(R.layout.item_restaurant_big, parent, false);
         return new ViewHolder(view);
     }
 
@@ -51,6 +60,12 @@ public class BigRestaurantAdapter extends RecyclerView.Adapter<BigRestaurantAdap
                 .load(resourceId)
                 .apply(RequestOptions.bitmapTransform(new RoundedCorners(8)))
                 .into(holder.restaurantAvatar);
+
+        holder.itemView.setOnClickListener(v -> {
+            if (onRestaurantClickListener != null) {
+                onRestaurantClickListener.onRestaurantClick(restaurant);
+            }
+        });
     }
 
     @Override

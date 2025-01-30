@@ -37,11 +37,11 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:paddingBottom="150dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/header">
+        app:layout_constraintTop_toBottomOf="@id/header"
+        app:layout_constraintBottom_toTopOf="@id/footer">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -371,7 +371,7 @@
                         android:id="@+id/radioButtonRating2"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:button="@drawable/custom_radio_button"/>
+                        android:button="@drawable/custom_radio_button" />
                 </LinearLayout>
             </RadioGroup>
         </LinearLayout>
@@ -516,7 +516,6 @@
                 android:textStyle="bold" />
 
             <Button
-                android:id="@+id/custom_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/custom_button_white"

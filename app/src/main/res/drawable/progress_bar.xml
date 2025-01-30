@@ -1,0 +1,19 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Màu nền xám -->
+    <item android:id="@android:id/background">
+        <shape android:shape="rectangle">
+            <corners android:radius="5dp" />
+            <solid android:color="#d3d3d3"/> <!-- Màu xám -->
+        </shape>
+    </item>
+
+    <!-- Màu cam cho phần tiến trình -->
+    <item android:id="@android:id/progress">
+        <clip>
+            <shape android:shape="rectangle">
+                <corners android:radius="5dp" />
+                <solid android:color="@color/primaryColor"/> <!-- Màu cam -->
+            </shape>
+        </clip>
+    </item>
+</layer-list>

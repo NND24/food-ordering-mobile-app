@@ -95,4 +95,5 @@
         <item name="android:src">@drawable/dess_1</item>
         <item name="android:background">@drawable/rounded_corners</item> <!-- Thêm drawable bo tròn cho ảnh -->
     </style>
+
 </resources>
