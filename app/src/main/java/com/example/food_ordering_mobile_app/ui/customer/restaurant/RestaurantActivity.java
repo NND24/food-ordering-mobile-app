@@ -24,6 +24,8 @@ import com.example.food_ordering_mobile_app.models.Restaurant;
 import com.example.food_ordering_mobile_app.models.Review;
 import com.example.food_ordering_mobile_app.ui.common.LoginActivity;
 import com.example.food_ordering_mobile_app.ui.common.RegisterActivity;
+import com.example.food_ordering_mobile_app.ui.customer.cart.CartDetailActivity;
+import com.example.food_ordering_mobile_app.ui.customer.dish.DishActivity;
 import com.example.food_ordering_mobile_app.ui.customer.review.ReviewActivity;
 
 import java.util.ArrayList;
@@ -50,7 +52,7 @@ public class RestaurantActivity extends AppCompatActivity {
         int cornerRadius = (int) getResources().getDisplayMetrics().density * 8; // 8dp to px
 
         Glide.with(this)
-                .load("URL_HOẶC_RESOURCE_CỦA_HÌNH_ẢNH")
+                .load(R.drawable.item_1)
                 .apply(RequestOptions.bitmapTransform(new RoundedCorners(cornerRadius))) // Áp dụng bo góc
                 .into(restaurantAvatar);
 
@@ -67,7 +69,10 @@ public class RestaurantActivity extends AppCompatActivity {
         dishBigList.add(new Dish("Phở Lý Quoc Su", "Bo ngon", 15000, String.valueOf(R.drawable.item_2)));
         dishBigList.add(new Dish("Phở Lý Quoc Su", "Bo ngon", 15000, String.valueOf(R.drawable.item_2)));
 
-        dishBigAdapter = new DishBigAdapter(this, dishBigList);
+        dishBigAdapter = new DishBigAdapter(this, dishBigList, dishBig -> {
+            Intent intent = new Intent(this, DishActivity.class);
+            startActivity(intent);
+        });
         dishBigRecyclerView.setAdapter(dishBigAdapter);
 
         // Show normal dish
@@ -78,11 +83,11 @@ public class RestaurantActivity extends AppCompatActivity {
         dishList.add(new Dish("Minute by tuk tuk", "Sợi mỳ dai ngon", 10000, String.valueOf(R.drawable.item_1)));
         dishList.add(new Dish("Phở Lý Quoc Su", "Bo ngon", 15000, String.valueOf(R.drawable.item_2)));
 
-        dishAdapter = new DishAdapter(this, dishList);
+        dishAdapter = new DishAdapter(this, dishList, dish -> {
+            Intent intent = new Intent(this, DishActivity.class);
+            startActivity(intent);
+        });
         dishRecyclerView.setAdapter(dishAdapter);
-
-        dishBigAdapter = new DishBigAdapter(this, dishBigList);
-        dishBigRecyclerView.setAdapter(dishBigAdapter);
 
         // Show short review
         reviewRecyclerView = findViewById(R.id.reviewRecyclerView);
@@ -102,6 +107,11 @@ public class RestaurantActivity extends AppCompatActivity {
 
     public void goToReviewPage(View view) {
         Intent intent = new Intent(RestaurantActivity.this, ReviewActivity.class);
+        startActivity(intent);
+    }
+
+    public void goToCartDetailPage(View view) {
+        Intent intent = new Intent(RestaurantActivity.this, CartDetailActivity.class);
         startActivity(intent);
     }
 }

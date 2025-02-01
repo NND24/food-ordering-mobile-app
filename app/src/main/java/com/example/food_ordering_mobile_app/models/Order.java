@@ -1,16 +1,27 @@
 package com.example.food_ordering_mobile_app.models;
 
+import java.util.List;
+
 public class Order {
     private String name;
-    private int amountOfDish;
+    private int quantity;
+    private int price;
     private String address;
     private String restaurantAvatar;
+    private List<String> sideDish;
 
-    public Order(String name, int amountOfDish, String address, String restaurantAvatar) {
+    public Order(String name, int quantity, String address, String restaurantAvatar) {
         this.name = name;
-        this.amountOfDish = amountOfDish;
+        this.quantity = quantity;
         this.address = address;
         this.restaurantAvatar = restaurantAvatar;
+    }
+
+    public Order(String name, int quantity, int price, List<String> sideDish) {
+        this.name = name;
+        this.quantity = quantity;
+        this.price = price;
+        this.sideDish = sideDish;
     }
 
     public String getName() {
@@ -21,12 +32,12 @@ public class Order {
         this.name = name;
     }
 
-    public int getAmountOfDish() {
-        return amountOfDish;
+    public int getQuantity() {
+        return quantity;
     }
 
-    public void setAmountOfDish(int amountOfDish) {
-        this.amountOfDish = amountOfDish;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
     public String getAddress() {
@@ -43,6 +54,22 @@ public class Order {
 
     public void setRestaurantAvatar(String restaurantAvatar) {
         this.restaurantAvatar = restaurantAvatar;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    public List<String> getSideDish() {
+        return sideDish;
+    }
+
+    public void setSideDish(List<String> sideDish) {
+        this.sideDish = sideDish;
     }
 }
 

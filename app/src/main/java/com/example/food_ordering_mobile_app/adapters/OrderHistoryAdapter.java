@@ -40,7 +40,7 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
         Order order = orderList.get(position);
 
         holder.name.setText(order.getName());
-        holder.amountOfDish.setText(String.valueOf(order.getAmountOfDish()));
+        holder.quantity.setText(String.valueOf(order.getQuantity()));
         holder.address.setText(order.getAddress());
 
         int resourceId = Integer.parseInt(order.getRestaurantAvatar());
@@ -56,13 +56,13 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView name, amountOfDish, address;
+        TextView name, quantity, address;
         ImageView restaurantAvatar;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.restaurantName);
-            amountOfDish = itemView.findViewById(R.id.amountOfDish);
+            quantity = itemView.findViewById(R.id.quantity);
             address = itemView.findViewById(R.id.address);
             restaurantAvatar = itemView.findViewById(R.id.restaurantAvatar);
         }

@@ -1,0 +1,17 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Layer bóng đổ -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="4dp" />
+            <solid android:color="@color/primaryBorderColor" /> <!-- Màu bóng đổ (đen mờ) -->
+        </shape>
+    </item>
+
+    <!-- Layer nút chính -->
+    <item android:top="1dp" android:left="1dp" android:bottom="1dp" android:right="1dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#FFFFFF" /> <!-- Màu nền nút -->
+            <corners android:radius="4dp" />
+        </shape>
+    </item>
+</layer-list>
