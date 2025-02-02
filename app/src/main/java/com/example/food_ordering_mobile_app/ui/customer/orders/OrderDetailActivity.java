@@ -1,8 +1,8 @@
-package com.example.food_ordering_mobile_app.ui.customer.cart;
+package com.example.food_ordering_mobile_app.ui.customer.orders;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,17 +12,18 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.food_ordering_mobile_app.R;
 import com.example.food_ordering_mobile_app.adapters.OrderSummaryAdapter;
 import com.example.food_ordering_mobile_app.models.Order;
-import com.example.food_ordering_mobile_app.ui.customer.dish.DishActivity;
-import com.example.food_ordering_mobile_app.ui.customer.orders.OrderDetailActivity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class CartDetailActivity extends AppCompatActivity {
+public class OrderDetailActivity extends AppCompatActivity {
     private RecyclerView orderSummaryRecyclerView;
     private OrderSummaryAdapter orderAdapter;
     private List<Order> orderList;
@@ -31,7 +32,23 @@ public class CartDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_cart_detail);
+        setContentView(R.layout.activity_order_detail);
+
+        ImageView restaurantAvatar = findViewById(R.id.restaurantAvatar);
+        int cornerRadius = (int) getResources().getDisplayMetrics().density * 8;
+
+        Glide.with(this)
+                .load(R.drawable.item_1)
+                .apply(RequestOptions.bitmapTransform(new RoundedCorners(cornerRadius)))
+                .into(restaurantAvatar);
+
+        ImageView shipperAvatar = findViewById(R.id.shipperAvatar);
+        int shipperAvatarCornerRadius = (int) getResources().getDisplayMetrics().density * 8; // 8dp to px
+
+        Glide.with(this)
+                .load(R.drawable.item_1)
+                .apply(RequestOptions.bitmapTransform(new RoundedCorners(shipperAvatarCornerRadius))) // Áp dụng bo góc
+                .into(shipperAvatar);
 
         orderSummaryRecyclerView = findViewById(R.id.orderSummaryRecyclerView);
         orderSummaryRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -47,10 +64,5 @@ public class CartDetailActivity extends AppCompatActivity {
 
     public void goBack(View view) {
         onBackPressed();
-    }
-
-    public void goToOrderDetail(View view) {
-        Intent intent = new Intent(this, OrderDetailActivity.class);
-        startActivity(intent);
     }
 }
