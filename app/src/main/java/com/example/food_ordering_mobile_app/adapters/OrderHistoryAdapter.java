@@ -1,9 +1,11 @@
 package com.example.food_ordering_mobile_app.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.example.food_ordering_mobile_app.R;
 import com.example.food_ordering_mobile_app.models.Order;
+import com.example.food_ordering_mobile_app.ui.customer.rating.RatingActivity;
 
 import java.util.List;
 
@@ -48,6 +51,11 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
                 .load(resourceId)
                 .transform(new RoundedCorners(8))
                 .into(holder.restaurantAvatar);
+
+        holder.ratingBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(context, RatingActivity.class);
+            context.startActivity(intent);
+        });
     }
 
     @Override
@@ -58,6 +66,7 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView name, quantity, address;
         ImageView restaurantAvatar;
+        Button reorderBtn, ratingBtn;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -65,6 +74,8 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
             quantity = itemView.findViewById(R.id.quantity);
             address = itemView.findViewById(R.id.address);
             restaurantAvatar = itemView.findViewById(R.id.restaurantAvatar);
+            reorderBtn = itemView.findViewById(R.id.reorderBtn);
+            ratingBtn = itemView.findViewById(R.id.ratingBtn);
         }
     }
 }

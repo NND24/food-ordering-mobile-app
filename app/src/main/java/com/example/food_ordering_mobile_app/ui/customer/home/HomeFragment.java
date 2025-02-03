@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -16,6 +17,8 @@ import com.example.food_ordering_mobile_app.adapters.CategoryAdapter;
 import com.example.food_ordering_mobile_app.adapters.RestaurantAdapter;
 import com.example.food_ordering_mobile_app.models.Category;
 import com.example.food_ordering_mobile_app.models.Restaurant;
+import com.example.food_ordering_mobile_app.ui.customer.cart.CartActivity;
+import com.example.food_ordering_mobile_app.ui.customer.notifications.NotificationActivity;
 import com.example.food_ordering_mobile_app.ui.customer.restaurant.RestaurantActivity;
 import com.example.food_ordering_mobile_app.ui.customer.search.SearchActivity;
 
@@ -32,6 +35,7 @@ public class HomeFragment extends Fragment {
     private RecyclerView bigRestaurantRecyclerView;
     private RestaurantBigAdapter restaurantBigAdapter;
     private List<Restaurant> bigRestaurantList;
+    ImageButton goToNotificationBtn, goToCartBtn;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -92,6 +96,23 @@ public class HomeFragment extends Fragment {
         });
         bigRestaurantRecyclerView.setAdapter(restaurantBigAdapter);
 
+
+        goToNotificationBtn = view.findViewById(R.id.goToNotificationBtn);
+        goToNotificationBtn.setOnClickListener(this::goToNotification);
+
+        goToCartBtn = view.findViewById(R.id.goToCartBtn);
+        goToCartBtn.setOnClickListener(this::goToCart);
+
         return view;
+    }
+
+    public void goToNotification(View view) {
+        Intent intent = new Intent(requireContext(), NotificationActivity.class);
+        startActivity(intent);
+    }
+
+    public void goToCart(View view) {
+        Intent intent = new Intent(requireContext(), CartActivity.class);
+        startActivity(intent);
     }
 }

@@ -41,22 +41,22 @@
                 android:layout_weight="1" />
 
             <ImageButton
-                android:id="@+id/imageButton"
+                android:id="@+id/goToNotificationBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@color/backgroundColor"
-                android:src="@drawable/ic_notification_24" />
+                android:src="@drawable/ic_notification_24"/>
 
             <Space
                 android:layout_width="20dp"
                 android:layout_height="wrap_content" />
 
             <ImageButton
-                android:id="@+id/imageButton2"
+                android:id="@+id/goToCartBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@color/backgroundColor"
-                android:src="@drawable/ic_cart_24" />
+                android:src="@drawable/ic_cart_24"/>
         </LinearLayout>
 
         <Space

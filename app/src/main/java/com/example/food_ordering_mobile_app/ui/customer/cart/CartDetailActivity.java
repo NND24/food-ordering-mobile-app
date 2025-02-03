@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.food_ordering_mobile_app.R;
 import com.example.food_ordering_mobile_app.adapters.OrderSummaryAdapter;
 import com.example.food_ordering_mobile_app.models.Order;
+import com.example.food_ordering_mobile_app.ui.customer.coupons.CouponsActivity;
 import com.example.food_ordering_mobile_app.ui.customer.dish.DishActivity;
 import com.example.food_ordering_mobile_app.ui.customer.orders.OrderDetailActivity;
 
@@ -51,6 +52,11 @@ public class CartDetailActivity extends AppCompatActivity {
 
     public void goToOrderDetail(View view) {
         Intent intent = new Intent(this, OrderDetailActivity.class);
+        startActivity(intent);
+    }
+
+    public void goToCouponPage(View view) {
+        Intent intent = new Intent(this, CouponsActivity.class);
         startActivity(intent);
     }
 }

@@ -82,6 +82,7 @@
         android:orientation="horizontal">
 
         <Button
+            android:id="@+id/reorderBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/custom_button_reorder"
@@ -96,6 +97,7 @@
             android:textAllCaps="false" />
 
         <Button
+            android:id="@+id/ratingBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/custom_button_rating"

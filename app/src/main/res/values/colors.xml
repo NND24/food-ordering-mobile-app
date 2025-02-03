@@ -26,6 +26,7 @@
     <color name="transparentBgColor">#00000000</color>
     <color name="reviewBgColor">#e6e6e6</color>
     <color name="ratingBgColor">#80E6E6E6</color>
+    <color name="notificationBgColor">#eeeeeeee</color>
 
     <!-- Error Colors -->
     <color name="errorColor">#B00020</color> <!-- Màu lỗi, đỏ -->
