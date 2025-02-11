@@ -149,6 +149,7 @@
                 android:layout_height="15dp" />
 
             <Button
+                android:id="@+id/setting_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/custom_button_setting"
@@ -159,6 +160,7 @@
                 android:gravity="start|center_vertical"
                 android:textAllCaps="false"
                 android:text="@string/setting"
+                android:onClick="goToSetting"
                 android:textSize="16dp"
                 android:drawablePadding="15dp"/>
 

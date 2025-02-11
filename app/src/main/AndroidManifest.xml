@@ -84,6 +84,11 @@
             android:name=".ui.customer.search.FilterByActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.common.ChangingRoleActivity"
+            android:exported="false" />
+        <activity android:name=".ui.store.MainStoreActivity"
+            android:exported="false"/>
+        <activity
             android:name=".ui.common.SplashActivity"
             android:exported="true">
             <intent-filter>

@@ -1,5 +1,6 @@
 package com.example.food_ordering_mobile_app.ui.customer.settings;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.bumptech.glide.Glide;
 import com.example.food_ordering_mobile_app.R;
+import com.example.food_ordering_mobile_app.ui.common.ChangingRoleActivity;
 
 public class SettingsFragment extends Fragment {
 
@@ -48,6 +50,18 @@ public class SettingsFragment extends Fragment {
                     .navigate(R.id.action_settings_to_payment_method, bundle);
         });
 
+        Button goToSettingBtn = view.findViewById(R.id.setting_button);
+        goToSettingBtn.setOnClickListener(this::goToSetting);
+
         return view;
     }
+
+    public void goToSetting(View view) {
+        Intent intent = new Intent(requireContext(), ChangingRoleActivity.class);
+        startActivity(intent);
+    }
+
+    public void login(View view) {
+    }
 }
+
