@@ -64,4 +64,8 @@
     <string name="review_and_comment">Review And Comment</string>
     <string name="review">Review</string>
     <string name="days_ago">days ago</string>
+    <string name="shipper">Shipper</string>
+    <string name="customer">Customer</string>
+    <string name="store_owner">Store Owner</string>
+    <string name="discount">Discount</string>
 </resources>
