@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="0dp"
+    app:cardElevation="4dp"
+    app:cardCornerRadius="2dp"
+    app:cardUseCompatPadding="true"
+    app:cardBackgroundColor="@android:color/white">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="0dp"
+        android:background="@color/whiteColor"
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/order_number"
+            android:layout_width="57dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/rounded_order_number"
+            android:gravity="center"
+            android:text="02"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/order_id"
+            android:layout_width="194dp"
+            android:layout_height="19dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:text="#120420"
+            android:textColor="@color/primaryColor"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/order_number"
+            app:layout_constraintTop_toTopOf="@id/order_number" />
+
+        <TextView
+            android:id="@+id/pickup_time"
+            android:layout_width="310dp"
+            android:layout_height="19dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:text="Giao lúc 14:50 (trong 20 phút)"
+            android:textColor="@color/secondaryColor"
+            android:textSize="14sp"
+            app:layout_constraintStart_toEndOf="@id/order_number"
+            app:layout_constraintTop_toBottomOf="@id/order_id" />
+
+        <TextView
+            android:id="@+id/customer_name"
+            android:layout_width="296dp"
+            android:layout_height="21dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="12dp"
+            android:text="Tuấn Anh Bùi Vũ"
+            android:textColor="@color/secondaryColor"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/pickup_time" />
+
+        <TextView
+            android:id="@+id/status"
+            android:layout_width="296dp"
+            android:layout_height="21dp"
+            android:layout_marginStart="4dp"
+            android:text="Đang tìm tài xế"
+            android:textColor="@color/secondaryColor"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/customer_name" />
+
+        <TextView
+            android:id="@+id/items_number"
+            android:layout_width="147dp"
+            android:layout_height="41dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="16dp"
+            android:text="2 món"
+            android:textColor="@color/secondaryColor"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/status" />
+
+        <Button
+            android:id="@+id/btn_confirm"
+            android:layout_width="160dp"
+            android:layout_height="44dp"
+            android:layout_marginEnd="4dp"
+            android:backgroundTint="@color/primaryColor"
+            android:text="@string/inform_driver"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/status"
+            app:layout_constraintVertical_bias="1.0" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

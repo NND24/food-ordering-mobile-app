@@ -68,4 +68,14 @@
     <string name="customer">Customer</string>
     <string name="store_owner">Store Owner</string>
     <string name="discount">Discount</string>
+    <string name="menu">Menu</string>
+    <string name="store_info">Store information</string>
+    <string name="service_quality">Service quality</string>
+    <string name="staff_management">Staff management</string>
+    <string name="help_center">Help center</string>
+    <string name="preorder">Preorder</string>
+    <string name="latest">Latest</string>
+    <string name="confirmed">Confirmed</string>
+    <string name="inform_driver">Thông báo tài xế</string>
+
 </resources>
