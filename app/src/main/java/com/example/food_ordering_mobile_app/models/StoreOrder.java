@@ -18,6 +18,19 @@ public class StoreOrder {
 
     private String  pickupDate;
 
+    private String status;
+
+
+    public StoreOrder(int id, int numberOrder, List<OrderDetail> orderItems, String pickUpTime, String pickupDate, String status, String customerName) {
+        this.id = id;
+        this.numberOrder = numberOrder;
+        this.orderItems = orderItems;
+        this.pickUpTime = pickUpTime;
+        this.pickupDate = pickupDate;
+        this.status = status;
+        this.customerName = customerName;
+    }
+
     public StoreOrder(int id, int numberOrder, List<OrderDetail> orderItems, String customerName, String orderTime, String pickUpTime, double distance, String orderDate, String pickupDate) {
         this.id = id;
         this.numberOrder = numberOrder;
@@ -28,6 +41,18 @@ public class StoreOrder {
         this.distance = distance;
         this.orderDate = orderDate;
         this.pickupDate = pickupDate;
+    }
+    public StoreOrder(int id, int numberOrder, List<OrderDetail> orderItems, String customerName, String orderTime, String pickUpTime, double distance, String orderDate, String pickupDate, String status) {
+        this.id = id;
+        this.numberOrder = numberOrder;
+        this.orderItems = orderItems;
+        this.customerName = customerName;
+        this.orderTime = orderTime;
+        this.pickUpTime = pickUpTime;
+        this.distance = distance;
+        this.orderDate = orderDate;
+        this.pickupDate = pickupDate;
+        this.status = status;
     }
 
     public StoreOrder(int id, int numberOrder, List<OrderDetail> orderItems, String customerName, String orderTime, String pickUpTime) {
@@ -119,6 +144,15 @@ public class StoreOrder {
     public void setPickupDate(String pickupDate) {
         this.pickupDate = pickupDate;
     }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
 
     public String getOrderDetail(){
         StringBuilder result = new StringBuilder();

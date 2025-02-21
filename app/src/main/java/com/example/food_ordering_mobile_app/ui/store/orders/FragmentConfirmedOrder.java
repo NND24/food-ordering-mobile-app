@@ -1,66 +1,67 @@
 package com.example.food_ordering_mobile_app.ui.store.orders;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.food_ordering_mobile_app.R;
+import com.example.food_ordering_mobile_app.adapters.OrderConfirmedAdapter;
+import com.example.food_ordering_mobile_app.models.OrderDetail;
+import com.example.food_ordering_mobile_app.models.StoreOrder;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link FragmentConfirmedOrder#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class FragmentConfirmedOrder extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private RecyclerView recyclerView;
+    private OrderConfirmedAdapter adapter;
+    private List<StoreOrder> orderList;
 
     public FragmentConfirmedOrder() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FragmentConfirmedOrder.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static FragmentConfirmedOrder newInstance(String param1, String param2) {
-        FragmentConfirmedOrder fragment = new FragmentConfirmedOrder();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_confirmed_order, container, false);
+
+        recyclerView = view.findViewById(R.id.confirmOrderRecyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        // Load example data
+        loadExampleData();
+
+        // Initialize and set adapter
+        adapter = new OrderConfirmedAdapter(getContext(), orderList, order -> {
+            // Handle order click event
+        });
+        recyclerView.setAdapter(adapter);
+
+        return view;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    private void loadExampleData() {
+        orderList = new ArrayList<>();
+        List<OrderDetail> orderItems1 = Arrays.asList(
+                new OrderDetail(1, "Bún Bò Huế", 2, 50000),
+                new OrderDetail(2, "Trà Sữa Trân Châu", 1, 30000)
+        );
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_confirmed_order, container, false);
+        List<OrderDetail> orderItems2 = Arrays.asList(
+                new OrderDetail(3, "Phở Bò", 1, 60000),
+                new OrderDetail(4, "Cà Phê Sữa Đá", 1, 25000)
+        );
+        orderList.add(new StoreOrder(1, 1, orderItems1, "10:30 AM", "12/2", "Confirmed","John Doe" ));
+        orderList.add(new StoreOrder(2, 2,orderItems2,  "11:00 AM", "12/2", "Confirmed", "Alice Smith"));
+        orderList.add(new StoreOrder(3, 3,orderItems2, "11:30 AM", "12/2", "Confirmed", "Bob Johnson"));
     }
 }

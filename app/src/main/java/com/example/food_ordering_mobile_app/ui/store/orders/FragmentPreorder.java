@@ -31,7 +31,7 @@ public class FragmentPreorder extends Fragment {
         // Required empty public constructor
     }
 
-    public static FragmentPreorder newInstance(String param1, String param2) {
+    public static FragmentPreorder newInstance() {
         FragmentPreorder fragment = new FragmentPreorder();
         Bundle args = new Bundle();
         fragment.setArguments(args);
