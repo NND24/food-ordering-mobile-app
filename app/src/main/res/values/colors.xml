@@ -4,7 +4,8 @@
     <color name="primaryColor">#fc6011</color> <!-- Màu chủ đạo -->
     <color name="primaryVariant">#FD5C0A</color> <!-- Phiên bản đậm hơn -->
     <color name="onPrimary">#4a4b4d</color> <!-- Màu nội dung trên nền chủ đạo -->
-
+    <color name="primaryLightColor">#FCF5F4</color>
+    
     <!-- Secondary Colors -->
     <color name="secondaryColor">#636464</color> <!-- Màu phụ, xanh lam nhạt -->
     <color name="secondaryVariant">#4a4b4d</color> <!-- Phiên bản đậm hơn -->
@@ -55,4 +56,5 @@
     <color name="blackColor">#000000</color>
     <color name="colorTransparentWhite">#cccccc</color>
     <color name="colorLink">#0054ff</color>
+    <color name="grayBackground">#f3f4f6</color>
 </resources>

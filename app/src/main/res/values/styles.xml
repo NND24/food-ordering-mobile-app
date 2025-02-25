@@ -50,6 +50,11 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="RoundedImage">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
     <style name="custom_input">
         <item name="android:background">@drawable/custom_input</item>
         <item name="android:drawablePadding">20dp</item>

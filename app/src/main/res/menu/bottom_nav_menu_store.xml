@@ -2,18 +2,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/home"
+        android:id="@+id/home_item"
         android:icon="@drawable/shortcut_home_state"
         app:labelVisibilityMode="labeled"
         android:title="@string/home"/>
     <item
-        android:id="@+id/orders"
+        android:id="@+id/orders_item"
         android:icon="@drawable/shortcut_orders_state"
         app:labelVisibilityMode="labeled"
         android:title="@string/orders" />
 
     <item
-        android:id="@+id/discount"
+        android:id="@+id/discount_item"
         android:icon="@drawable/shortcut_favorites_state"
         app:labelVisibilityMode="labeled"
         android:title="@string/discount" />
