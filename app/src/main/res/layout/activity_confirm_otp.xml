@@ -8,11 +8,10 @@
     android:padding="30dp"
     android:gravity="center"
     android:background="@color/backgroundColor"
-    tools:context=".ui.common.ConfirmOTPActivity">
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="20dp"/>
+    tools:context=".ui.common.ConfirmOTPActivity"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:clickable="true">
 
     <TextView
         android:id="@+id/title_login"
@@ -41,7 +40,7 @@
         android:id="@+id/tvCountdownTimer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="35sp"
+        android:textSize="30sp"
         android:textStyle="bold"
         android:text="00:00"
         android:padding="8dp"
@@ -54,7 +53,14 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Vui lòng kiểm tra số điện thoại 0935******"
+        android:text="Vui lòng kiểm tra email"
+        android:textColor="@color/secondaryColor"
+        android:textSize="16sp" />
+    <TextView
+        android:id="@+id/tvEmailInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
         android:textColor="@color/secondaryColor"
         android:textSize="16sp" />
     <TextView
@@ -75,34 +81,68 @@
         android:gravity="center">
 
         <EditText
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:id="@+id/otp1"
+            android:layout_width="49dp"
+            android:layout_height="49dp"
             android:textAlignment="center"
             android:hint="*"
-            android:layout_marginRight="20dp"
+            android:inputType="number"
+            android:maxLength="1"
+            android:layout_marginRight="5dp"
             style="@style/custom_input"/>
 
         <EditText
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:id="@+id/otp2"
+            android:layout_width="49dp"
+            android:layout_height="49dp"
             android:textAlignment="center"
             android:hint="*"
-            android:layout_marginRight="20dp"
+            android:inputType="number"
+            android:maxLength="1"
+            android:layout_marginRight="5dp"
             style="@style/custom_input"/>
 
         <EditText
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:id="@+id/otp3"
+            android:layout_width="49dp"
+            android:layout_height="49dp"
             android:textAlignment="center"
             android:hint="*"
-            android:layout_marginRight="20dp"
+            android:inputType="number"
+            android:maxLength="1"
+            android:layout_marginRight="5dp"
             style="@style/custom_input"/>
 
         <EditText
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:id="@+id/otp4"
+            android:layout_width="49dp"
+            android:layout_height="49dp"
             android:textAlignment="center"
             android:hint="*"
+            android:inputType="number"
+            android:maxLength="1"
+            android:layout_marginRight="5dp"
+            style="@style/custom_input"/>
+
+        <EditText
+            android:id="@+id/otp5"
+            android:layout_width="49dp"
+            android:layout_height="49dp"
+            android:textAlignment="center"
+            android:hint="*"
+            android:inputType="number"
+            android:maxLength="1"
+            android:layout_marginRight="5dp"
+            style="@style/custom_input"/>
+
+        <EditText
+            android:id="@+id/otp6"
+            android:layout_width="49dp"
+            android:layout_height="49dp"
+            android:textAlignment="center"
+            android:hint="*"
+            android:inputType="number"
+            android:maxLength="1"
             style="@style/custom_input"/>
     </LinearLayout>
 
@@ -111,11 +151,10 @@
         android:layout_height="20dp"/>
 
     <Button
-        android:id="@+id/btn_login"
+        android:id="@+id/btnVerifyOtp"
         android:layout_width="match_parent"
         android:text="@string/next"
-        style="@style/button_style"
-        android:onClick="redirectToResetPasswordPage"/>
+        style="@style/button_style"/>
 
     <Space
         android:layout_width="match_parent"
@@ -132,9 +171,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/resendOTP"
-            android:textStyle="bold"
             android:textColor="@color/secondaryColor"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <Space

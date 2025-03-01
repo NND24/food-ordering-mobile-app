@@ -8,11 +8,10 @@
     android:padding="30dp"
     android:gravity="center"
     android:background="@color/backgroundColor"
-    tools:context=".ui.common.LoginActivity">
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="20dp"/>
+    tools:context=".ui.common.LoginActivity"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:clickable="true">
 
     <TextView
         android:id="@+id/title_login"
@@ -43,7 +42,7 @@
         android:layout_height="wrap_content">
 
         <EditText
-            android:id="@+id/loginTextViewUsername"
+            android:id="@+id/edtEmail"
             android:inputType="textEmailAddress"
             android:drawableStart="@drawable/ic_email_24"
             android:hint="@string/email"
@@ -59,7 +58,7 @@
             android:orientation="horizontal">
 
             <EditText
-                android:id="@+id/txtPassword"
+                android:id="@+id/edtPassword"
                 style="@style/custom_input_password"
                 android:drawableStart="@drawable/ic_lock_24"
                 android:hint="@string/password"
@@ -70,7 +69,7 @@
                 android:id="@+id/btnShowPassword"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                app:srcCompat="@drawable/ic_eye_show_24"
+                app:srcCompat="@drawable/ic_eye_hide_24"
                 style="@style/custom_button_password" />
         </LinearLayout>
 
@@ -81,11 +80,10 @@
         android:layout_height="20dp"/>
 
     <Button
-        android:id="@+id/btn_login"
+        android:id="@+id/btnLogin"
         android:layout_width="match_parent"
         android:text="@string/login"
-        style="@style/button_style"
-        android:onClick="login"/>
+        style="@style/button_style"/>
 
     <Space
         android:layout_width="match_parent"
@@ -148,7 +146,7 @@
         android:layout_height="25dp"/>
 
     <Button
-        android:id="@+id/btn_facebook"
+        android:id="@+id/btnLoginFacebook"
         style="@style/facebook_button_style"
         android:layout_width="match_parent"
         android:drawableLeft="@drawable/ic_facebook"
@@ -158,12 +156,13 @@
         android:layout_width="match_parent"
         android:layout_height="15dp"/>
 
-    <Button
-        android:id="@+id/btn_google"
+    <com.developer.gbuttons.GoogleSignInButton
+        android:id="@+id/btnLoginGoogle"
         android:layout_width="match_parent"
-        android:text="@string/loginWithGoogle"
-        android:drawableLeft="@drawable/ic_google"
-        style="@style/google_button_style"/>
+        android:layout_height="wrap_content"
+        android:text="Login with google"
+        style="@style/google_button_style"
+        />
 
     <Space
         android:layout_width="match_parent"

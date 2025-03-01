@@ -169,10 +169,10 @@
                 android:layout_height="15dp" />
 
             <Button
+                android:id="@+id/btnLogout"
                 style="@style/button_style"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:onClick="login"
                 android:text="@string/logout" />
         </LinearLayout>
 

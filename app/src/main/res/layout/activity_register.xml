@@ -8,11 +8,10 @@
     android:padding="30dp"
     android:gravity="center"
     android:background="@color/backgroundColor"
-    tools:context=".ui.common.RegisterActivity">
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="20dp"/>
+    tools:context=".ui.common.RegisterActivity"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:clickable="true">
 
     <TextView
         android:id="@+id/title_login"
@@ -25,7 +24,7 @@
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="20dp"/>
+        android:layout_height="15dp"/>
 
     <ImageView
         android:id="@+id/logo"
@@ -35,7 +34,7 @@
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="20dp"/>
+        android:layout_height="15dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -43,17 +42,17 @@
         android:layout_height="wrap_content">
 
         <EditText
-            android:id="@+id/txtName"
+            android:id="@+id/edtName"
             android:drawableStart="@drawable/ic_account_24"
-            android:hint="@string/email"
+            android:hint="@string/name"
             style="@style/custom_input" />
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="20dp"/>
+            android:layout_height="10dp"/>
 
         <EditText
-            android:id="@+id/txtEmail"
+            android:id="@+id/edtEmail"
             android:inputType="textEmailAddress"
             android:drawableStart="@drawable/ic_email_24"
             android:hint="@string/email"
@@ -61,18 +60,122 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="20dp"/>
+            android:layout_height="10dp"/>
 
         <EditText
-            android:id="@+id/txtPhoneNumber"
-            android:inputType="textPhonetic"
+            android:id="@+id/edtPhonenumber"
+            android:inputType="phone"
             android:drawableStart="@drawable/ic_phone_24"
             android:hint="@string/phonenumber"
             style="@style/custom_input" />
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="20dp"/>
+            android:layout_height="10dp"/>
+
+        <RadioGroup
+            android:id="@+id/radioGroupGender"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/layoutFemale"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/custom_radio_gender_button_background"
+                android:padding="12dp"
+                android:gravity="center_vertical"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/female"
+                    android:textColor="@color/onPrimary"
+                    android:textSize="16sp"
+                    android:layout_weight="1"/>
+
+                <RadioButton
+                    android:id="@+id/radioFemale"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@drawable/custom_radio_button"
+                    android:focusable="false"
+                    android:clickable="false"/>
+            </LinearLayout>
+
+            <Space android:layout_width="10dp" android:layout_height="wrap_content"/>
+
+            <LinearLayout
+                android:id="@+id/layoutMale"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/custom_radio_gender_button_background"
+                android:padding="12dp"
+                android:gravity="center_vertical"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/male"
+                    android:textColor="@color/onPrimary"
+                    android:textSize="16sp"
+                    android:layout_weight="1"/>
+
+                <RadioButton
+                    android:id="@+id/radioMale"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@drawable/custom_radio_button"
+                    android:focusable="false"
+                    android:clickable="false"/>
+            </LinearLayout>
+
+            <Space android:layout_width="10dp" android:layout_height="wrap_content"/>
+
+            <LinearLayout
+                android:id="@+id/layoutOther"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/custom_radio_gender_button_background"
+                android:padding="12dp"
+                android:gravity="center_vertical"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/other"
+                    android:textColor="@color/onPrimary"
+                    android:textSize="16sp"
+                    android:layout_weight="1"/>
+
+                <RadioButton
+                    android:id="@+id/radioOther"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@drawable/custom_radio_button"
+                    android:focusable="false"
+                    android:clickable="false"/>
+            </LinearLayout>
+
+        </RadioGroup>
+
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -80,7 +183,7 @@
             android:orientation="horizontal">
 
             <EditText
-                android:id="@+id/txtPassword"
+                android:id="@+id/edtPassword"
                 style="@style/custom_input_password"
                 android:drawableStart="@drawable/ic_lock_24"
                 android:hint="@string/password"
@@ -91,13 +194,13 @@
                 android:id="@+id/btnShowPassword"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                app:srcCompat="@drawable/ic_eye_show_24"
+                app:srcCompat="@drawable/ic_eye_hide_24"
                 style="@style/custom_button_password" />
         </LinearLayout>
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="20dp"/>
+            android:layout_height="10dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -105,10 +208,10 @@
             android:orientation="horizontal">
 
             <EditText
-                android:id="@+id/txtConfirmPassword"
+                android:id="@+id/edtConfirmPassword"
                 style="@style/custom_input_password"
                 android:drawableStart="@drawable/ic_lock_24"
-                android:hint="@string/password"
+                android:hint="@string/confirm_password"
                 android:layout_weight="1"
                 android:inputType="textPassword" />
 
@@ -116,7 +219,7 @@
                 android:id="@+id/btnShowConfirmPassword"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                app:srcCompat="@drawable/ic_eye_show_24"
+                app:srcCompat="@drawable/ic_eye_hide_24"
                 style="@style/custom_button_password" />
         </LinearLayout>
 
@@ -127,7 +230,7 @@
         android:layout_height="20dp"/>
 
     <Button
-        android:id="@+id/btn_login"
+        android:id="@+id/btnRegister"
         android:layout_width="match_parent"
         android:text="@string/register"
         style="@style/button_style"/>

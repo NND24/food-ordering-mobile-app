@@ -1,4 +1,5 @@
 <resources>
+    <string name="google_client_id">931496416191-pr28dm2ddhdq17jemlc684cjbjbau5hv.apps.googleusercontent.com</string>
     <string name="app_name">PTIT FOOD</string>
     <string name="cart_icon">Cart</string>
     <string name="notification_icon">Notifi</string>
@@ -77,5 +78,9 @@
     <string name="latest">Latest</string>
     <string name="confirmed">Confirmed</string>
     <string name="inform_driver">Thông báo tài xế</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="female">Female</string>
+    <string name="male">Male</string>
+    <string name="other">Other</string>
 
 </resources>
