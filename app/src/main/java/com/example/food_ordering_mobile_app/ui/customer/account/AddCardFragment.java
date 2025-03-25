@@ -1,4 +1,4 @@
-package com.example.food_ordering_mobile_app.ui.customer.settings;
+package com.example.food_ordering_mobile_app.ui.customer.account;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

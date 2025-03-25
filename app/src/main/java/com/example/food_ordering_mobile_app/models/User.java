@@ -23,6 +23,12 @@ public class User {
         this.password = password;
     }
 
+    public User(String name, String phonenumber, String gender) {
+        this.name = name;
+        this.phonenumber = phonenumber;
+        this.gender = gender;
+    }
+
     public User(String name, String email, String phonenumber, String gender, String password) {
         this.name = name;
         this.email = email;
@@ -109,5 +115,21 @@ public class User {
 
     public void setGoogleLogin(boolean googleLogin) {
         isGoogleLogin = googleLogin;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", phonenumber='" + phonenumber + '\'' +
+                ", password='" + (password != null ? "******" : "null") + '\'' +
+                ", gender='" + gender + '\'' +
+                ", role=" + role +
+                ", avatar=" + avatar +
+                ", accessToken='" + (accessToken != null ? "****" : "null") + '\'' +
+                ", isGoogleLogin=" + isGoogleLogin +
+                '}';
     }
 }

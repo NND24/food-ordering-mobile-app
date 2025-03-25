@@ -29,8 +29,8 @@ public class RegisterActivity extends AppCompatActivity {
     private AuthViewModel authViewModel;
     private EditText edtName, edtEmail, edtPassword, edtConfirmPassword, edtPhonenumber;
     private RadioGroup radioGroupGender;
-    LinearLayout layoutFemale, layoutMale, layoutOther;
-    RadioButton radioFemale, radioMale, radioOther;
+    private LinearLayout layoutFemale, layoutMale, layoutOther;
+    private RadioButton radioFemale, radioMale, radioOther;
     private ImageButton btnShowPassword, btnShowConfirmPassword;
     private Button btnRegister;
     private boolean isPasswordVisible = false;
@@ -58,20 +58,9 @@ public class RegisterActivity extends AppCompatActivity {
         btnShowConfirmPassword = findViewById(R.id.btnShowConfirmPassword);
         btnRegister = findViewById(R.id.btnRegister);
 
-        layoutFemale.setOnClickListener(v -> {
-            radioGroupGender.clearCheck(); // Bỏ chọn tất cả
-            radioFemale.setChecked(true);
-        });
-
-        layoutMale.setOnClickListener(v -> {
-            radioGroupGender.clearCheck();
-            radioMale.setChecked(true);
-        });
-
-        layoutOther.setOnClickListener(v -> {
-            radioGroupGender.clearCheck();
-            radioOther.setChecked(true);
-        });
+        layoutFemale.setOnClickListener(v -> radioGroupGender.check(R.id.radioFemale));
+        layoutMale.setOnClickListener(v -> radioGroupGender.check(R.id.radioMale));
+        layoutOther.setOnClickListener(v -> radioGroupGender.check(R.id.radioOther));
 
         // Initialize ViewModel
         authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
@@ -154,7 +143,14 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
-        String gender = ((RadioButton) findViewById(selectedId)).getText().toString().toLowerCase();
+        String gender = "";
+        if (selectedId == R.id.radioMale) {
+            gender = "male";
+        } else if (selectedId == R.id.radioFemale) {
+            gender = "female";
+        } else if (selectedId == R.id.radioOther) {
+            gender = "other";
+        }
 
         // Send data to ViewModel
         authViewModel.register(name, email, password, phonenumber, gender);

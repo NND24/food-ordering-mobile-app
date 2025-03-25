@@ -30,9 +30,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInStatusCodes;
-import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.tasks.Task;
 
 public class LoginActivity extends AppCompatActivity {
@@ -41,10 +39,10 @@ public class LoginActivity extends AppCompatActivity {
     private ImageButton btnShowPassword;
     private Button btnLogin, btnLoginFacebook;
     private boolean isPasswordVisible = true;
-    GoogleSignInButton btnLoginGoogle;
-    GoogleSignInOptions gOptions;
-    GoogleSignInClient gClient;
-    ActivityResultLauncher<Intent> activityResultLauncher;
+    private GoogleSignInButton btnLoginGoogle;
+    private GoogleSignInOptions gOptions;
+    private GoogleSignInClient gClient;
+    private ActivityResultLauncher<Intent> activityResultLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

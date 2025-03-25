@@ -9,6 +9,10 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" tools:ignore="ScopedStorage" />
 
+    <!-- Quyền truy cập camera -->
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-feature android:name="android.hardware.camera" android:required="true"/>
+
     <!-- Cấu hình Google Sign-In -->
     <meta-data
         android:name="com.google.android.gms.auth.api.signin.CLIENT_ID"

@@ -1,4 +1,4 @@
-package com.example.food_ordering_mobile_app.network;
+package com.example.food_ordering_mobile_app.network.services;
 
 import com.example.food_ordering_mobile_app.models.User;
 

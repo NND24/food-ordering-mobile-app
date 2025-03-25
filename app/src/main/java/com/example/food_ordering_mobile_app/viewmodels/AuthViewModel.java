@@ -14,6 +14,7 @@ import com.example.food_ordering_mobile_app.utils.Resource;
 
 public class AuthViewModel extends AndroidViewModel {
     private final AuthRepository authRepository;
+
     private final MutableLiveData<Resource<User>> loginResponse = new MutableLiveData<>();
     public LiveData<Resource<User>> getLoginResponse() {
         return loginResponse;

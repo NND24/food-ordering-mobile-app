@@ -14,7 +14,7 @@
 
     <fragment
         android:id="@+id/settings"
-        android:name="com.example.food_ordering_mobile_app.ui.customer.settings.SettingsFragment"
+        android:name="com.example.food_ordering_mobile_app.ui.customer.account.SettingsFragment"
         android:label="@string/settings"
         tools:layout="@layout/fragment_settings">
         <action
@@ -27,7 +27,7 @@
 
     <fragment
         android:id="@+id/profile"
-        android:name="com.example.food_ordering_mobile_app.ui.customer.settings.ProfileFragment"
+        android:name="com.example.food_ordering_mobile_app.ui.customer.account.ProfileFragment"
         tools:layout="@layout/fragment_profile" >
         <action
             android:id="@+id/action_profile_to_settings"
@@ -36,7 +36,7 @@
 
     <fragment
         android:id="@+id/payment_method"
-        android:name="com.example.food_ordering_mobile_app.ui.customer.settings.PaymentMethodFragment"
+        android:name="com.example.food_ordering_mobile_app.ui.customer.account.PaymentMethodFragment"
         tools:layout="@layout/fragment_payment_method" >
         <action
             android:id="@+id/action_payment_method_to_settings"
@@ -48,7 +48,7 @@
 
     <fragment
         android:id="@+id/add_card"
-        android:name="com.example.food_ordering_mobile_app.ui.customer.settings.AddCardFragment"
+        android:name="com.example.food_ordering_mobile_app.ui.customer.account.AddCardFragment"
         tools:layout="@layout/fragment_add_card" >
         <action
             android:id="@+id/action_add_card_to_payment_method"

@@ -5,7 +5,7 @@ import java.time.Instant;
 public class UserAvatar {
     private String filePath;
     private String url;
-    private Instant createdAt;
+    private String createdAt;
 
     public String getFilePath() {
         return filePath;
@@ -23,11 +23,20 @@ public class UserAvatar {
         this.url = url;
     }
 
-    public Instant getCreatedAt() {
+    public String getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Instant createdAt) {
+    public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
+    }
+
+    @Override
+    public String toString() {
+        return "UserAvatar{" +
+                "filePath='" + filePath + '\'' +
+                ", url='" + url + '\'' +
+                ", createdAt='" + createdAt + '\'' +
+                '}';
     }
 }

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:padding="0dp"
     android:background="@color/backgroundColor"
-    tools:context=".ui.customer.settings.SettingsFragment">
+    tools:context=".ui.customer.account.SettingsFragment">
 
 
     <LinearLayout
@@ -21,43 +21,52 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
-            android:id="@+id/profile_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
-            <TextView
-                android:id="@+id/textView"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Xin chào Đạt"
-                android:layout_marginRight="10dp"
-                android:textColor="@color/onPrimary"
-                android:textSize="28sp"
-                android:textStyle="bold" />
+                android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/editProfileBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_pencil_24" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/account"
+                    android:textColor="@color/onPrimary"
+                    android:textSize="28sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
 
             <Space
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1" />
 
-            <ImageView
-                android:id="@+id/avatar"
-                android:layout_width="53dp"
-                android:layout_height="53dp"
-                android:scaleType="centerCrop"
-                android:padding="3dp"
-                android:background="@drawable/category_border"
-                android:src="@drawable/dess_1" />
+            <ImageButton
+                android:id="@+id/goToNotificationBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/backgroundColor"
+                android:src="@drawable/ic_notification_24"/>
+
+            <Space
+                android:layout_width="20dp"
+                android:layout_height="wrap_content" />
+
+            <ImageButton
+                android:id="@+id/goToCartBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/backgroundColor"
+                android:src="@drawable/ic_cart_24"/>
 
         </LinearLayout>
+
+
     </LinearLayout>
 
     <androidx.core.widget.NestedScrollView
@@ -75,6 +84,60 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <LinearLayout
+                android:id="@+id/profile_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/ivAvatar"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@drawable/default_avatar" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="10dp">
+
+                    <TextView
+                        android:id="@+id/tvUserName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textColor="@color/onPrimary"
+                        android:textSize="22sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvPhonenumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textColor="@color/onSecondary"
+                        android:textSize="16sp"
+                        android:textStyle="normal" />
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <ImageView
+                    android:id="@+id/editProfileBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_pencil_24" />
+            </LinearLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="15dp" />
+
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -83,7 +146,6 @@
                 android:drawableRight="@drawable/ic_arrow_right_24"
                 android:drawablePadding="15dp"
                 android:gravity="start|center_vertical"
-                android:paddingHorizontal="20dp"
                 android:paddingVertical="12dp"
                 android:text="@string/notifications"
                 android:textAllCaps="false"
@@ -97,7 +159,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/custom_button_setting"
-                android:paddingHorizontal="20dp"
                 android:paddingVertical="12dp"
                 android:drawableLeft="@drawable/ic_cart_24"
                 android:drawableRight="@drawable/ic_arrow_right_24"
@@ -115,7 +176,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/custom_button_setting"
-                android:paddingHorizontal="20dp"
                 android:paddingVertical="12dp"
                 android:drawableLeft="@drawable/ic_location_24"
                 android:drawableRight="@drawable/ic_arrow_right_24"
@@ -134,7 +194,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/custom_button_setting"
-                android:paddingHorizontal="20dp"
                 android:paddingVertical="12dp"
                 android:drawableLeft="@drawable/ic_credit_card_24"
                 android:drawableRight="@drawable/ic_arrow_right_24"
@@ -143,6 +202,24 @@
                 android:text="@string/payment_methods"
                 android:textSize="16dp"
                 android:drawablePadding="15dp"/>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="15dp" />
+
+            <Button
+                android:id="@+id/btnChangePassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_button_setting"
+                android:drawableLeft="@drawable/ic_lock_24"
+                android:drawableRight="@drawable/ic_arrow_right_24"
+                android:drawablePadding="15dp"
+                android:gravity="start|center_vertical"
+                android:paddingVertical="12dp"
+                android:text="@string/change_password"
+                android:textAllCaps="false"
+                android:textSize="16dp" />
 
             <Space
                 android:layout_width="match_parent"
@@ -158,7 +235,6 @@
                 android:drawablePadding="15dp"
                 android:gravity="start|center_vertical"
                 android:onClick="goToSetting"
-                android:paddingHorizontal="20dp"
                 android:paddingVertical="12dp"
                 android:text="@string/setting"
                 android:textAllCaps="false"
