@@ -8,7 +8,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,7 +26,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import androidx.fragment.app.Fragment;
@@ -40,7 +38,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.example.food_ordering_mobile_app.R;
-import com.example.food_ordering_mobile_app.models.User;
+import com.example.food_ordering_mobile_app.models.user.User;
 import com.example.food_ordering_mobile_app.ui.customer.notifications.NotificationActivity;
 import com.example.food_ordering_mobile_app.utils.Resource;
 import com.example.food_ordering_mobile_app.utils.SharedPreferencesHelper;
@@ -66,7 +64,6 @@ public class ProfileFragment extends Fragment {
     private ImageView  btnUploadAvatar;
     private static final int CAMERA_REQUEST = 100;
     private static final int GALLERY_REQUEST = 200;
-    private static final int CAMERA_PERMISSION_REQUEST_CODE = 101;
     private static final int REQUEST_CAMERA_PERMISSION = 100;
 
     @Override
@@ -115,7 +112,6 @@ public class ProfileFragment extends Fragment {
             tvShowName.setText(savedUser.getName());
             edtEmail.setText(savedUser.getEmail());
             edtPhonenumber.setText(savedUser.getPhonenumber());
-
 
             if (savedUser.getGender() != null) {
                 String gender = savedUser.getGender().toLowerCase();
@@ -167,7 +163,7 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-       btnUpdate.setOnClickListener(v -> handleUpdateUser());
+        btnUpdate.setOnClickListener(v -> handleUpdateUser());
 
         btnUploadAvatar.setOnClickListener(v -> showImagePickerDialog());
 
@@ -235,7 +231,6 @@ public class ProfileFragment extends Fragment {
 
         // Check gender selection
         int selectedId = radioGroupGender.getCheckedRadioButtonId();
-        Log.d("ProfileFragment", "Selected Gender ID: " + selectedId);
         if (selectedId == -1) {
             Toast.makeText(requireContext(), "Vui lòng chọn giới tính", Toast.LENGTH_SHORT).show();
             return;
@@ -268,17 +263,6 @@ public class ProfileFragment extends Fragment {
                 .show();
     }
 
-    private void checkCameraPermission() {
-        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            ActivityCompat.requestPermissions(requireActivity(),
-                    new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE);
-        } else {
-            openCamera();
-        }
-    }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -290,8 +274,6 @@ public class ProfileFragment extends Fragment {
             }
         }
     }
-
-
 
 
     private void openCamera() {
@@ -306,7 +288,6 @@ public class ProfileFragment extends Fragment {
             startActivityForResult(intent, REQUEST_CAMERA_PERMISSION);
         }
     }
-
 
     private void openGallery() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);

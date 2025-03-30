@@ -2,6 +2,8 @@ package com.example.food_ordering_mobile_app.models;
 
 import android.app.Application;
 
+import com.example.food_ordering_mobile_app.models.user.User;
+
 import java.util.HashMap;
 import java.util.Map;
 

@@ -6,7 +6,7 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.food_ordering_mobile_app.models.User;
+import com.example.food_ordering_mobile_app.models.user.User;
 import com.example.food_ordering_mobile_app.network.services.AuthService;
 import com.example.food_ordering_mobile_app.network.RetrofitClient;
 import com.example.food_ordering_mobile_app.utils.PersistentCookieStore;

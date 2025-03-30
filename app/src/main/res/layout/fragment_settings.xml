@@ -234,7 +234,6 @@
                 android:drawableRight="@drawable/ic_arrow_right_24"
                 android:drawablePadding="15dp"
                 android:gravity="start|center_vertical"
-                android:onClick="goToSetting"
                 android:paddingVertical="12dp"
                 android:text="@string/setting"
                 android:textAllCaps="false"

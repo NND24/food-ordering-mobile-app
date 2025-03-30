@@ -37,13 +37,10 @@
             android:name=".ui.customer.cart.CartActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.customer.rating.RatingActivity"
+            android:name=".ui.customer.rating.AddRatingActivity"
             android:exported="false" />
         <activity
             android:name=".ui.customer.orders.OrderDetailActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.customer.coupons.CouponsActivity"
             android:exported="false" />
         <activity
             android:name=".ui.customer.cart.CartDetailActivity"
@@ -52,10 +49,10 @@
             android:name=".ui.customer.dish.DishActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.customer.review.ReviewActivity"
+            android:name=".ui.customer.rating.RatingActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.customer.restaurant.RestaurantActivity"
+            android:name=".ui.customer.store.StoreActivity"
             android:exported="false" />
         <activity
             android:name=".ui.customer.messages.DetailMessageActivity"
@@ -89,22 +86,11 @@
             android:name=".ui.customer.MainCustomerActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.customer.search.FilterPriceActivity"
+            android:name=".ui.customer.search.SortByActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.customer.search.FilterDeliveryFeeActivity"
+            android:name=".ui.customer.search.CategoryFilterActivity"
             android:exported="false" />
-        <activity
-            android:name=".ui.customer.search.FilterRestaurantOptionsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.customer.search.FilterByActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.common.ChangingRoleActivity"
-            android:exported="false" />
-        <activity android:name=".ui.store.MainStoreActivity"
-            android:exported="false"/>
         <activity
             android:name=".ui.common.SplashActivity"
             android:exported="true">

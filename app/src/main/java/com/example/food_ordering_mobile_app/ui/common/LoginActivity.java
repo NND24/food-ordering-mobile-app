@@ -21,7 +21,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.developer.gbuttons.GoogleSignInButton;
 import com.example.food_ordering_mobile_app.R;
-import com.example.food_ordering_mobile_app.models.User;
+import com.example.food_ordering_mobile_app.models.user.User;
 import com.example.food_ordering_mobile_app.ui.customer.MainCustomerActivity;
 import com.example.food_ordering_mobile_app.utils.Resource;
 import com.example.food_ordering_mobile_app.viewmodels.AuthViewModel;

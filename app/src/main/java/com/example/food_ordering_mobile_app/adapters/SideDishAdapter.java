@@ -10,24 +10,24 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.food_ordering_mobile_app.R;
-import com.example.food_ordering_mobile_app.models.SideDish;
+import com.example.food_ordering_mobile_app.models.dish.Topping;
 
 import java.util.List;
 
 public class SideDishAdapter extends RecyclerView.Adapter<SideDishAdapter.ViewHolder> {
     private Context context;
-    private List<SideDish> sideDishList;
+    private List<Topping> sideDishList;
     private OnSideDishClickListener onSideDishClickListener;
     public interface OnSideDishClickListener {
-        void onSideDishClick(SideDish dish);
+        void onSideDishClick(Topping dish);
     }
 
-    public SideDishAdapter(Context context, List<SideDish> dishList) {
+    public SideDishAdapter(Context context, List<Topping> dishList) {
         this.context = context;
         this.sideDishList = dishList;
     }
 
-    public SideDishAdapter(Context context, List<SideDish> sideDishList, OnSideDishClickListener onSideDishClickListener) {
+    public SideDishAdapter(Context context, List<Topping> sideDishList, OnSideDishClickListener onSideDishClickListener) {
         this.context = context;
         this.sideDishList = sideDishList;
         this.onSideDishClickListener = onSideDishClickListener;
@@ -42,7 +42,7 @@ public class SideDishAdapter extends RecyclerView.Adapter<SideDishAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        SideDish sideDish = sideDishList.get(position);
+        Topping sideDish = sideDishList.get(position);
 
         holder.name.setText(sideDish.getName());
         holder.price.setText(String.valueOf(sideDish.getPrice()));

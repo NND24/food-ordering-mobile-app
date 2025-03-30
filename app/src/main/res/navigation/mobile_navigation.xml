@@ -20,9 +20,6 @@
         <action
             android:id="@+id/action_settings_to_profile"
             app:destination="@id/profile" />
-        <action
-            android:id="@+id/action_settings_to_payment_method"
-            app:destination="@id/payment_method" />
     </fragment>
 
     <fragment
@@ -32,27 +29,6 @@
         <action
             android:id="@+id/action_profile_to_settings"
             app:destination="@id/settings" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/payment_method"
-        android:name="com.example.food_ordering_mobile_app.ui.customer.account.PaymentMethodFragment"
-        tools:layout="@layout/fragment_payment_method" >
-        <action
-            android:id="@+id/action_payment_method_to_settings"
-            app:destination="@id/settings" />
-        <action
-            android:id="@+id/action_payment_method_to_add_card"
-            app:destination="@id/add_card" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/add_card"
-        android:name="com.example.food_ordering_mobile_app.ui.customer.account.AddCardFragment"
-        tools:layout="@layout/fragment_add_card" >
-        <action
-            android:id="@+id/action_add_card_to_payment_method"
-            app:destination="@id/payment_method" />
     </fragment>
 
     <fragment
@@ -69,8 +45,8 @@
 
     <fragment
         android:id="@+id/messages"
-        android:name="com.example.food_ordering_mobile_app.ui.customer.messages.MessagesFragment"
+        android:name="com.example.food_ordering_mobile_app.ui.customer.messages.ChatFragment"
         android:label="@string/messages"
-        tools:layout="@layout/fragment_messages" />
+        tools:layout="@layout/fragment_chat" />
 
 </navigation>

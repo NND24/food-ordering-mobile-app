@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.food_ordering_mobile_app.R;
 import com.example.food_ordering_mobile_app.adapters.SideDishAdapter;
-import com.example.food_ordering_mobile_app.models.SideDish;
+import com.example.food_ordering_mobile_app.models.dish.Topping;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ import java.util.List;
 public class DishActivity extends AppCompatActivity {
     private RecyclerView sideDishRecyclerView;
     private SideDishAdapter dishAdapter;
-    private List<SideDish> sideDishList;
+    private List<Topping> sideDishList;
     TextView tvQuantity;
     LinearLayout quantityContainer;
     ImageButton btnIncrease, btnDecrease;
@@ -40,8 +40,8 @@ public class DishActivity extends AppCompatActivity {
         sideDishRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         sideDishList = new ArrayList<>();
-        sideDishList.add(new SideDish("Cơm them", 10000));
-        sideDishList.add(new SideDish("Nhiều thịt bò", 15000));
+        sideDishList.add(new Topping("Cơm them", 10000));
+        sideDishList.add(new Topping("Nhiều thịt bò", 15000));
 
         dishAdapter = new SideDishAdapter(this, sideDishList);
         sideDishRecyclerView.setAdapter(dishAdapter);

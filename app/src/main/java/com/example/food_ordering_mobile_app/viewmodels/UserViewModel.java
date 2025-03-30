@@ -8,7 +8,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
-import com.example.food_ordering_mobile_app.models.User;
+import com.example.food_ordering_mobile_app.models.user.User;
 import com.example.food_ordering_mobile_app.repository.UserRepository;
 import com.example.food_ordering_mobile_app.utils.Resource;
 

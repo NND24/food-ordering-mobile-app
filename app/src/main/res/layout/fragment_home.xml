@@ -80,11 +80,28 @@
             android:layout_width="match_parent"
             android:layout_height="20dp" />
 
-        <EditText
-            android:drawableStart="@drawable/ic_search_24"
-            android:hint="@string/findFood"
-            android:layout_height="45dp"
-            style="@style/custom_input" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            style="@style/custom_input">
+
+            <ImageButton
+                android:id="@+id/btnSearch"
+                android:layout_width="24dp"
+                android:layout_height="match_parent"
+                app:srcCompat="@drawable/ic_search_24"
+                android:layout_marginRight="5dp"
+                style="@style/custom_button_password"/>
+
+            <EditText
+                android:id="@+id/etSearch"
+                android:layout_height="45dp"
+                android:layout_width="match_parent"
+                android:hint="@string/findFood"
+                android:imeOptions="actionSearch"
+                android:inputType="text" />
+        </LinearLayout>
     </LinearLayout>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -95,7 +112,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
-
     <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -110,7 +126,7 @@
             android:orientation="vertical">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/categoryRecyclerView"
+                android:id="@+id/foodTypeRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="20dp"
@@ -142,6 +158,7 @@
                         android:layout_weight="1" />
 
                     <TextView
+                        android:id="@+id/searchAllStandoutStore"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="16sp"
@@ -150,109 +167,10 @@
 
                 </LinearLayout>
 
-                <LinearLayout
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/standoutStoreRecyclerView"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-                    <ImageView
-                        android:id="@+id/restaurantAvatar"
-                        android:layout_width="match_parent"
-                        android:layout_height="185dp"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/dess_1" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:paddingHorizontal="20dp">
-
-                        <TextView
-                            android:id="@+id/restaurantName"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Restaurant Name"
-                            android:textColor="@color/onPrimary"
-                            android:textSize="20sp"
-                            android:textStyle="bold" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical">
-
-                            <ImageView
-                                android:id="@+id/imageView"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                app:srcCompat="@drawable/ic_star_active_16" />
-
-                            <TextView
-                                android:id="@+id/rating"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginHorizontal="4dp"
-                                android:text="4.9"
-                                android:textColor="@color/primaryColor"
-                                android:textSize="16sp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="("
-                                android:textColor="@color/onSecondary"
-                                android:textSize="16sp" />
-
-                            <TextView
-                                android:id="@+id/amountOfRating"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="124"
-                                android:textColor="@color/onSecondary"
-                                android:textSize="16sp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text=" ratings"
-                                android:textColor="@color/onSecondary"
-                                android:textSize="16sp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text=")"
-                                android:textColor="@color/onSecondary"
-                                android:textSize="16sp" />
-
-                            <TextView
-                                android:id="@+id/restaurantType"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Cafe"
-                                android:textColor="@color/onSecondary"
-                                android:textSize="16sp"
-                                android:layout_marginLeft="4dp"/>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text=" • "
-                                android:textColor="@color/primaryColor"
-                                android:textSize="18sp" />
-
-                            <TextView
-                                android:id="@+id/restaurantDescription"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Western food"
-                                android:textColor="@color/onSecondary"
-                                android:textSize="16sp" />
-                        </LinearLayout>
-
-                    </LinearLayout>
-                </LinearLayout>
+                    android:layout_height="wrap_content" />
             </LinearLayout>
 
             <LinearLayout
@@ -281,6 +199,7 @@
                         android:layout_weight="1" />
 
                     <TextView
+                        android:id="@+id/searchAllRatingStore"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="16sp"
@@ -290,7 +209,7 @@
                 </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/bigRestaurantRecyclerView"
+                    android:id="@+id/ratingStoreRecyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </LinearLayout>
@@ -302,39 +221,11 @@
                 android:paddingHorizontal="20dp"
                 android:paddingVertical="10dp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Quán cơm"
-                        android:textSize="24sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/onPrimary"/>
-
-                    <Space
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="16sp"
-                        android:textColor="@color/primaryColor"
-                        android:text="Xem tất cả"/>
-
-                </LinearLayout>
-
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/restaurantRecyclerView"
+                    android:id="@+id/categoryRecyclerView"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"/>
             </LinearLayout>
-
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>

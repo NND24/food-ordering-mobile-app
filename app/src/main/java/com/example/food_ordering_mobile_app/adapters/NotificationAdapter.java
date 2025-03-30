@@ -4,20 +4,20 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
-import com.bumptech.glide.request.RequestOptions;
 import com.example.food_ordering_mobile_app.R;
-import com.example.food_ordering_mobile_app.models.Notification;
+import com.example.food_ordering_mobile_app.models.notification.Notification;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.ViewHolder> {
     private Context context;
@@ -50,21 +50,28 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Notification notification = notificationList.get(position);
 
-        holder.noti.setText(notification.getNoti());
-        holder.time.setText(notification.getTime());
+        holder.tvTitle.setText(notification.getTitle());
+        holder.tvMessage.setText(notification.getMessage());
 
-        Boolean isRead = notification.getIsRead();
+        Timestamp timestamp = notification.getTimestamps();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
+        String formattedDate = sdf.format(timestamp);
+        holder.tvDate.setText(formattedDate);
+
+        Boolean isRead = notification.getStatus() == "read";
 
         if (isRead) {
             holder.notificationContainer.setBackgroundColor(context.getResources().getColor(R.color.backgroundColor));
-            holder.noti.setTextColor((context.getResources().getColor(R.color.onTertiary)));
-            holder.time.setTextColor((context.getResources().getColor(R.color.onTertiary)));
-            holder.status.setTextColor((context.getResources().getColor(R.color.onTertiary)));
+            holder.tvTitle.setTextColor((context.getResources().getColor(R.color.onTertiary)));
+            holder.tvMessage.setTextColor((context.getResources().getColor(R.color.onTertiary)));
+            holder.tvDate.setTextColor((context.getResources().getColor(R.color.onTertiary)));
+            holder.tvStatus.setTextColor((context.getResources().getColor(R.color.onTertiary)));
         } else {
             holder.notificationContainer.setBackgroundColor(context.getResources().getColor(R.color.notificationBgColor));
-            holder.noti.setTextColor((context.getResources().getColor(R.color.onPrimary)));
-            holder.time.setTextColor((context.getResources().getColor(R.color.onSecondary)));
-            holder.status.setTextColor((context.getResources().getColor(R.color.primaryColor)));
+            holder.tvTitle.setTextColor((context.getResources().getColor(R.color.onPrimary)));
+            holder.tvMessage.setTextColor((context.getResources().getColor(R.color.onPrimary)));
+            holder.tvDate.setTextColor((context.getResources().getColor(R.color.onSecondary)));
+            holder.tvStatus.setTextColor((context.getResources().getColor(R.color.primaryColor)));
         }
 
         holder.itemView.setOnClickListener(v -> {
@@ -80,15 +87,16 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView noti, time, status;
+        TextView tvTitle, tvMessage, tvDate, tvStatus;
         LinearLayout notificationContainer;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             notificationContainer = itemView.findViewById(R.id.notification_container);
-            noti = itemView.findViewById(R.id.noti);
-            time = itemView.findViewById(R.id.time);
-            status = itemView.findViewById(R.id.status);
+            tvTitle = itemView.findViewById(R.id.tvTitle);
+            tvMessage = itemView.findViewById(R.id.tvMessage);
+            tvDate = itemView.findViewById(R.id.tvDate);
+            tvStatus = itemView.findViewById(R.id.tvStatus);
         }
     }
 }

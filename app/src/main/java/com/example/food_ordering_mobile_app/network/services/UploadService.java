@@ -1,7 +1,5 @@
 package com.example.food_ordering_mobile_app.network.services;
 
-import com.example.food_ordering_mobile_app.models.User;
-
 import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;

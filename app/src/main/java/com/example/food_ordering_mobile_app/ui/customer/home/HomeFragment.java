@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -15,41 +17,61 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SnapHelper;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.food_ordering_mobile_app.R;
-import com.example.food_ordering_mobile_app.adapters.RestaurantBigAdapter;
 import com.example.food_ordering_mobile_app.adapters.CategoryAdapter;
-import com.example.food_ordering_mobile_app.adapters.RestaurantAdapter;
-import com.example.food_ordering_mobile_app.models.Category;
-import com.example.food_ordering_mobile_app.models.Restaurant;
-import com.example.food_ordering_mobile_app.models.User;
+import com.example.food_ordering_mobile_app.adapters.StoreBigCardAdapter;
+import com.example.food_ordering_mobile_app.adapters.FoodTypeAdapter;
+import com.example.food_ordering_mobile_app.adapters.StoreStandoutAdapter;
+import com.example.food_ordering_mobile_app.models.foodType.FoodType;
+import com.example.food_ordering_mobile_app.models.store.CategoryWithStores;
+import com.example.food_ordering_mobile_app.models.store.Store;
+import com.example.food_ordering_mobile_app.models.store.ListStoreResponse;
+import com.example.food_ordering_mobile_app.models.user.User;
 import com.example.food_ordering_mobile_app.ui.customer.cart.CartActivity;
 import com.example.food_ordering_mobile_app.ui.customer.notifications.NotificationActivity;
-import com.example.food_ordering_mobile_app.ui.customer.restaurant.RestaurantActivity;
+import com.example.food_ordering_mobile_app.ui.customer.store.StoreActivity;
 import com.example.food_ordering_mobile_app.ui.customer.search.SearchActivity;
 import com.example.food_ordering_mobile_app.utils.Resource;
 import com.example.food_ordering_mobile_app.utils.SharedPreferencesHelper;
+import com.example.food_ordering_mobile_app.viewmodels.FoodTypeViewModel;
+import com.example.food_ordering_mobile_app.viewmodels.StoreViewModel;
 import com.example.food_ordering_mobile_app.viewmodels.UserViewModel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import com.example.food_ordering_mobile_app.utils.Functions;
 
 public class HomeFragment extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private UserViewModel userViewModel;
-    private CategoryAdapter categoryAdapter;
-    private List<Category> categoryList;
+    private FoodTypeViewModel foodTypeViewModel;
+    private StoreViewModel storeViewModel;
+    private FoodTypeAdapter foodTypeAdapter;
+    private List<FoodType> foodTypes;
+    private RecyclerView foodTypeRecyclerView;
     private RecyclerView categoryRecyclerView;
-    private RecyclerView restaurantRecyclerView;
-    private RestaurantAdapter restaurantAdapter;
-    private List<Restaurant> restaurantList;
-    private RecyclerView bigRestaurantRecyclerView;
-    private RestaurantBigAdapter restaurantBigAdapter;
-    private List<Restaurant> bigRestaurantList;
-    private ImageButton goToNotificationBtn, goToCartBtn;
-    private TextView tvName;
+    private CategoryAdapter categoryAdapter;
+    private List<CategoryWithStores> categoryWithStoresList;
+    private RecyclerView ratingStoreRecyclerView;
+    private StoreBigCardAdapter storeBigCardAdapter;
+    private List<Store> ratingStores;
+    private RecyclerView standoutStoreRecyclerView;
+    private StoreStandoutAdapter standoutStoreAdapter;
+    private List<Store> standoutStores;
+    private ImageButton goToNotificationBtn, goToCartBtn, btnSearch;
+    private TextView tvName, searchAllStandoutStore, searchAllRatingStore;
+    private EditText etSearch;
+    private Set<String> selectedFoodTypes = new HashSet<>();
 
     @Nullable
     @Override
@@ -59,28 +81,53 @@ public class HomeFragment extends Fragment {
 
         // Ánh xạ UI
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
+        foodTypeRecyclerView = view.findViewById(R.id.foodTypeRecyclerView);
         categoryRecyclerView = view.findViewById(R.id.categoryRecyclerView);
-        restaurantRecyclerView = view.findViewById(R.id.restaurantRecyclerView);
-        bigRestaurantRecyclerView = view.findViewById(R.id.bigRestaurantRecyclerView);
+        ratingStoreRecyclerView = view.findViewById(R.id.ratingStoreRecyclerView);
+        standoutStoreRecyclerView = view.findViewById(R.id.standoutStoreRecyclerView);
         goToNotificationBtn = view.findViewById(R.id.goToNotificationBtn);
         goToCartBtn = view.findViewById(R.id.goToCartBtn);
         tvName = view.findViewById(R.id.tvName);
+        etSearch = view.findViewById(R.id.etSearch);
+        btnSearch = view.findViewById(R.id.btnSearch);
+        searchAllStandoutStore = view.findViewById(R.id.searchAllStandoutStore);
+        searchAllRatingStore = view.findViewById(R.id.searchAllRatingStore);
 
         // Sự kiện khi kéo xuống làm mới dữ liệu
         swipeRefreshLayout.setOnRefreshListener(this::refreshData);
-
-        // Thiết lập danh mục món ăn
-        setupCategoryList();
-
-        // Thiết lập danh sách nhà hàng
-        setupRestaurantList();
 
         // Sự kiện điều hướng
         goToNotificationBtn.setOnClickListener(v -> goToActivity(NotificationActivity.class));
         goToCartBtn.setOnClickListener(v -> goToActivity(CartActivity.class));
 
+        searchAllStandoutStore.setOnClickListener(v -> {
+            Intent intent = new Intent(requireContext(), SearchActivity.class);
+            intent.putExtra("sort", "standout");
+            startActivity(intent);
+        });
+
+        searchAllRatingStore.setOnClickListener(v -> {
+            Intent intent = new Intent(requireContext(), SearchActivity.class);
+            intent.putExtra("sort", "rating");
+            startActivity(intent);
+        });
+
+        // Bắt sự kiện nhấn nút "Search" trên bàn phím
+        etSearch.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                performSearch();
+                return true;
+            }
+            return false;
+        });
+
+        // Bắt sự kiện nhấn vào icon search
+        btnSearch.setOnClickListener(v -> performSearch());
+
         // Gọi API để lấy thông tin người dùng
-        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+        foodTypeViewModel = new ViewModelProvider(requireActivity()).get(FoodTypeViewModel.class);
+        storeViewModel = new ViewModelProvider(requireActivity()).get(StoreViewModel.class);
 
         // Lấy dữ liệu người dùng từ SharedPreferences
         User savedUser = SharedPreferencesHelper.getInstance(requireContext()).getCurrentUser();
@@ -94,52 +141,9 @@ public class HomeFragment extends Fragment {
                 tvName.setText("");
             }
         } else {
-            fetchCurrentUser();
+            userViewModel.getCurrentUser();
         }
 
-        return view;
-    }
-
-    private void setupCategoryList() {
-        categoryRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-
-        categoryList = new ArrayList<>();
-        categoryList.add(new Category(String.valueOf(R.drawable.cat_3), "Cơm"));
-        categoryList.add(new Category(String.valueOf(R.drawable.cat_4), "Phở"));
-        categoryList.add(new Category(String.valueOf(R.drawable.cat_offer), "Bánh Mì"));
-        categoryList.add(new Category(String.valueOf(R.drawable.cat_sri), "Bún"));
-
-        categoryAdapter = new CategoryAdapter(requireContext(), categoryList, category -> {
-            Intent intent = new Intent(requireContext(), SearchActivity.class);
-            intent.putExtra("category_name", category.getName());
-            startActivity(intent);
-        });
-
-        categoryRecyclerView.setAdapter(categoryAdapter);
-    }
-
-    private void setupRestaurantList() {
-        restaurantRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        bigRestaurantRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        restaurantList = new ArrayList<>();
-        bigRestaurantList = new ArrayList<>();
-
-        restaurantList.add(new Restaurant("Minute by tuk tuk", "Cafe", 4.9, 124, "Western food", String.valueOf(R.drawable.item_1)));
-        restaurantList.add(new Restaurant("Phở Lý Quốc Sư", "Mì", 3.4, 200, "Món ăn ngon", String.valueOf(R.drawable.item_2)));
-
-        bigRestaurantList.add(new Restaurant("Minute by tuk tuk", "Cafe", 4.9, 124, "Western food", String.valueOf(R.drawable.res_1)));
-        bigRestaurantList.add(new Restaurant("Phở Lý Quốc Sư", "Mì", 3.4, 200, "Món ăn ngon", String.valueOf(R.drawable.item_2)));
-
-        restaurantAdapter = new RestaurantAdapter(getContext(), restaurantList, restaurant -> goToActivity(RestaurantActivity.class));
-        restaurantBigAdapter = new RestaurantBigAdapter(getContext(), bigRestaurantList, restaurant -> goToActivity(RestaurantActivity.class));
-
-        restaurantRecyclerView.setAdapter(restaurantAdapter);
-        bigRestaurantRecyclerView.setAdapter(restaurantBigAdapter);
-    }
-
-    private void fetchCurrentUser() {
-        userViewModel.getCurrentUser();
         userViewModel.getCurrentUserResponse().observe(getViewLifecycleOwner(), new Observer<Resource<User>>() {
             @Override
             public void onChanged(Resource<User> resource) {
@@ -160,42 +164,251 @@ public class HomeFragment extends Fragment {
                         break;
                     case ERROR:
                         swipeRefreshLayout.setRefreshing(false);
+                        Log.d("HomeFragment", "Error loading data: " + resource.getMessage());
                         break;
                 }
             }
         });
+
+        // Thiết lập danh mục món ăn
+        setupFoodTypes();
+
+        // Thiết lập danh sách nhà hàng
+        setupStandoutStores();
+        setupRatingStores();
+        setupStores();
+
+        return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        etSearch.setText("");
+        selectedFoodTypes.clear();
+        foodTypeAdapter.notifyDataSetChanged();
+    }
+
+    private void performSearch() {
+        String query = etSearch.getText().toString().trim();
+            Intent intent = new Intent(requireContext(), SearchActivity.class);
+            intent.putExtra("search", query);
+            startActivity(intent);
+    }
+
+    private void setupFoodTypes() {
+        foodTypeRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+
+        foodTypes = new ArrayList<>();
+
+        foodTypeAdapter = new FoodTypeAdapter(requireContext(), foodTypes, selectedFoodTypes, selectedFoodTypeIds -> {
+            Intent intent = new Intent(getContext(), SearchActivity.class);
+            intent.putStringArrayListExtra("selected_categories", new ArrayList<>(selectedFoodTypeIds));
+            startActivity(intent);
+        });
+
+        foodTypeRecyclerView.setAdapter(foodTypeAdapter);
+
+        foodTypeViewModel.getAllFoodTypesResponse().observe(getViewLifecycleOwner(), new Observer<Resource<List<FoodType>>>() {
+            @Override
+            public void onChanged(Resource<List<FoodType>> resource) {
+                switch (resource.getStatus()) {
+                    case LOADING:
+                        swipeRefreshLayout.setRefreshing(true);
+                        break;
+                    case SUCCESS:
+                        swipeRefreshLayout.setRefreshing(false);
+                        foodTypes.clear();
+                        foodTypes.addAll(resource.getData());
+                        foodTypeAdapter.notifyDataSetChanged();
+
+                        SharedPreferencesHelper.getInstance(requireContext()).saveFoodTypes(resource.getData());
+                        break;
+                    case ERROR:
+                        swipeRefreshLayout.setRefreshing(false);
+                        break;
+                }
+            }
+        });
+
+        List<FoodType> savedFoodTypes = SharedPreferencesHelper.getInstance(requireContext()).getSavedFoodTypes();
+        if (savedFoodTypes != null && !savedFoodTypes.isEmpty()) {
+            foodTypes.clear();
+            foodTypes.addAll(savedFoodTypes);
+            foodTypeAdapter.notifyDataSetChanged();
+        }
+
+        foodTypeViewModel.getAllFoodTypes();
+    }
+
+    private void setupRatingStores() {
+        ratingStoreRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        ratingStores = new ArrayList<>();
+        storeBigCardAdapter = new StoreBigCardAdapter(getContext(), ratingStores, store -> {
+            Intent intent = new Intent(this.getContext(), StoreActivity.class);
+            intent.putExtra("storeId", store.getId());
+            this.getContext().startActivity(intent);
+        });
+        ratingStoreRecyclerView.setAdapter(storeBigCardAdapter);
+
+        storeViewModel.getRatingStoreResponse().observe(getViewLifecycleOwner(), new Observer<Resource<ListStoreResponse>>() {
+            @Override
+            public void onChanged(Resource<ListStoreResponse> resource) {
+                switch (resource.getStatus()) {
+                    case LOADING:
+                        swipeRefreshLayout.setRefreshing(true);
+                        break;
+                    case SUCCESS:
+                        swipeRefreshLayout.setRefreshing(false);
+                        ratingStores.clear();
+                        ratingStores.addAll(resource.getData().getData());
+                        storeBigCardAdapter.notifyDataSetChanged();
+                        SharedPreferencesHelper.getInstance(requireContext()).saveStores("ratingStores", resource.getData().getData());
+                        break;
+                    case ERROR:
+                        swipeRefreshLayout.setRefreshing(false);
+                        break;
+                }
+            }
+        });
+
+        List<Store> savedRatingStores = SharedPreferencesHelper.getInstance(requireContext()).getSavedStores("ratingStores");
+        if (savedRatingStores != null && !savedRatingStores.isEmpty()) {
+            ratingStores.clear();
+            ratingStores.addAll(savedRatingStores);
+            storeBigCardAdapter.notifyDataSetChanged();
+        }
+
+        Map<String, String> queryParams = new HashMap<>();
+        queryParams.put("name", "");
+        queryParams.put("category", "");
+        queryParams.put("sort", "rating");
+        queryParams.put("limit", "3");
+        queryParams.put("page", "1");
+
+        storeViewModel.getRatingStore(queryParams);
+    }
+
+    private void setupStandoutStores() {
+        standoutStoreRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        standoutStores = new ArrayList<>();
+        standoutStoreAdapter = new StoreStandoutAdapter(getContext(), standoutStores, store -> {
+            Intent intent = new Intent(this.getContext(), StoreActivity.class);
+            intent.putExtra("storeId", store.getId());
+            this.getContext().startActivity(intent);
+        });
+        standoutStoreRecyclerView.setAdapter(standoutStoreAdapter);
+
+        SnapHelper snapHelper = new LinearSnapHelper();
+        snapHelper.attachToRecyclerView(standoutStoreRecyclerView);
+
+        storeViewModel.getStandoutStoreResponse().observe(getViewLifecycleOwner(), new Observer<Resource<ListStoreResponse>>() {
+            @Override
+            public void onChanged(Resource<ListStoreResponse> resource) {
+                switch (resource.getStatus()) {
+                    case LOADING:
+                        swipeRefreshLayout.setRefreshing(true);
+                        break;
+                    case SUCCESS:
+                        swipeRefreshLayout.setRefreshing(false);
+                        standoutStores.clear();
+                        standoutStores.addAll(resource.getData().getData());
+                        standoutStoreAdapter.notifyDataSetChanged();
+                        SharedPreferencesHelper.getInstance(requireContext()).saveStores("standoutStores", resource.getData().getData());
+                        break;
+                    case ERROR:
+                        swipeRefreshLayout.setRefreshing(false);
+                        break;
+                }
+            }
+        });
+
+        List<Store> savedStandoutStores = SharedPreferencesHelper.getInstance(requireContext()).getSavedStores("standoutStores");
+        if (savedStandoutStores != null && !savedStandoutStores.isEmpty()) {
+            standoutStores.clear();
+            standoutStores.addAll(savedStandoutStores);
+            standoutStoreAdapter.notifyDataSetChanged();
+        }
+
+        Map<String, String> queryParams = new HashMap<>();
+        queryParams.put("name", "");
+        queryParams.put("category", "");
+        queryParams.put("sort", "standout");
+        queryParams.put("limit", "5");
+        queryParams.put("page", "1");
+
+        storeViewModel.getStandoutStore(queryParams);
+    }
+
+    private void setupStores() {
+        categoryRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        categoryWithStoresList = new ArrayList<>();
+        categoryAdapter = new CategoryAdapter(getContext(), categoryWithStoresList);
+        categoryRecyclerView.setAdapter(categoryAdapter);
+
+        storeViewModel.getAllStoreResponse().observe(getViewLifecycleOwner(), new Observer<Resource<ListStoreResponse>>() {
+            @Override
+            public void onChanged(Resource<ListStoreResponse> resource) {
+                switch (resource.getStatus()) {
+                    case LOADING:
+                        swipeRefreshLayout.setRefreshing(true);
+                        break;
+                    case SUCCESS:
+                        swipeRefreshLayout.setRefreshing(false);
+                        categoryWithStoresList.clear();
+                        List<Store> stores = resource.getData().getData();
+                        categoryWithStoresList.addAll(Functions.groupStoresByCategory(stores));
+                        categoryAdapter.notifyDataSetChanged();
+                        break;
+                    case ERROR:
+                        swipeRefreshLayout.setRefreshing(false);
+                        break;
+                }
+            }
+        });
+
+        Map<String, String> queryParams = new HashMap<>();
+        queryParams.put("name", "");
+        queryParams.put("category", "");
+        queryParams.put("sort", "");
+        queryParams.put("limit", "");
+        queryParams.put("page", "");
+
+        storeViewModel.getAllStore(queryParams);
     }
 
     private void refreshData() {
-        if (userViewModel != null) {
-            userViewModel.getCurrentUserResponse().removeObservers(getViewLifecycleOwner());
-            userViewModel.getCurrentUser();
-            userViewModel.getCurrentUserResponse().observe(getViewLifecycleOwner(), new Observer<Resource<User>>() {
-                @Override
-                public void onChanged(Resource<User> resource) {
-                    switch (resource.getStatus()) {
-                        case LOADING:
-                            swipeRefreshLayout.setRefreshing(true);
-                            break;
-                        case SUCCESS:
-                            swipeRefreshLayout.setRefreshing(false);
-                            String fullName = resource.getData().getName();
-                            if (fullName != null && !fullName.trim().isEmpty()) {
-                                String[] nameParts = fullName.trim().split("\\s+");
-                                String lastName = nameParts[nameParts.length - 1];
-                                tvName.setText(lastName);
-                            } else {
-                                tvName.setText("");
-                            }
-                            break;
-                        case ERROR:
-                            swipeRefreshLayout.setRefreshing(false);
-                            Log.d("HomeFragment", "Error loading data: " + resource.getMessage());
-                            break;
-                    }
-                }
-            });
-        }
+        userViewModel.getCurrentUser();
+
+        // Làm mới danh sách loại món ăn
+        foodTypeViewModel.getAllFoodTypes();
+
+        // Làm mới danh sách nhà hàng theo rating
+        Map<String, String> ratingQueryParams = new HashMap<>();
+        ratingQueryParams.put("name", "");
+        ratingQueryParams.put("category", "");
+        ratingQueryParams.put("sort", "rating");
+        ratingQueryParams.put("limit", "3");
+        ratingQueryParams.put("page", "1");
+        storeViewModel.getAllStore(ratingQueryParams);
+
+        // Làm mới danh sách nhà hàng nổi bật
+        Map<String, String> standoutQueryParams = new HashMap<>();
+        standoutQueryParams.put("name", "");
+        standoutQueryParams.put("category", "");
+        standoutQueryParams.put("sort", "standout");
+        standoutQueryParams.put("limit", "5");
+        standoutQueryParams.put("page", "1");
+        storeViewModel.getAllStore(standoutQueryParams);
+
+        // Làm mới danh sách nhà hàng theo danh mục
+        Map<String, String> categoryQueryParams = new HashMap<>();
+        categoryQueryParams.put("name", "");
+        categoryQueryParams.put("category", "");
+        categoryQueryParams.put("sort", "");
+        categoryQueryParams.put("limit", "");
+        categoryQueryParams.put("page", "");
+        storeViewModel.getAllStore(categoryQueryParams);
     }
 
     private void goToActivity(Class<?> activityClass) {

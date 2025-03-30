@@ -2,34 +2,57 @@ package com.example.food_ordering_mobile_app.ui.customer.search;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.food_ordering_mobile_app.R;
-import com.example.food_ordering_mobile_app.adapters.CategoryAdapter;
-import com.example.food_ordering_mobile_app.adapters.RestaurantAdapter;
-import com.example.food_ordering_mobile_app.models.Category;
-import com.example.food_ordering_mobile_app.models.Restaurant;
+import com.example.food_ordering_mobile_app.adapters.FoodTypeAdapter;
+import com.example.food_ordering_mobile_app.adapters.StoreAdapter;
+import com.example.food_ordering_mobile_app.models.foodType.FoodType;
+import com.example.food_ordering_mobile_app.models.store.Store;
+import com.example.food_ordering_mobile_app.models.user.User;
+import com.example.food_ordering_mobile_app.ui.customer.store.StoreActivity;
+import com.example.food_ordering_mobile_app.utils.SharedPreferencesHelper;
+import com.example.food_ordering_mobile_app.viewmodels.FoodTypeViewModel;
+import com.example.food_ordering_mobile_app.viewmodels.StoreViewModel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class SearchActivity extends AppCompatActivity {
-    private CategoryAdapter categoryAdapter;
-    private List<Category> categoryList;
-    private RecyclerView categoryRecyclerView;
-    private RecyclerView restaurantRecyclerView;
-    private RestaurantAdapter restaurantAdapter;
-    private List<Restaurant> restaurantList;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private FoodTypeViewModel foodTypeViewModel;
+    private StoreViewModel storeViewModel;
+    private FoodTypeAdapter foodTypeAdapter;
+    private List<FoodType> foodTypes;
+    private RecyclerView foodTypeRecyclerView;
+    private StoreAdapter searchStoreAdapter;
+    private List<Store> searchStores;
+    private RecyclerView searchStoreRecyclerView;
+    private TextView tvName, tvRefresh, tvAmountFilter;
+    private EditText etSearch;
+    private ImageButton btnSearch;
+    private String name = "";
+    private Set<String> selectedFoodTypes = new HashSet<>();
+    private String sort = "";
+    private Map<String, String> queryParams = new HashMap<>();
+    private int filterAmount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,61 +60,215 @@ public class SearchActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_search);
 
-        categoryRecyclerView = findViewById(R.id.categoryRecyclerView);
-        categoryRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
+        etSearch = findViewById(R.id.etSearch);
+        btnSearch = findViewById(R.id.btnSearch);
+        foodTypeRecyclerView = findViewById(R.id.foodTypeRecyclerView);
+        searchStoreRecyclerView = findViewById(R.id.searchStoreRecyclerView);
+        tvName = findViewById(R.id.tvName);
+        tvRefresh = findViewById(R.id.tvRefresh);
+        tvAmountFilter = findViewById(R.id.tvAmountFilter);
 
-        categoryList = new ArrayList<>();
-        categoryList.add(new Category(String.valueOf(R.drawable.cat_3), "Cơm"));
-        categoryList.add(new Category(String.valueOf(R.drawable.cat_4), "Pho"));
-        categoryList.add(new Category(String.valueOf(R.drawable.cat_offer), "Banh Mi"));
-        categoryList.add(new Category(String.valueOf(R.drawable.cat_sri), "Bun"));
-        categoryList.add(new Category(String.valueOf(R.drawable.cat_sri), "Bun"));
-        categoryList.add(new Category(String.valueOf(R.drawable.cat_sri), "Bun"));
-        categoryList.add(new Category(String.valueOf(R.drawable.cat_sri), "Bun"));
-        categoryList.add(new Category(String.valueOf(R.drawable.cat_sri), "Bun"));
+        swipeRefreshLayout.setOnRefreshListener(this::refreshData);
 
-        categoryAdapter = new CategoryAdapter(this, categoryList);
-        categoryRecyclerView.setAdapter(categoryAdapter);
+        Intent intent = getIntent();
+        if (intent != null) {
+            sort = intent.getStringExtra("sort") != null ? intent.getStringExtra("sort") : "";
+            name = intent.getStringExtra("search") != null ? intent.getStringExtra("search") : "";
+            List<String> selectedCategories = getIntent().getStringArrayListExtra("selected_categories");
+            if (selectedCategories != null) {
+                selectedFoodTypes.addAll(selectedCategories);
+            }
+        }
 
-        restaurantRecyclerView = findViewById(R.id.restaurantRecyclerView);
-        restaurantRecyclerView.setLayoutManager(new LinearLayoutManager(this)); // Use LinearLayoutManager
+        updateFilterAmount();
 
-        restaurantList = new ArrayList<>();
-        // Add your restaurant data to restaurantList
-        restaurantList.add(new Restaurant("Minute by tuk tuk", "Cafe", 4.9, 124, "Western food", String.valueOf(R.drawable.item_1)));
-        restaurantList.add(new Restaurant("Phở Lý Quoc Su", "Mỳ", 3.4, 200, "Món ăn ngon", String.valueOf(R.drawable.item_2)));
+        etSearch.setText(name);
 
-        restaurantAdapter = new RestaurantAdapter(this, restaurantList);
-        restaurantRecyclerView.setAdapter(restaurantAdapter);
+        etSearch.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                String query = etSearch.getText().toString().trim();
+                name = query;
+                fetchStores();
+                return true;
+            }
+            return false;
+        });
+
+        btnSearch.setOnClickListener(v -> {
+            String query = etSearch.getText().toString().trim();
+            name = query;
+            fetchStores();
+        });
+
+        tvRefresh.setOnClickListener(v -> {
+            Intent newIntent = new Intent(this, SearchActivity.class);
+            startActivity(newIntent);
+            finish();
+        });
+
+        foodTypeViewModel = new ViewModelProvider(this).get(FoodTypeViewModel.class);
+        storeViewModel = new ViewModelProvider(this).get(StoreViewModel.class);
+
+        // Handle show user name
+        User savedUser = SharedPreferencesHelper.getInstance(this).getCurrentUser();
+        if (savedUser != null) {
+            String fullName = savedUser.getName();
+            if (fullName != null && !fullName.trim().isEmpty()) {
+                String[] nameParts = fullName.trim().split("\\s+");
+                String lastName = nameParts[nameParts.length - 1];
+                tvName.setText(lastName);
+            } else {
+                tvName.setText("");
+            }
+        }
+
+        // Set up show food types
+        setupFoodTypes();
+
+        // Handle search store
+        searchStoreRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        searchStores = new ArrayList<>();
+        searchStoreAdapter = new StoreAdapter(this, searchStores, store -> goToActivity(StoreActivity.class));
+        searchStoreRecyclerView.setAdapter(searchStoreAdapter);
+
+        fetchStores();
+
+        storeViewModel.getSearchStoreResponse().observe(this, resource -> {
+            switch (resource.getStatus()) {
+                case LOADING:
+                    swipeRefreshLayout.setRefreshing(true);
+                    break;
+                case SUCCESS:
+                    swipeRefreshLayout.setRefreshing(false);
+                    searchStores.clear();
+                    searchStores.addAll(resource.getData().getData());
+                    searchStoreAdapter.notifyDataSetChanged();
+                    break;
+                case ERROR:
+                    swipeRefreshLayout.setRefreshing(false);
+                    break;
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 100 && resultCode == RESULT_OK) {
+            ArrayList<String> selectedCategories = data.getStringArrayListExtra("selected_categories");
+            if (selectedCategories != null) {
+                Log.d("DEBUG", "Updated categories: " + selectedCategories);
+            }
+        }
+    }
+
+    private void updateFilterAmount() {
+        filterAmount = 0;
+
+        if (!sort.isEmpty()) {
+            filterAmount++;
+        }
+        if (!selectedFoodTypes.isEmpty()) {
+            filterAmount++;
+        }
+
+        if (filterAmount > 0) {
+            tvAmountFilter.setText(String.valueOf(filterAmount));
+            tvAmountFilter.setVisibility(View.VISIBLE);
+        } else {
+            tvAmountFilter.setVisibility(View.GONE);
+        }
+    }
+
+
+    private void setupFoodTypes() {
+        foodTypeRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+
+        foodTypes = new ArrayList<>();
+        foodTypeAdapter = new FoodTypeAdapter(this, foodTypes, selectedFoodTypes, selectedFoodTypeIds -> {
+            selectedFoodTypes.addAll(selectedFoodTypeIds);
+            queryParams.put("category", TextUtils.join(",", selectedFoodTypes));
+
+            updateFilterAmount();
+
+            storeViewModel.getSearchStore(queryParams);
+        });
+
+        foodTypeRecyclerView.setAdapter(foodTypeAdapter);
+
+        foodTypeViewModel.getAllFoodTypesResponse().observe(this, resource -> {
+            switch (resource.getStatus()) {
+                case LOADING:
+                    swipeRefreshLayout.setRefreshing(true);
+                    break;
+                case SUCCESS:
+                    swipeRefreshLayout.setRefreshing(false);
+                    foodTypes.clear();
+                    foodTypes.addAll(resource.getData());
+                    foodTypeAdapter.notifyDataSetChanged();
+
+                    SharedPreferencesHelper.getInstance(getApplicationContext()).saveFoodTypes(resource.getData());
+                    break;
+                case ERROR:
+                    swipeRefreshLayout.setRefreshing(false);
+                    break;
+            }
+        });
+
+        List<FoodType> savedFoodTypes = SharedPreferencesHelper.getInstance(this).getSavedFoodTypes();
+        if (savedFoodTypes != null && !savedFoodTypes.isEmpty()) {
+            foodTypes.clear();
+            foodTypes.addAll(savedFoodTypes);
+            foodTypeAdapter.notifyDataSetChanged();
+        }
+
+        foodTypeViewModel.getAllFoodTypes();
+    }
+
+    private void fetchStores() {
+        queryParams.put("name", name);
+        queryParams.put("category", TextUtils.join(",", selectedFoodTypes));
+        queryParams.put("sort", sort.isEmpty() ? "standout" : sort);
+        queryParams.put("limit", "20");
+        queryParams.put("page", "1");
+
+        storeViewModel.getSearchStore(queryParams);
+    }
+
+    private void refreshData() {
+        foodTypeViewModel.getAllFoodTypes();
+        fetchStores();
     }
 
     public void openFilterAll(View view) {
-        Intent intent = new Intent(SearchActivity.this, FilterAllActivity.class);
+        Intent intent = new Intent(this, FilterAllActivity.class);
+        intent.putExtra("search", name);
+        intent.putExtra("sort", sort);
+        intent.putStringArrayListExtra("selected_categories", new ArrayList<>(selectedFoodTypes));
         startActivity(intent);
-        finish();
     }
 
-    public void openFilterBy(View view) {
-        Intent intent = new Intent(SearchActivity.this, FilterByActivity.class);
+    public void openSortBy(View view) {
+        Intent intent = new Intent(this, SortByActivity.class);
+        intent.putExtra("search", name);
+        intent.putExtra("sort", sort);
+        intent.putStringArrayListExtra("selected_categories", new ArrayList<>(selectedFoodTypes));
         startActivity(intent);
-        finish();
     }
 
-    public void openFilterRestaurantOptions(View view) {
-        Intent intent = new Intent(SearchActivity.this, FilterRestaurantOptionsActivity.class);
+    public void openCategoryFilter(View view) {
+        Intent intent = new Intent(this, CategoryFilterActivity.class);
+        intent.putExtra("search", name);
+        intent.putExtra("sort", sort);
+        intent.putStringArrayListExtra("selected_categories", new ArrayList<>(selectedFoodTypes));
         startActivity(intent);
-        finish();
     }
 
-    public void openFilterDeliveryFee(View view) {
-        Intent intent = new Intent(SearchActivity.this, FilterDeliveryFeeActivity.class);
+    private void goToActivity(Class<?> activityClass) {
+        Intent intent = new Intent(this, activityClass);
         startActivity(intent);
-        finish();
-    }
-
-    public void openFilterPrice(View view) {
-        Intent intent = new Intent(SearchActivity.this, FilterPriceActivity.class);
-        startActivity(intent);
-        finish();
     }
 }

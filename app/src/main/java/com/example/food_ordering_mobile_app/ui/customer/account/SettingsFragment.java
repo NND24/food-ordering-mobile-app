@@ -3,7 +3,6 @@ package com.example.food_ordering_mobile_app.ui.customer.account;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,12 +21,10 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.example.food_ordering_mobile_app.R;
-import com.example.food_ordering_mobile_app.models.User;
-import com.example.food_ordering_mobile_app.ui.common.ChangingRoleActivity;
+import com.example.food_ordering_mobile_app.models.user.User;
 import com.example.food_ordering_mobile_app.ui.common.LoginActivity;
 import com.example.food_ordering_mobile_app.utils.Resource;
 import com.example.food_ordering_mobile_app.utils.SharedPreferencesHelper;
@@ -77,7 +74,6 @@ public class SettingsFragment extends Fragment {
             }
         });
 
-
         LinearLayout profileContainer = view.findViewById(R.id.profile_container);
 
         profileContainer.setOnClickListener(v -> {
@@ -86,16 +82,7 @@ public class SettingsFragment extends Fragment {
                     .navigate(R.id.action_settings_to_profile, bundle);
         });
 
-        Button paymentMethodBtn = view.findViewById(R.id.payment_method_btn);
-
-        paymentMethodBtn.setOnClickListener(v -> {
-            Bundle bundle = new Bundle();
-            NavHostFragment.findNavController(SettingsFragment.this)
-                    .navigate(R.id.action_settings_to_payment_method, bundle);
-        });
-
         Button goToSettingBtn = view.findViewById(R.id.setting_button);
-        goToSettingBtn.setOnClickListener(this::goToSetting);
 
         // Initialize UserViewModel
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
@@ -128,11 +115,6 @@ public class SettingsFragment extends Fragment {
 
     private void handleLogout() {
         authViewModel.logout(requireContext());
-    }
-
-    public void goToSetting(View view) {
-        Intent intent = new Intent(requireContext(), ChangingRoleActivity.class);
-        startActivity(intent);
     }
 }
 

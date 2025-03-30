@@ -4,18 +4,17 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.example.food_ordering_mobile_app.R;
-import com.example.food_ordering_mobile_app.models.Order;
+import com.example.food_ordering_mobile_app.models.dish.Topping;
+import com.example.food_ordering_mobile_app.models.order.Order;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class OrderSummaryAdapter extends RecyclerView.Adapter<OrderSummaryAdapter.ViewHolder> {
@@ -40,19 +39,22 @@ public class OrderSummaryAdapter extends RecyclerView.Adapter<OrderSummaryAdapte
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Order order = orderList.get(position);
 
-        holder.name.setText(order.getName());
-        holder.quantity.setText(String.valueOf(order.getQuantity()));
-        holder.price.setText(String.valueOf(order.getPrice()));
+        holder.name.setText(order.getStore().getName());
+      //  holder.quantity.setText(String.valueOf(order.getItems().getQuantity()));
+      //  holder.price.setText(String.valueOf(order.getItems().getDish().getPrice()));
 
-        if (order.getSideDish().isEmpty()) {
-            holder.recyclerViewAddons.setVisibility(View.GONE);
-        } else {
-            holder.recyclerViewAddons.setVisibility(View.VISIBLE);
-
-            AddonAdapter addonAdapter = new AddonAdapter(order.getSideDish());
-            holder.recyclerViewAddons.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
-            holder.recyclerViewAddons.setAdapter(addonAdapter);
-        }
+//        if (order.getItems().getToppings().isEmpty()) {
+//            holder.recyclerViewAddons.setVisibility(View.GONE);
+//        } else {
+//            holder.recyclerViewAddons.setVisibility(View.VISIBLE);
+//            List<String> toppingNames = new ArrayList<>();
+//            for (Topping topping : order.getItems().getToppings()) {
+//                toppingNames.add(topping.getName()); // Giả sử Topping có phương thức getName()
+//            }
+//            AddonAdapter addonAdapter = new AddonAdapter(toppingNames);
+//            holder.recyclerViewAddons.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
+//            holder.recyclerViewAddons.setAdapter(addonAdapter);
+//        }
     }
 
     @Override

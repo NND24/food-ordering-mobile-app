@@ -1,20 +1,25 @@
 package com.example.food_ordering_mobile_app.adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.graphics.drawable.RoundedBitmapDrawable;
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.example.food_ordering_mobile_app.R;
-import com.example.food_ordering_mobile_app.models.Order;
-import com.example.food_ordering_mobile_app.models.Restaurant;
+import com.example.food_ordering_mobile_app.models.order.Order;
+import com.example.food_ordering_mobile_app.models.order.OrderItem;
 
 import java.util.List;
 
@@ -40,15 +45,32 @@ public class OrderCurrentAdapter extends RecyclerView.Adapter<OrderCurrentAdapte
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Order order = orderList.get(position);
 
-        holder.name.setText(order.getName());
-        holder.quantity.setText(String.valueOf(order.getQuantity()));
-        holder.address.setText(order.getAddress());
+        holder.tvStoreName.setText(order.getStore().getName());
+        holder.tvDescription.setText(order.getStore().getDescription());
 
-        int resourceId = Integer.parseInt(order.getRestaurantAvatar());
+        int totalQuantity = 0;
+        for (OrderItem item : order.getItems()) {
+            totalQuantity += item.getQuantity();
+        }
+
+        holder.tvQuantity.setText(String.valueOf(totalQuantity));
+        holder.tvAddress.setText(order.getShipLocation().getAddress());
+
+        String storeAvatarUrl = order.getStore().getAvatar() != null ? order.getStore().getAvatar().getUrl() : null;
         Glide.with(context)
-                .load(resourceId)
-                .transform(new RoundedCorners(8))
-                .into(holder.restaurantAvatar);
+                .asBitmap()
+                .load(storeAvatarUrl)
+                .override(80, 80)
+                .centerCrop()
+                .into(new BitmapImageViewTarget(holder.imStoreAvatar) {
+                    @Override
+                    protected void setResource(Bitmap resource) {
+                        RoundedBitmapDrawable roundedDrawable =
+                                RoundedBitmapDrawableFactory.create(context.getResources(), resource);
+                        roundedDrawable.setCornerRadius(6);
+                        holder.imStoreAvatar.setImageDrawable(roundedDrawable);
+                    }
+                });
     }
 
     @Override
@@ -57,15 +79,18 @@ public class OrderCurrentAdapter extends RecyclerView.Adapter<OrderCurrentAdapte
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView name, quantity, address;
-        ImageView restaurantAvatar;
+        TextView tvStoreName, tvQuantity, tvAddress, tvDescription;
+        ImageView imStoreAvatar;
+        Button btnTrackOrder;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            name = itemView.findViewById(R.id.restaurantName);
-            quantity = itemView.findViewById(R.id.quantity);
-            address = itemView.findViewById(R.id.address);
-            restaurantAvatar = itemView.findViewById(R.id.restaurantAvatar);
+            tvStoreName = itemView.findViewById(R.id.tvStoreName);
+            tvQuantity = itemView.findViewById(R.id.tvQuantity);
+            tvAddress = itemView.findViewById(R.id.tvAddress);
+            imStoreAvatar = itemView.findViewById(R.id.imStoreAvatar);
+            btnTrackOrder = itemView.findViewById(R.id.btnTrackOrder);
+            tvDescription = itemView.findViewById(R.id.tvDescription);
         }
     }
 }

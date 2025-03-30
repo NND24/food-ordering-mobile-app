@@ -1,74 +1,124 @@
 package com.example.food_ordering_mobile_app.adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.graphics.drawable.RoundedBitmapDrawable;
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.example.food_ordering_mobile_app.R;
-import com.example.food_ordering_mobile_app.models.Restaurant;
+import com.example.food_ordering_mobile_app.models.favorite.Favorite;
+import com.example.food_ordering_mobile_app.models.foodType.FoodType;
+import com.example.food_ordering_mobile_app.models.store.Store;
 
 import java.util.List;
 
-public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHolder> {
+public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.FavoriteViewHolder> {
     private Context context;
 
-    private List<Restaurant> restaurantList;
+    private List<Store> favoriteList;
 
-    public FavoriteAdapter(Context context, List<Restaurant> restaurantList) {
+    public FavoriteAdapter(Context context, List<Store> favoriteList) {
         this.context = context;
-        this.restaurantList = restaurantList;
+        this.favoriteList = favoriteList;
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public FavoriteViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context)
                 .inflate(R.layout.item_favorite, parent, false);
-        return new ViewHolder(view);
+        return new FavoriteViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Restaurant restaurant = restaurantList.get(position);
+    public void onBindViewHolder(@NonNull FavoriteViewHolder holder, int position) {
+        Store favorite = favoriteList.get(position);
 
-        holder.name.setText(restaurant.getName());
-        holder.type.setText(restaurant.getType());
-        holder.rating.setText(String.valueOf(restaurant.getRating()));
-        holder.amountOfRating.setText(String.valueOf(restaurant.getAmountOfRating()));
-        holder.description.setText(restaurant.getDescription());
+        holder.tvStoreName.setText(favorite.getName());
+        if (favorite.getAmountRating() > 0) {
+            holder.tvAvgRating.setText(String.format("%.2f", favorite.getAvgRating()));
+            holder.tvAmountRating.setText(String.valueOf(favorite.getAmountRating()));
+            holder.tvAvgRating.setVisibility(View.VISIBLE);
+            holder.tvAmountRating.setVisibility(View.VISIBLE);
+            holder.ivStar.setVisibility(View.VISIBLE);
+            holder.tvRatingOpen.setVisibility(View.VISIBLE);
+            holder.tvRatingText.setVisibility(View.VISIBLE);
+            holder.tvRatingClose.setVisibility(View.VISIBLE);
+        } else {
+            holder.tvAvgRating.setVisibility(View.GONE);
+            holder.tvAmountRating.setVisibility(View.GONE);
+            holder.ivStar.setVisibility(View.GONE);
+            holder.tvRatingOpen.setVisibility(View.GONE);
+            holder.tvRatingText.setVisibility(View.GONE);
+            holder.tvRatingClose.setVisibility(View.GONE);
+        }
 
-        int resourceId = Integer.parseInt(restaurant.getRestaurantAvatar());
+        if (favorite.getStoreCategory() != null && !favorite.getStoreCategory().isEmpty()) {
+            SpannableStringBuilder categories = new SpannableStringBuilder();
+            for (int i = 0; i < favorite.getStoreCategory().size(); i++) {
+                FoodType type = favorite.getStoreCategory().get(i);
+                categories.append(type.getName());
+
+                if (i < favorite.getStoreCategory().size() - 1) {
+                    categories.append(" • ");
+                }
+            }
+            holder.tvStoreFoodType.setText(categories);
+        } else {
+            holder.tvStoreFoodType.setText("Unknown");
+        }
+
+        String storeAvatarUrl = favorite.getAvatar() != null ? favorite.getAvatar().getUrl() : null;
         Glide.with(context)
-                .load(resourceId)
-                .transform(new RoundedCorners(8))
-                .into(holder.restaurantAvatar);
+                .asBitmap()
+                .load(storeAvatarUrl)
+                .override(80, 80)
+                .centerCrop()
+                .into(new BitmapImageViewTarget(holder.imStoreAvatar) {
+                    @Override
+                    protected void setResource(Bitmap resource) {
+                        RoundedBitmapDrawable roundedDrawable =
+                                RoundedBitmapDrawableFactory.create(context.getResources(), resource);
+                        roundedDrawable.setCornerRadius(6);
+                        holder.imStoreAvatar.setImageDrawable(roundedDrawable);
+                    }
+                });
     }
 
     @Override
     public int getItemCount() {
-        return restaurantList.size();
+        return favoriteList.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView name, type, rating, amountOfRating, description;
-        ImageView restaurantAvatar;
+    public static class FavoriteViewHolder extends RecyclerView.ViewHolder {
+        TextView tvStoreName, tvStoreFoodType, tvAvgRating, tvAmountRating, tvRatingOpen, tvRatingText, tvRatingClose;
+        ImageView imStoreAvatar, ivStar;
+        ImageButton btnRemove;
 
-        public ViewHolder(@NonNull View itemView) {
+        public FavoriteViewHolder(@NonNull View itemView) {
             super(itemView);
-            name = itemView.findViewById(R.id.restaurantName);
-            type = itemView.findViewById(R.id.restaurantType);
-            rating = itemView.findViewById(R.id.rating);
-            amountOfRating = itemView.findViewById(R.id.amountOfRating);
-            description = itemView.findViewById(R.id.restaurantDescription);
-            restaurantAvatar = itemView.findViewById(R.id.restaurantAvatar);
+            tvStoreName = itemView.findViewById(R.id.tvStoreName);
+            tvStoreFoodType = itemView.findViewById(R.id.tvStoreFoodType);
+            tvAvgRating = itemView.findViewById(R.id.tvAvgRating);
+            tvAmountRating = itemView.findViewById(R.id.tvAmountRating);
+            imStoreAvatar = itemView.findViewById(R.id.imStoreAvatar);
+            ivStar = itemView.findViewById(R.id.ivStar);
+            tvRatingOpen = itemView.findViewById(R.id.tvRatingOpen);
+            tvRatingText = itemView.findViewById(R.id.tvRatingText);
+            tvRatingClose = itemView.findViewById(R.id.tvRatingClose);
+            btnRemove = itemView.findViewById(R.id.btnRemove);
         }
     }
 }

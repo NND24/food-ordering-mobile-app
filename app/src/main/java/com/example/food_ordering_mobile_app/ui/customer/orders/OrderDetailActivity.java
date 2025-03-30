@@ -6,9 +6,6 @@ import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,7 +14,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.food_ordering_mobile_app.R;
 import com.example.food_ordering_mobile_app.adapters.OrderSummaryAdapter;
-import com.example.food_ordering_mobile_app.models.Order;
+import com.example.food_ordering_mobile_app.models.order.Order;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -54,9 +51,9 @@ public class OrderDetailActivity extends AppCompatActivity {
         orderSummaryRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         orderList = new ArrayList<>();
-        orderList.add(new Order("Pizza", 2, 120000, Arrays.asList("Phô mai", "Xúc xích")));
-        orderList.add(new Order("Gà rán", 3, 50000, Arrays.asList("Tương ớt", "Khoai tây chiên")));
-        orderList.add(new Order("Mì cay", 1, 70000, new ArrayList<>()));
+//        orderList.add(new Order("Pizza", 2, 120000, Arrays.asList("Phô mai", "Xúc xích")));
+//        orderList.add(new Order("Gà rán", 3, 50000, Arrays.asList("Tương ớt", "Khoai tây chiên")));
+//        orderList.add(new Order("Mì cay", 1, 70000, new ArrayList<>()));
 
         orderAdapter = new OrderSummaryAdapter(this, orderList);
         orderSummaryRecyclerView.setAdapter(orderAdapter);

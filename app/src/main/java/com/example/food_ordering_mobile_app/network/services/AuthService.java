@@ -1,6 +1,6 @@
 package com.example.food_ordering_mobile_app.network.services;
 
-import com.example.food_ordering_mobile_app.models.User;
+import com.example.food_ordering_mobile_app.models.user.User;
 
 import java.util.Map;
 

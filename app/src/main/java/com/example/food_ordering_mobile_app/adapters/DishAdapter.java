@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.example.food_ordering_mobile_app.R;
-import com.example.food_ordering_mobile_app.models.Dish;
+import com.example.food_ordering_mobile_app.models.dish.Dish;
 
 import java.util.List;
 
@@ -53,7 +53,7 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.ViewHolder> {
         holder.price.setText(String.valueOf(dish.getPrice()));
         holder.description.setText(dish.getDescription());
 
-        int resourceId = Integer.parseInt(dish.getDishAvatar());
+        int resourceId = Integer.parseInt(dish.getImage().getUrl());
         Glide.with(context)
                 .load(resourceId)
                 .transform(new RoundedCorners(8))

@@ -3,14 +3,12 @@ package com.example.food_ordering_mobile_app.viewmodels;
 import android.app.Application;
 import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
-import com.example.food_ordering_mobile_app.models.User;
 import com.example.food_ordering_mobile_app.repository.UploadRepository;
 import com.example.food_ordering_mobile_app.utils.Resource;
 

@@ -1,20 +1,29 @@
 package com.example.food_ordering_mobile_app.adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.graphics.drawable.RoundedBitmapDrawable;
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.example.food_ordering_mobile_app.R;
-import com.example.food_ordering_mobile_app.models.Cart;
+import com.example.food_ordering_mobile_app.models.cart.Cart;
+import com.example.food_ordering_mobile_app.models.cart.CartItem;
+import com.example.food_ordering_mobile_app.models.foodType.FoodType;
+import com.example.food_ordering_mobile_app.models.order.OrderItem;
 
 import java.util.List;
 
@@ -49,23 +58,60 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Cart cart = cartList.get(position);
 
-        holder.name.setText(cart.getName());
-        holder.type.setText(cart.getType());
-        holder.rating.setText(String.valueOf(cart.getRating()));
-        holder.amountOfRating.setText(String.valueOf(cart.getAmountOfRating()));
-        holder.description.setText(cart.getDescription());
+        holder.tvStoreName.setText(cart.getStore().getName());
+        int totalQuantity = 0;
+        for (CartItem item : cart.getItems()) {
+            totalQuantity += item.getQuantity();
+        }
 
-        int resourceId = Integer.parseInt(cart.getRestaurantAvatar());
-        Glide.with(context)
-                .load(resourceId)
-                .apply(RequestOptions.bitmapTransform(new RoundedCorners(8)))
-                .into(holder.restaurantAvatar);
+        holder.tvQuantity.setText(String.valueOf(totalQuantity));
+        if (cart.getStore().getAmountRating() > 0) {
+            holder.tvAvgRating.setText(String.format("%.2f", cart.getStore().getAvgRating()));
+            holder.tvAmountRating.setText(String.valueOf(cart.getStore().getAmountRating()));
+            holder.tvAvgRating.setVisibility(View.VISIBLE);
+            holder.tvAmountRating.setVisibility(View.VISIBLE);
+            holder.ivStar.setVisibility(View.VISIBLE);
+            holder.tvRatingOpen.setVisibility(View.VISIBLE);
+            holder.tvRatingText.setVisibility(View.VISIBLE);
+            holder.tvRatingClose.setVisibility(View.VISIBLE);
+        } else {
+            holder.tvAvgRating.setVisibility(View.GONE);
+            holder.tvAmountRating.setVisibility(View.GONE);
+            holder.ivStar.setVisibility(View.GONE);
+            holder.tvRatingOpen.setVisibility(View.GONE);
+            holder.tvRatingText.setVisibility(View.GONE);
+            holder.tvRatingClose.setVisibility(View.GONE);
+        }
 
-        holder.itemView.setOnClickListener(v -> {
-            if (onCartClickListener != null) {
-                onCartClickListener.onCartClick(cart);
+        if (cart.getStore().getStoreCategory() != null && !cart.getStore().getStoreCategory().isEmpty()) {
+            SpannableStringBuilder categories = new SpannableStringBuilder();
+            for (int i = 0; i < cart.getStore().getStoreCategory().size(); i++) {
+                FoodType type = cart.getStore().getStoreCategory().get(i);
+                categories.append(type.getName());
+
+                if (i < cart.getStore().getStoreCategory().size() - 1) {
+                    categories.append(" • ");
+                }
             }
-        });
+            holder.tvStoreFoodType.setText(categories);
+        } else {
+            holder.tvStoreFoodType.setText("Unknown");
+        }
+
+        String storeAvatarUrl = cart.getStore().getAvatar() != null ? cart.getStore().getAvatar().getUrl() : null;
+        Glide.with(context)
+                .asBitmap()
+                .load(storeAvatarUrl)
+                .centerCrop()
+                .into(new BitmapImageViewTarget(holder.imStoreAvatar) {
+                    @Override
+                    protected void setResource(Bitmap resource) {
+                        RoundedBitmapDrawable roundedDrawable =
+                                RoundedBitmapDrawableFactory.create(context.getResources(), resource);
+                        roundedDrawable.setCornerRadius(6);
+                        holder.imStoreAvatar.setImageDrawable(roundedDrawable);
+                    }
+                });
     }
 
     @Override
@@ -74,18 +120,23 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView name, type, rating, amountOfRating, description, quantity;
-        ImageView restaurantAvatar;
+        TextView tvStoreName, tvStoreFoodType, tvAvgRating, tvAmountRating, tvRatingOpen, tvRatingText, tvRatingClose, tvQuantity;
+        ImageView imStoreAvatar, ivStar;
+        ImageButton btnRemove;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            name = itemView.findViewById(R.id.restaurantName);
-            type = itemView.findViewById(R.id.restaurantType);
-            rating = itemView.findViewById(R.id.rating);
-            amountOfRating = itemView.findViewById(R.id.amountOfRating);
-            description = itemView.findViewById(R.id.restaurantDescription);
-            restaurantAvatar = itemView.findViewById(R.id.restaurantAvatar);
-            quantity = itemView.findViewById(R.id.quantity);
+            tvStoreName = itemView.findViewById(R.id.tvStoreName);
+            tvStoreFoodType = itemView.findViewById(R.id.tvStoreFoodType);
+            tvAvgRating = itemView.findViewById(R.id.tvAvgRating);
+            tvAmountRating = itemView.findViewById(R.id.tvAmountRating);
+            imStoreAvatar = itemView.findViewById(R.id.imStoreAvatar);
+            ivStar = itemView.findViewById(R.id.ivStar);
+            tvRatingOpen = itemView.findViewById(R.id.tvRatingOpen);
+            tvRatingText = itemView.findViewById(R.id.tvRatingText);
+            tvRatingClose = itemView.findViewById(R.id.tvRatingClose);
+            btnRemove = itemView.findViewById(R.id.btnRemove);
+            tvQuantity = itemView.findViewById(R.id.tvQuantity);
         }
     }
 }

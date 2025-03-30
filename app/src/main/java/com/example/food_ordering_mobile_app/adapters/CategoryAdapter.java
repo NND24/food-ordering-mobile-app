@@ -1,40 +1,30 @@
 package com.example.food_ordering_mobile_app.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.example.food_ordering_mobile_app.R;
-import com.example.food_ordering_mobile_app.models.Category;
+import com.example.food_ordering_mobile_app.models.store.CategoryWithStores;
+import com.example.food_ordering_mobile_app.ui.customer.store.StoreActivity;
 
 import java.util.List;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
 
     private Context context;
-    private List<Category> categoryList;
-    private OnCategoryClickListener onCategoryClickListener;
-    private int selectedPosition = -1;
+    private List<CategoryWithStores> categoryList;
+    private RecyclerView.RecycledViewPool viewPool = new RecyclerView.RecycledViewPool();
 
-    public interface OnCategoryClickListener {
-        void onCategoryClick(Category category);
-    }
 
-    public CategoryAdapter(Context context, List<Category> categoryList, OnCategoryClickListener onCategoryClickListener) {
-        this.context = context;
-        this.categoryList = categoryList;
-        this.onCategoryClickListener = onCategoryClickListener;
-    }
-
-    public CategoryAdapter(Context context, List<Category> categoryList) {
+    public CategoryAdapter(Context context, List<CategoryWithStores> categoryList) {
         this.context = context;
         this.categoryList = categoryList;
     }
@@ -48,35 +38,20 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     @Override
     public void onBindViewHolder(@NonNull CategoryViewHolder holder, int position) {
-        Category category = categoryList.get(position);
+        CategoryWithStores category = categoryList.get(position);
+        holder.categoryName.setText(category.getCategory().getName());
 
-        // Use getAdapterPosition to get the position dynamically
-        int currentPosition = holder.getAdapterPosition();
-        if (currentPosition != RecyclerView.NO_POSITION) {
-            if (currentPosition == selectedPosition) {
-                holder.imageContainer.setBackgroundResource(R.drawable.category_border_selected);  // Border when selected
-                holder.checkIcon.setVisibility(View.VISIBLE);  // Show check icon
-            } else {
-                holder.imageContainer.setBackgroundResource(R.drawable.category_border);  // Normal border
-                holder.checkIcon.setVisibility(View.GONE);  // Hide check icon
-            }
-
-            // Load image directly from resource ID
-            int resourceId = Integer.parseInt(category.getImageUrl()); // Convert string back to resource ID
-            Glide.with(context)
-                    .load(resourceId) // Load using resource ID
-                    .circleCrop()
-                    .into(holder.imageView);
-
-            holder.textView.setText(category.getName());
-
-            holder.itemView.setOnClickListener(v -> {
-                selectedPosition = currentPosition;  // Set selected position
-                notifyDataSetChanged();  // Refresh the list to show the updated selection
-                if (onCategoryClickListener != null) {
-                    onCategoryClickListener.onCategoryClick(category);  // Notify listener
-                }
+        if (holder.storeAdapter == null) {
+            holder.storeAdapter = new StoreAdapter(context, category.getStores(), store -> {
+                Intent intent = new Intent(context, StoreActivity.class);
+                intent.putExtra("storeId", store.getId());
+                context.startActivity(intent);
             });
+            holder.restaurantRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+            holder.restaurantRecyclerView.setAdapter(holder.storeAdapter);
+            holder.restaurantRecyclerView.setRecycledViewPool(viewPool);
+        } else {
+            holder.storeAdapter.updateData(category.getStores());
         }
     }
 
@@ -86,16 +61,14 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     }
 
     public static class CategoryViewHolder extends RecyclerView.ViewHolder {
-        ImageView imageView, checkIcon;
-        TextView textView;
-        FrameLayout imageContainer;
+        TextView categoryName;
+        RecyclerView restaurantRecyclerView;
+        StoreAdapter storeAdapter;
 
         public CategoryViewHolder(@NonNull View itemView) {
             super(itemView);
-            imageView = itemView.findViewById(R.id.categoryImage);
-            textView = itemView.findViewById(R.id.categoryName);
-            checkIcon = itemView.findViewById(R.id.checkIcon);
-            imageContainer = itemView.findViewById(R.id.imgContainer);
+            categoryName = itemView.findViewById(R.id.categoryName);
+            restaurantRecyclerView = itemView.findViewById(R.id.restaurantRecyclerView);
         }
     }
 }

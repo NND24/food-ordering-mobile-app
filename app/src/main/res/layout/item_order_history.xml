@@ -14,10 +14,9 @@
         android:padding="10dp">
 
         <ImageView
-            android:id="@+id/restaurantAvatar"
+            android:id="@+id/imStoreAvatar"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:scaleType="centerCrop"
             android:src="@drawable/dess_1" />
 
         <LinearLayout
@@ -28,7 +27,7 @@
             android:paddingStart="15dp">
 
             <TextView
-                android:id="@+id/restaurantName"
+                android:id="@+id/tvStoreName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Restaurant Name"
@@ -36,13 +35,21 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
+            <TextView
+                android:id="@+id/tvDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="4"
+                android:textColor="@color/onSecondary"
+                android:textSize="16sp" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/quantity"
+                    android:id="@+id/tvQuantity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="4"
@@ -65,12 +72,14 @@
                     android:textSize="18sp" />
 
                 <TextView
-                    android:id="@+id/address"
+                    android:id="@+id/tvAddress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="123 Quoc Lo 14"
                     android:textColor="@color/onSecondary"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:maxLines="1"
+                    android:ellipsize="end" />
             </LinearLayout>
 
         </LinearLayout>
@@ -82,7 +91,7 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/reorderBtn"
+            android:id="@+id/btnReOrder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/custom_button_reorder"
@@ -97,7 +106,7 @@
             android:textAllCaps="false" />
 
         <Button
-            android:id="@+id/ratingBtn"
+            android:id="@+id/btnRating"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/custom_button_rating"

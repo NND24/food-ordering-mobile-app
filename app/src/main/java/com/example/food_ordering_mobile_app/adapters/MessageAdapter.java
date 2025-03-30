@@ -12,56 +12,54 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.food_ordering_mobile_app.R;
-import com.example.food_ordering_mobile_app.models.Message;
+import com.example.food_ordering_mobile_app.models.chat.Message;
 
 import java.util.List;
 
-public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
+public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
     private List<Message> messageList;
-    private OnMessageClickListener onMessageClickListener;
-    public interface OnMessageClickListener {
-        void onMessageClick(Message message);
-    }
+    private static final int VIEW_TYPE_SENT = 1;
+    private static final int VIEW_TYPE_RECEIVED = 2;
 
     public MessageAdapter(Context context, List<Message> messageList) {
         this.context = context;
         this.messageList = messageList;
     }
 
-    public MessageAdapter(Context context, List<Message> messageList, OnMessageClickListener onMessageClickListener) {
-        this.context = context;
-        this.messageList = messageList;
-        this.onMessageClickListener = onMessageClickListener;
+    @Override
+    public int getItemViewType(int position) {
+        if (messageList.get(position).getSender().getId() != null) {
+            return VIEW_TYPE_SENT; // Tin nhắn gửi
+        } else {
+            return VIEW_TYPE_RECEIVED; // Tin nhắn nhận
+        }
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context)
-                .inflate(R.layout.item_message, parent, false);
-        return new ViewHolder(view);
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        if (viewType == VIEW_TYPE_SENT) {
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.item_message_right, parent, false);
+            return new SentMessageViewHolder(view);
+        } else {
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.item_message_left, parent, false);
+            return new ReceivedMessageViewHolder(view);
+        }
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Message message = messageList.get(position);
-
-        holder.name.setText(message.getName());
-        holder.message.setText(message.getMessage());
-        holder.createdTime.setText(message.getCreatedTime());
-
-        int resourceId = Integer.parseInt(message.getAvatar());
-        Glide.with(context)
-                .load(resourceId)
-                .circleCrop()
-                .into(holder.avatar);
-
-        holder.itemView.setOnClickListener(v -> {
-            if (onMessageClickListener != null) {
-                onMessageClickListener.onMessageClick(message);
-            }
-        });
+        if (holder instanceof SentMessageViewHolder) {
+            SentMessageViewHolder sentHolder = (SentMessageViewHolder) holder;
+            sentHolder.bind(message);
+        } else if (holder instanceof ReceivedMessageViewHolder) {
+            ReceivedMessageViewHolder receivedHolder = (ReceivedMessageViewHolder) holder;
+            receivedHolder.bind(message);
+        }
     }
 
     @Override
@@ -69,17 +67,39 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         return messageList.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView name, message, createdTime;
-        ImageView avatar;
+    static class SentMessageViewHolder extends RecyclerView.ViewHolder {
+        TextView tvMessage;
 
-        public ViewHolder(@NonNull View itemView) {
+        public SentMessageViewHolder(@NonNull View itemView) {
             super(itemView);
-            name = itemView.findViewById(R.id.name);
-            message = itemView.findViewById(R.id.message);
-            createdTime = itemView.findViewById(R.id.createdTime);
-            avatar = itemView.findViewById(R.id.avatar);
+            tvMessage = itemView.findViewById(R.id.tvMessage);
+        }
+
+        void bind(Message message) {
+            if (message != null && message.getContent() != null) {
+                tvMessage.setText(message.getContent());
+            } else {
+                tvMessage.setText(""); // Fallback for null or empty messages
+            }
         }
     }
-}
 
+    static class ReceivedMessageViewHolder extends RecyclerView.ViewHolder {
+        TextView textViewMessage;
+        ImageView avatar;
+
+        public ReceivedMessageViewHolder(@NonNull View itemView) {
+            super(itemView);
+            textViewMessage = itemView.findViewById(R.id.tvMessage);
+        }
+
+        void bind(Message message) {
+            if (message != null && message.getContent() != null) {
+                textViewMessage.setText(message.getContent());
+            } else {
+                textViewMessage.setText(""); // Fallback for null or empty messages
+            }
+        }
+
+    }
+}

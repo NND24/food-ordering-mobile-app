@@ -1,22 +1,30 @@
 package com.example.food_ordering_mobile_app.ui.customer.cart;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.food_ordering_mobile_app.R;
 import com.example.food_ordering_mobile_app.adapters.CartAdapter;
-import com.example.food_ordering_mobile_app.models.Cart;
+import com.example.food_ordering_mobile_app.models.cart.Cart;
+import com.example.food_ordering_mobile_app.models.cart.ListCartResponse;
+import com.example.food_ordering_mobile_app.utils.Resource;
+import com.example.food_ordering_mobile_app.viewmodels.CartViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CartActivity extends AppCompatActivity {
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private CartViewModel cartViewModel;
     private RecyclerView cartRecyclerView;
     private CartAdapter cartAdapter;
     private List<Cart> cartList;
@@ -27,15 +35,45 @@ public class CartActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_cart);
 
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
         cartRecyclerView = findViewById(R.id.cartRecyclerView);
+
+        cartViewModel = new ViewModelProvider(this).get(CartViewModel.class);
+
+        setupUserCart();
+    }
+
+    private void setupUserCart() {
         cartRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         cartList = new ArrayList<>();
-        cartList.add(new Cart("Minute by tuk tuk", "Cafe", 4.9, 124, "Western food",String.valueOf(R.drawable.res_1), 2));
-        cartList.add(new Cart("Phở Lý Quoc Su", "Mỳ", 3.4, 200, "Món ăn ngon",String.valueOf(R.drawable.item_2), 5));
 
         cartAdapter = new CartAdapter(this, cartList);
         cartRecyclerView.setAdapter(cartAdapter);
+
+        cartViewModel.getUserCartResponse().observe(this, new Observer<Resource<ListCartResponse>>() {
+            @Override
+            public void onChanged(Resource<ListCartResponse> resource) {
+                switch (resource.getStatus()) {
+                    case LOADING:
+                        swipeRefreshLayout.setRefreshing(true);
+                        break;
+                    case SUCCESS:
+                        swipeRefreshLayout.setRefreshing(false);
+                        cartList.clear();
+                        cartList.addAll(resource.getData().getData());
+                        cartAdapter.notifyDataSetChanged();
+                        Log.d("CartActivity", "getUserCart: " + resource.getData().getData().toString());
+                        break;
+                    case ERROR:
+                        swipeRefreshLayout.setRefreshing(false);
+                        Log.d("CartActivity", "getUserCart Error: " + resource.getMessage());
+                        break;
+                }
+            }
+        });
+
+        cartViewModel.getUserCart();
     }
 
     public void goBack(View view) {
