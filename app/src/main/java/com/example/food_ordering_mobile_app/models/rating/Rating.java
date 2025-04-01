@@ -1,6 +1,7 @@
-package com.example.food_ordering_mobile_app.models.dish;
+package com.example.food_ordering_mobile_app.models.rating;
 
-import com.example.food_ordering_mobile_app.models.store.Store;
+import com.example.food_ordering_mobile_app.models.dish.Dish;
+import com.example.food_ordering_mobile_app.models.dish.DishImage;
 import com.example.food_ordering_mobile_app.models.user.User;
 import com.google.gson.annotations.SerializedName;
 
@@ -11,12 +12,12 @@ public class Rating {
     @SerializedName("_id")
     private String id;
     private User user;
-    private Store store;
-    private List<Dish> dishes;
+    private String store;
+    private List<DishRating> dishes;
     private Integer ratingValue;
     private String comment;
     private List<DishImage> images;
-    private Timestamp timestamps;
+    private Timestamp updatedAt;
 
     public String getId() {
         return id;
@@ -34,19 +35,19 @@ public class Rating {
         this.user = user;
     }
 
-    public Store getStore() {
+    public String getStore() {
         return store;
     }
 
-    public void setStore(Store store) {
+    public void setStore(String store) {
         this.store = store;
     }
 
-    public List<Dish> getDishes() {
+    public List<DishRating> getDishes() {
         return dishes;
     }
 
-    public void setDishes(List<Dish> dishes) {
+    public void setDishes(List<DishRating> dishes) {
         this.dishes = dishes;
     }
 
@@ -74,11 +75,11 @@ public class Rating {
         this.images = images;
     }
 
-    public Timestamp getTimestamps() {
-        return timestamps;
+    public Timestamp getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setTimestamps(Timestamp timestamps) {
-        this.timestamps = timestamps;
+    public void setUpdatedAt(Timestamp updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

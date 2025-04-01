@@ -79,4 +79,18 @@ public class Dish {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    @Override
+    public String toString() {
+        return "Dish{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", category=" + category +
+                ", store=" + store +
+                ", image=" + image +
+                ", toppingGroups=" + toppingGroups +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }

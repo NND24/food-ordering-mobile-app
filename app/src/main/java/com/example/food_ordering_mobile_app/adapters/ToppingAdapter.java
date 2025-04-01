@@ -14,35 +14,43 @@ import com.example.food_ordering_mobile_app.models.dish.Topping;
 
 import java.util.List;
 
-public class SideDishAdapter extends RecyclerView.Adapter<SideDishAdapter.ViewHolder> {
+public class ToppingAdapter extends RecyclerView.Adapter<ToppingAdapter.ViewHolder> {
     private Context context;
-    private List<Topping> sideDishList;
+    private List<Topping> toppingList;
     private OnSideDishClickListener onSideDishClickListener;
     public interface OnSideDishClickListener {
         void onSideDishClick(Topping dish);
     }
 
-    public SideDishAdapter(Context context, List<Topping> dishList) {
+    public ToppingAdapter(Context context, List<Topping> toppingList) {
         this.context = context;
-        this.sideDishList = dishList;
+        this.toppingList = toppingList;
     }
 
-    public SideDishAdapter(Context context, List<Topping> sideDishList, OnSideDishClickListener onSideDishClickListener) {
+    public ToppingAdapter(Context context, List<Topping> toppingList, OnSideDishClickListener onSideDishClickListener) {
         this.context = context;
-        this.sideDishList = sideDishList;
+        this.toppingList = toppingList;
         this.onSideDishClickListener = onSideDishClickListener;
+    }
+
+    public void updateData(List<Topping> newToppings) {
+        if (newToppings != null) {
+            toppingList.clear();
+            toppingList.addAll(newToppings);
+            notifyDataSetChanged();
+        }
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_side_dish, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_topping, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Topping sideDish = sideDishList.get(position);
+        Topping sideDish = toppingList.get(position);
 
         holder.name.setText(sideDish.getName());
         holder.price.setText(String.valueOf(sideDish.getPrice()));
@@ -56,7 +64,7 @@ public class SideDishAdapter extends RecyclerView.Adapter<SideDishAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        return sideDishList.size();
+        return toppingList.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

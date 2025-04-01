@@ -8,8 +8,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
-import com.example.food_ordering_mobile_app.models.dish.ListRatingResponse;
-import com.example.food_ordering_mobile_app.models.dish.Rating;
+import com.example.food_ordering_mobile_app.models.rating.ListRatingResponse;
+import com.example.food_ordering_mobile_app.models.rating.Rating;
 import com.example.food_ordering_mobile_app.repository.RatingRepository;
 import com.example.food_ordering_mobile_app.utils.Resource;
 

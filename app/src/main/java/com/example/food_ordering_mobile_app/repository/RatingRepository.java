@@ -6,8 +6,8 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.food_ordering_mobile_app.models.dish.ListRatingResponse;
-import com.example.food_ordering_mobile_app.models.dish.Rating;
+import com.example.food_ordering_mobile_app.models.rating.ListRatingResponse;
+import com.example.food_ordering_mobile_app.models.rating.Rating;
 import com.example.food_ordering_mobile_app.network.RetrofitClient;
 import com.example.food_ordering_mobile_app.network.services.RatingService;
 import com.example.food_ordering_mobile_app.utils.PersistentCookieStore;

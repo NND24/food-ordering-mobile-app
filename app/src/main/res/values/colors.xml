@@ -36,7 +36,7 @@
     <!-- Outline and Borders -->
     <color name="outlineColor">#E0E0E0</color> <!-- Màu đường viền, xám nhạt -->
     <color name="primaryBorderColor">#a3a3a3a3</color>
-    <color name="secondaryBorderColor">#e0e0e0a3</color>
+    <color name="secondaryBorderColor">#a3e0e0e0</color>
 
     <!-- Button Colors -->
     <color name="buttonNormal">#757575</color> <!-- Màu nút mặc định -->
@@ -57,4 +57,5 @@
     <color name="colorTransparentWhite">#cccccc</color>
     <color name="colorLink">#0054ff</color>
     <color name="grayBackground">#f3f4f6</color>
+    <color name="redColor">#ef4444</color>
 </resources>

@@ -12,6 +12,8 @@ import com.example.food_ordering_mobile_app.models.location.Location;
 import com.example.food_ordering_mobile_app.repository.LocationRepository;
 import com.example.food_ordering_mobile_app.utils.Resource;
 
+import java.util.List;
+
 public class LocationViewModel extends AndroidViewModel {
     private final LocationRepository locationRepository;
 
@@ -23,8 +25,8 @@ public class LocationViewModel extends AndroidViewModel {
     public LiveData<Resource<Location>> getLocationResponse() {
         return locationResponse;
     }
-    private final MutableLiveData<Resource<Location>> userLocationsResponse = new MutableLiveData<>();
-    public LiveData<Resource<Location>> getUserLocationsResponse() {
+    private final MutableLiveData<Resource<List<Location>>> userLocationsResponse = new MutableLiveData<>();
+    public LiveData<Resource<List<Location>>> getUserLocationsResponse() {
         return userLocationsResponse;
     }
     private final MutableLiveData<Resource<Location>> updateLocationResponse = new MutableLiveData<>();
@@ -52,8 +54,8 @@ public class LocationViewModel extends AndroidViewModel {
         });
     }
 
-    public void getLocation(String id) {
-        LiveData<Resource<Location>> result = locationRepository.getLocation(id);
+    public void getLocation(String locationId) {
+        LiveData<Resource<Location>> result = locationRepository.getLocation(locationId);
         result.observeForever(new Observer<Resource<Location>>() {
             @Override
             public void onChanged(Resource<Location> resource) {
@@ -64,10 +66,10 @@ public class LocationViewModel extends AndroidViewModel {
     }
 
     public void getUserLocations() {
-        LiveData<Resource<Location>> result = locationRepository.getUserLocations();
-        result.observeForever(new Observer<Resource<Location>>() {
+        LiveData<Resource<List<Location>>> result = locationRepository.getUserLocations();
+        result.observeForever(new Observer<Resource<List<Location>>>() {
             @Override
-            public void onChanged(Resource<Location> resource) {
+            public void onChanged(Resource<List<Location>> resource) {
                 Log.d("LocationViewModel", "getLocation: " + resource);
                 userLocationsResponse.setValue(resource);
             }

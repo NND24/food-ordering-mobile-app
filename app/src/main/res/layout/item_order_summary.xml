@@ -14,7 +14,7 @@
         android:background="@drawable/custom_button_quantity">
 
         <TextView
-            android:id="@+id/quantity"
+            android:id="@+id/tvDishQuantity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="1"
@@ -42,7 +42,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/name"
+            android:id="@+id/tvDishName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Mì Quảng Thập Cẩm - Tô Lớn"
@@ -69,7 +69,7 @@
             android:layout_weight="1" />
 
         <TextView
-            android:id="@+id/price"
+            android:id="@+id/tvDishPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="10000"

@@ -1,6 +1,7 @@
 package com.example.food_ordering_mobile_app.adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,32 +11,46 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.graphics.drawable.RoundedBitmapDrawable;
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.example.food_ordering_mobile_app.R;
 import com.example.food_ordering_mobile_app.models.dish.Dish;
+import com.example.food_ordering_mobile_app.models.dish.DishStore;
+import com.example.food_ordering_mobile_app.models.store.Store;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DishAdapter extends RecyclerView.Adapter<DishAdapter.ViewHolder> {
     private Context context;
-    private List<Dish> dishList;
+    private List<DishStore> dishList;
     private OnDishClickListener onDishClickListener;
     public interface OnDishClickListener {
-        void onDishClick(Dish dish);
+        void onDishClick(DishStore dish);
     }
 
-    public DishAdapter(Context context, List<Dish> dishList) {
+    public DishAdapter(Context context, List<DishStore> dishList) {
         this.context = context;
         this.dishList = dishList;
     }
 
-    public DishAdapter(Context context, List<Dish> dishList, OnDishClickListener onDishClickListener) {
+    public DishAdapter(Context context, List<DishStore> dishList, OnDishClickListener onDishClickListener) {
         this.context = context;
-        this.dishList = dishList;
+        this.dishList = dishList != null ? dishList : new ArrayList<>();
         this.onDishClickListener = onDishClickListener;
+    }
+
+    public void updateData(List<DishStore> newDishes) {
+        if (newDishes != null) {
+            dishList.clear();
+            dishList.addAll(newDishes);
+            notifyDataSetChanged();
+        }
     }
 
     @NonNull
@@ -47,17 +62,27 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Dish dish = dishList.get(position);
+        DishStore dish = dishList.get(position);
 
         holder.name.setText(dish.getName());
         holder.price.setText(String.valueOf(dish.getPrice()));
         holder.description.setText(dish.getDescription());
 
-        int resourceId = Integer.parseInt(dish.getImage().getUrl());
+        String dishImageUrl = dish.getImage() != null ? dish.getImage().getUrl() : null;
         Glide.with(context)
-                .load(resourceId)
-                .transform(new RoundedCorners(8))
-                .into(holder.dishAvatar);
+                .asBitmap()
+                .load(dishImageUrl)
+                .override(80, 80)
+                .centerCrop()
+                .into(new BitmapImageViewTarget(holder.dishAvatar) {
+                    @Override
+                    protected void setResource(Bitmap resource) {
+                        RoundedBitmapDrawable roundedDrawable =
+                                RoundedBitmapDrawableFactory.create(context.getResources(), resource);
+                        roundedDrawable.setCornerRadius(6);
+                        holder.dishAvatar.setImageDrawable(roundedDrawable);
+                    }
+                });
 
         // Handle button clicks for increase, decrease, and visibility
         holder.btnAddToCart.setOnClickListener(v -> {

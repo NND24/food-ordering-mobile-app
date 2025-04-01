@@ -1,6 +1,7 @@
 package com.example.food_ordering_mobile_app.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.example.food_ordering_mobile_app.R;
 import com.example.food_ordering_mobile_app.models.order.Order;
 import com.example.food_ordering_mobile_app.models.order.OrderItem;
+import com.example.food_ordering_mobile_app.ui.customer.orders.OrderDetailActivity;
 
 import java.util.List;
 
@@ -71,6 +73,12 @@ public class OrderCurrentAdapter extends RecyclerView.Adapter<OrderCurrentAdapte
                         holder.imStoreAvatar.setImageDrawable(roundedDrawable);
                     }
                 });
+
+        holder.btnTrackOrder.setOnClickListener(v -> {
+            Intent intent = new Intent(context, OrderDetailActivity.class);
+            intent.putExtra("orderId", order.getId());
+            context.startActivity(intent);
+        });
     }
 
     @Override

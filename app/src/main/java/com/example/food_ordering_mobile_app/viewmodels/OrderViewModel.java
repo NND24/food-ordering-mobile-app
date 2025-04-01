@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer;
 
 import com.example.food_ordering_mobile_app.models.order.Order;
 import com.example.food_ordering_mobile_app.models.order.ListOrderResponse;
+import com.example.food_ordering_mobile_app.models.order.OrderResponse;
 import com.example.food_ordering_mobile_app.repository.OrderRepository;
 import com.example.food_ordering_mobile_app.utils.Resource;
 
@@ -24,8 +25,8 @@ public class OrderViewModel extends AndroidViewModel {
     public LiveData<Resource<ListOrderResponse>> getHistoryOrderResponse() {
         return historyOrderResponse;
     }
-    private final MutableLiveData<Resource<Order>> orderDetailResponse = new MutableLiveData<>();
-    public LiveData<Resource<Order>> getOrderDetailResponse() {
+    private final MutableLiveData<Resource<OrderResponse>> orderDetailResponse = new MutableLiveData<>();
+    public LiveData<Resource<OrderResponse>> getOrderDetailResponse() {
         return orderDetailResponse;
     }
 
@@ -55,10 +56,10 @@ public class OrderViewModel extends AndroidViewModel {
     }
 
     public void getOrderDetail(String orderId) {
-        LiveData<Resource<Order>> result = orderRepository.getOrderDetail(orderId);
-        result.observeForever(new Observer<Resource<Order>>() {
+        LiveData<Resource<OrderResponse>> result = orderRepository.getOrderDetail(orderId);
+        result.observeForever(new Observer<Resource<OrderResponse>>() {
             @Override
-            public void onChanged(Resource<Order> resource) {
+            public void onChanged(Resource<OrderResponse> resource) {
                 Log.d("OrderViewModel", "getOrderDetail: " + resource);
                 orderDetailResponse.setValue(resource);
             }

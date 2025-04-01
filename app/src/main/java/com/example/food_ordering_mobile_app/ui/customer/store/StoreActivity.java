@@ -21,22 +21,24 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
-import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.example.food_ordering_mobile_app.R;
 import com.example.food_ordering_mobile_app.adapters.DishBigAdapter;
 import com.example.food_ordering_mobile_app.adapters.DishAdapter;
+import com.example.food_ordering_mobile_app.adapters.DishGroupByCategoryAdapter;
 import com.example.food_ordering_mobile_app.adapters.RatingShortAdapter;
-import com.example.food_ordering_mobile_app.models.dish.Dish;
-import com.example.food_ordering_mobile_app.models.dish.ListRatingResponse;
-import com.example.food_ordering_mobile_app.models.dish.Rating;
+import com.example.food_ordering_mobile_app.models.dish.DishGroupByCategory;
+import com.example.food_ordering_mobile_app.models.dish.DishStore;
+import com.example.food_ordering_mobile_app.models.dish.ListDishResponse;
+import com.example.food_ordering_mobile_app.models.rating.ListRatingResponse;
+import com.example.food_ordering_mobile_app.models.rating.Rating;
 import com.example.food_ordering_mobile_app.models.foodType.FoodType;
 import com.example.food_ordering_mobile_app.models.store.Store;
 import com.example.food_ordering_mobile_app.models.store.StoreResponse;
 import com.example.food_ordering_mobile_app.ui.customer.cart.CartDetailActivity;
 import com.example.food_ordering_mobile_app.ui.customer.dish.DishActivity;
 import com.example.food_ordering_mobile_app.ui.customer.rating.RatingActivity;
+import com.example.food_ordering_mobile_app.utils.Functions;
 import com.example.food_ordering_mobile_app.utils.Resource;
 import com.example.food_ordering_mobile_app.viewmodels.DishViewModel;
 import com.example.food_ordering_mobile_app.viewmodels.RatingViewModel;
@@ -53,16 +55,16 @@ public class StoreActivity extends AppCompatActivity {
     private DishViewModel dishViewModel;
     private RatingViewModel ratingViewModel;
     private RecyclerView dishRecyclerView;
-    private DishAdapter dishAdapter;
-    private List<Dish> dishList;
+    private DishGroupByCategoryAdapter dishGroupByCategoryAdapter;
+    private List<DishGroupByCategory> dishGroupByCategoryList;
     private RecyclerView dishBigRecyclerView;
     private DishBigAdapter dishBigAdapter;
-    private List<Dish> dishBigList;
+    private List<DishStore> dishBigList;
     private RecyclerView reviewRecyclerView;
     private RatingShortAdapter reviewAdapter;
     private List<Rating> reviewList;
     private ImageView ivStoreAvatar, ivStoreCover, ivStar;
-    private TextView tvStoreName, tvStoreFoodType, tvAvgRating, tvRatingOpen, tvAmountRating, tvRatingText, tvRatingClose, tvDescription;
+    private TextView tvStoreName, tvStoreFoodType, tvAvgRating, tvRatingOpen, tvAmountRating, tvRatingText, tvRatingClose, tvDescription, tvDot;
     private String storeId;
 
     @Override
@@ -83,6 +85,7 @@ public class StoreActivity extends AppCompatActivity {
         tvRatingText = findViewById(R.id.tvRatingText);
         tvRatingClose = findViewById(R.id.tvRatingClose);
         tvDescription = findViewById(R.id.tvDescription);
+        tvDot = findViewById(R.id.tvDot);
         dishBigRecyclerView = findViewById(R.id.dishBigRecyclerView);
         dishRecyclerView = findViewById(R.id.dishRecyclerView);
         reviewRecyclerView = findViewById(R.id.reviewRecyclerView);
@@ -97,8 +100,8 @@ public class StoreActivity extends AppCompatActivity {
 
         setupStore();
         setupBigDish();
-//        setupDish();
-//        setupShortRating();
+        setupDish();
+        setupShortRating();
     }
 
     private void setupStore() {
@@ -112,7 +115,6 @@ public class StoreActivity extends AppCompatActivity {
                         break;
                     case SUCCESS:
                         swipeRefreshLayout.setRefreshing(false);
-                        Log.d("StoreActivity", "setupStore: " + resource.getData().toString());
                         tvStoreName.setText(resource.getData().getData().getName());
                         tvDescription.setText(resource.getData().getData().getDescription());
                         if (resource.getData().getData().getAmountRating() != null && resource.getData().getData().getAmountRating() > 0) {
@@ -124,6 +126,7 @@ public class StoreActivity extends AppCompatActivity {
                             tvRatingOpen.setVisibility(View.VISIBLE);
                             tvRatingText.setVisibility(View.VISIBLE);
                             tvRatingClose.setVisibility(View.VISIBLE);
+                            tvDot.setVisibility(View.VISIBLE);
                         } else {
                             tvAvgRating.setVisibility(View.GONE);
                             tvAmountRating.setVisibility(View.GONE);
@@ -131,6 +134,7 @@ public class StoreActivity extends AppCompatActivity {
                             tvRatingOpen.setVisibility(View.GONE);
                             tvRatingText.setVisibility(View.GONE);
                             tvRatingClose.setVisibility(View.GONE);
+                            tvDot.setVisibility(View.GONE);
                         }
 
                         if (resource.getData().getData().getStoreCategory() != null && !resource.getData().getData().getStoreCategory().isEmpty()) {
@@ -181,7 +185,6 @@ public class StoreActivity extends AppCompatActivity {
                         break;
                     case ERROR:
                         swipeRefreshLayout.setRefreshing(false);
-                        Log.d("StoreActivity", "setupStore error: " + resource.getData().toString());
                         break;
                 }
             }
@@ -189,18 +192,18 @@ public class StoreActivity extends AppCompatActivity {
     }
 
     private void setupBigDish() {
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
-        dishBigRecyclerView.setLayoutManager(gridLayoutManager);
+        dishBigRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        dishBigList = new ArrayList<>();
         dishBigAdapter = new DishBigAdapter(this, dishBigList, dishBig -> {
             Intent intent = new Intent(this, DishActivity.class);
+            intent.putExtra("dishId", dishBig.getId());
             startActivity(intent);
         });
-        dishBigList = new ArrayList<>();
         dishBigRecyclerView.setAdapter(dishBigAdapter);
 
-        dishViewModel.getAllBigDishResponse().observe(this, new Observer<Resource<List<Dish>>>() {
+        dishViewModel.getAllBigDishResponse().observe(this, new Observer<Resource<ListDishResponse>>() {
             @Override
-            public void onChanged(Resource<List<Dish>> resource) {
+            public void onChanged(Resource<ListDishResponse> resource) {
                 switch (resource.getStatus()) {
                     case LOADING:
                         swipeRefreshLayout.setRefreshing(true);
@@ -208,8 +211,8 @@ public class StoreActivity extends AppCompatActivity {
                     case SUCCESS:
                         swipeRefreshLayout.setRefreshing(false);
                         dishBigList.clear();
-                        dishBigList.addAll(resource.getData());
-                        Log.d("StoreActivity", "getAllBigDishResponse: " + resource.getData().toString());
+                        dishBigList.addAll(resource.getData().getData());
+                        Log.d("StoreActivity", "getAllBigDishResponse: " + resource.getData().getData().toString());
                         dishBigAdapter.notifyDataSetChanged();
                         break;
                     case ERROR:
@@ -225,30 +228,28 @@ public class StoreActivity extends AppCompatActivity {
 
     private void setupDish() {
         dishRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        dishList = new ArrayList<>();
-        dishAdapter = new DishAdapter(this, dishList, dish -> {
-            Intent intent = new Intent(this, DishActivity.class);
-            startActivity(intent);
-        });
-        dishRecyclerView.setAdapter(dishAdapter);
+        dishGroupByCategoryList = new ArrayList<>();
+        dishGroupByCategoryAdapter = new DishGroupByCategoryAdapter(this, dishGroupByCategoryList);
+        dishRecyclerView.setAdapter(dishGroupByCategoryAdapter);
 
-        dishViewModel.getAllDishResponse().observe(this, new Observer<Resource<List<Dish>>>() {
+        dishViewModel.getAllDishResponse().observe(this, new Observer<Resource<ListDishResponse>>() {
             @Override
-            public void onChanged(Resource<List<Dish>> resource) {
+            public void onChanged(Resource<ListDishResponse> resource) {
                 switch (resource.getStatus()) {
                     case LOADING:
                         swipeRefreshLayout.setRefreshing(true);
                         break;
                     case SUCCESS:
                         swipeRefreshLayout.setRefreshing(false);
-                        dishList.clear();
-                        dishList.addAll(resource.getData());
-                        Log.d("StoreActivity", "getAllDishResponse: " + resource.getData().toString());
-                        dishAdapter.notifyDataSetChanged();
+                        dishGroupByCategoryList.clear();
+                        List<DishStore> dishes = resource.getData().getData();
+                        dishGroupByCategoryList.addAll(Functions.groupDishesByCategory(dishes));
+                        Log.d("StoreActivity", "setupDish: " + resource.getData().toString());
+                        dishGroupByCategoryAdapter.notifyDataSetChanged();
                         break;
                     case ERROR:
                         swipeRefreshLayout.setRefreshing(false);
-                        Log.d("StoreActivity", "getAllDishResponse Error: " + resource.getData().toString());
+                        Log.d("StoreActivity", "setupDish Error: " + resource.getData().toString());
                         break;
                 }
             }
@@ -274,19 +275,17 @@ public class StoreActivity extends AppCompatActivity {
                         swipeRefreshLayout.setRefreshing(false);
                         reviewList.clear();
                         reviewList.addAll(resource.getData().getData());
-                        Log.d("StoreActivity", "getAllStoreRatingResponse: " + resource.getData().toString());
                         reviewAdapter.notifyDataSetChanged();
                         break;
                     case ERROR:
                         swipeRefreshLayout.setRefreshing(false);
-                        Log.d("StoreActivity", "getAllStoreRatingResponse Error: " + resource.getData().toString());
                         break;
                 }
             }
         });
 
         Map<String, String> queryParams = new HashMap<>();
-        queryParams.put("sort", "");
+        queryParams.put("sort", "desc");
         queryParams.put("limit", "3");
         queryParams.put("page", "1");
 
@@ -297,11 +296,11 @@ public class StoreActivity extends AppCompatActivity {
         storeViewModel.getStoreInformation(storeId);
         dishViewModel.getAllBigDish(storeId);
         dishViewModel.getAllDish(storeId);
+
         Map<String, String> queryParams = new HashMap<>();
         queryParams.put("sort", "");
         queryParams.put("limit", "3");
         queryParams.put("page", "1");
-
         ratingViewModel.getAllStoreRating(storeId, queryParams);
     }
 
@@ -311,11 +310,13 @@ public class StoreActivity extends AppCompatActivity {
 
     public void goToReviewPage(View view) {
         Intent intent = new Intent(StoreActivity.this, RatingActivity.class);
+        intent.putExtra("storeId", storeId);
         startActivity(intent);
     }
 
     public void goToCartDetailPage(View view) {
         Intent intent = new Intent(StoreActivity.this, CartDetailActivity.class);
+        intent.putExtra("storeId", storeId);
         startActivity(intent);
     }
 }

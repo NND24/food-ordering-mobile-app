@@ -1,6 +1,7 @@
 package com.example.food_ordering_mobile_app.network.services;
 
 import com.example.food_ordering_mobile_app.models.cart.Cart;
+import com.example.food_ordering_mobile_app.models.cart.CartResponse;
 import com.example.food_ordering_mobile_app.models.cart.ListCartResponse;
 import com.example.food_ordering_mobile_app.models.user.User;
 
@@ -16,6 +17,8 @@ import retrofit2.http.Path;
 public interface CartService {
     @GET("/api/v1/cart/")
     Call<ListCartResponse> getUserCart();
+    @GET("/api/v1/cart/{storeId}")
+    Call<CartResponse> getUserCartInStore(@Path("storeId") String storeId);
     @GET("/api/v1/cart/{cartId}")
     Call<Cart> getDetailCart(@Path("cartId") String cartId);
     @POST("/api/v1/cart/update")

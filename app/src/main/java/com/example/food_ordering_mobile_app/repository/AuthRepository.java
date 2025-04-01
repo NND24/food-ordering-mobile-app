@@ -289,6 +289,40 @@ public class AuthRepository {
         return result;
     }
 
+    public MutableLiveData<Resource<String>> changePassword(String oldPassword, String password) {
+        MutableLiveData<Resource<String>> result = new MutableLiveData<>();
+        result.setValue(Resource.loading(null)); // Đặt trạng thái Loading
+
+        Map<String, String> data = new HashMap<>();
+        data.put("oldPassword", oldPassword);
+        data.put("newPassword", password);
+
+        authService.changePassword(data).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    result.setValue(Resource.success(response.body(), null));
+                } else {
+                    try {
+                        String errorMessage = response.errorBody() != null ? response.errorBody().string() : "Lỗi không xác định!";
+                        JSONObject jsonObject = new JSONObject(errorMessage);
+                        String message = jsonObject.getString("message");
+                        result.setValue(Resource.error(message, null));
+                    } catch (Exception e) {
+                        result.setValue(Resource.error("Lỗi khi đọc phản hồi từ server!", null));
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                result.setValue(Resource.error("Lỗi kết nối", null));
+            }
+        });
+
+        return result;
+    }
+
     public MutableLiveData<Resource<String>> logout(Context context) {
         MutableLiveData<Resource<String>> result = new MutableLiveData<>();
         result.setValue(Resource.loading(null)); // Trạng thái Loading

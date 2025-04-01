@@ -1,13 +1,13 @@
-package com.example.food_ordering_mobile_app.models.dish;
+package com.example.food_ordering_mobile_app.models.rating;
 
 import java.util.List;
 
 public class ListRatingResponse {
-    private String status;
+    private String success;
     private List<Rating> data;
 
-    public String getStatus() {
-        return status;
+    public String getSuccess() {
+        return success;
     }
 
     public List<Rating> getData() {

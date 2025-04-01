@@ -153,6 +153,10 @@ public class RegisterActivity extends AppCompatActivity {
         startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
         finish();
     }
+
+    public void goBack(View view) {
+        onBackPressed();
+    }
 }
 
 

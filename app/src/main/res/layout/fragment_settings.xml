@@ -173,6 +173,7 @@
                 android:layout_height="15dp" />
 
             <Button
+                android:id="@+id/btnLocation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/custom_button_setting"
@@ -185,23 +186,23 @@
                 android:textSize="16dp"
                 android:drawablePadding="15dp"/>
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="15dp" />
+<!--            <Space-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="15dp" />-->
 
-            <Button
-                android:id="@+id/payment_method_btn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/custom_button_setting"
-                android:paddingVertical="12dp"
-                android:drawableLeft="@drawable/ic_credit_card_24"
-                android:drawableRight="@drawable/ic_arrow_right_24"
-                android:gravity="start|center_vertical"
-                android:textAllCaps="false"
-                android:text="@string/payment_methods"
-                android:textSize="16dp"
-                android:drawablePadding="15dp"/>
+<!--            <Button-->
+<!--                android:id="@+id/payment_method_btn"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:background="@drawable/custom_button_setting"-->
+<!--                android:paddingVertical="12dp"-->
+<!--                android:drawableLeft="@drawable/ic_credit_card_24"-->
+<!--                android:drawableRight="@drawable/ic_arrow_right_24"-->
+<!--                android:gravity="start|center_vertical"-->
+<!--                android:textAllCaps="false"-->
+<!--                android:text="@string/payment_methods"-->
+<!--                android:textSize="16dp"-->
+<!--                android:drawablePadding="15dp"/>-->
 
             <Space
                 android:layout_width="match_parent"

@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.food_ordering_mobile_app.R;
-import com.example.food_ordering_mobile_app.models.dish.Rating;
+import com.example.food_ordering_mobile_app.models.rating.Rating;
 
 import java.util.List;
 

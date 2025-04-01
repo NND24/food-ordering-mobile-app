@@ -1,6 +1,5 @@
 package com.example.food_ordering_mobile_app.models.cart;
 
-import com.example.food_ordering_mobile_app.models.dish.Dish;
 import com.example.food_ordering_mobile_app.models.dish.Topping;
 
 import java.util.List;

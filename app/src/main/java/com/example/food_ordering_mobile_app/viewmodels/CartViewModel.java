@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
 import com.example.food_ordering_mobile_app.models.cart.Cart;
+import com.example.food_ordering_mobile_app.models.cart.CartResponse;
 import com.example.food_ordering_mobile_app.models.cart.ListCartResponse;
 import com.example.food_ordering_mobile_app.repository.CartRepository;
 import com.example.food_ordering_mobile_app.utils.Resource;
@@ -19,6 +20,10 @@ public class CartViewModel extends AndroidViewModel {
     private final MutableLiveData<Resource<ListCartResponse>> userCartResponse = new MutableLiveData<>();
     public LiveData<Resource<ListCartResponse>> getUserCartResponse() {
         return userCartResponse;
+    }
+    private final MutableLiveData<Resource<CartResponse>> userCartInStoreResponse = new MutableLiveData<>();
+    public LiveData<Resource<CartResponse>> getUserCartInStoreResponse() {
+        return userCartInStoreResponse;
     }
     private final MutableLiveData<Resource<Cart>> detailCartResponse = new MutableLiveData<>();
     public LiveData<Resource<Cart>> getDetailCartResponse() {
@@ -62,6 +67,17 @@ public class CartViewModel extends AndroidViewModel {
             public void onChanged(Resource<ListCartResponse> resource) {
                 Log.d("CartViewModel", "getCurrentUser: " + resource);
                 userCartResponse.setValue(resource);
+            }
+        });
+    }
+
+    public void getUserCartInStore(String storeId) {
+        LiveData<Resource<CartResponse>> result = cartRepository.getUserCartInStore(storeId);
+        result.observeForever(new Observer<Resource<CartResponse>>() {
+            @Override
+            public void onChanged(Resource<CartResponse> resource) {
+                Log.d("CartViewModel", "getCurrentUser: " + resource);
+                userCartInStoreResponse.setValue(resource);
             }
         });
     }

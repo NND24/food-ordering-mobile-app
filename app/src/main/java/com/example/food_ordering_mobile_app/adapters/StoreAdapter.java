@@ -92,7 +92,7 @@ public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.StoreViewHol
             }
             holder.tvStoreFoodType.setText(categories);
         } else {
-            holder.tvStoreFoodType.setText("");
+            holder.tvStoreFoodType.setVisibility(View.GONE);
         }
 
         String storeAvatarUrl = store.getAvatar() != null ? store.getAvatar().getUrl() : null;

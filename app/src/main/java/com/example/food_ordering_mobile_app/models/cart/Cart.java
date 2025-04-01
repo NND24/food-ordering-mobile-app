@@ -1,7 +1,6 @@
 package com.example.food_ordering_mobile_app.models.cart;
 
 import com.example.food_ordering_mobile_app.models.store.Store;
-import com.example.food_ordering_mobile_app.models.user.User;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;

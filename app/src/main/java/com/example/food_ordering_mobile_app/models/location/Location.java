@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 public class Location {
     @SerializedName("_id")
     private String id;
-    private User user;
+    private String user;
     private String name;
     private String address;
     private Double lat;
@@ -25,11 +25,11 @@ public class Location {
         this.id = id;
     }
 
-    public User getUser() {
+    public String getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(String user) {
         this.user = user;
     }
 
@@ -103,5 +103,22 @@ public class Location {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    @Override
+    public String toString() {
+        return "Location{" +
+                "id='" + id + '\'' +
+                ", user=" + user +
+                ", name='" + name + '\'' +
+                ", address='" + address + '\'' +
+                ", lat=" + lat +
+                ", lon=" + lon +
+                ", detailAddress='" + detailAddress + '\'' +
+                ", contactName='" + contactName + '\'' +
+                ", note='" + note + '\'' +
+                ", contactPhonenumber='" + contactPhonenumber + '\'' +
+                ", type='" + type + '\'' +
+                '}';
     }
 }

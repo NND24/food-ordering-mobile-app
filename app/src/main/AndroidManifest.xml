@@ -3,20 +3,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.food_ordering_mobile_app">
     <!-- Quyền truy cập Internet -->
-    <uses-permission android:name="android.permission.INTERNET"/>
-
-    <!-- Quyền truy cập bộ nhớ -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- Quyền truy cập bộ nhớ -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" tools:ignore="ScopedStorage" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" /> <!-- Quyền truy cập camera -->
+    <uses-permission android:name="android.permission.CAMERA" />
 
-    <!-- Quyền truy cập camera -->
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-feature android:name="android.hardware.camera" android:required="true"/>
-
-    <!-- Cấu hình Google Sign-In -->
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" /> <!-- Cấu hình Google Sign-In -->
     <meta-data
         android:name="com.google.android.gms.auth.api.signin.CLIENT_ID"
-        android:value="@string/google_client_id" />
+        android:value="@string/google_client_id" /> <!-- Lay vi tri -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <meta-data
+        android:name="MAPBOX_ACCESS_TOKEN"
+        android:value="@string/mapbox_access_token" />
 
     <application
         android:name=".models.GlobalVariable"
@@ -28,8 +33,11 @@
         android:roundIcon="@drawable/logo_app"
         android:supportsRtl="true"
         android:theme="@style/Theme.FoodOrderingApp"
-        tools:targetApi="31"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        tools:targetApi="31">
+        <activity
+            android:name=".ui.customer.account.location.ChooseProvinceActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.customer.notifications.NotificationActivity"
             android:exported="false" />
@@ -90,6 +98,18 @@
             android:exported="false" />
         <activity
             android:name=".ui.customer.search.CategoryFilterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.customer.account.location.AddLocationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.customer.account.location.EditLocationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.customer.account.location.EditCurrentLocationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.customer.account.location.ChooseLocationActivity"
             android:exported="false" />
         <activity
             android:name=".ui.common.SplashActivity"

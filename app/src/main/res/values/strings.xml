@@ -1,4 +1,5 @@
 <resources>
+    <string name="mapbox_access_token">sk.eyJ1Ijoibm5kMjQiLCJhIjoiY204eTluZzl6MDhtcjJqc2FsMzN3Z3ozaCJ9.wigbyhwGl22d2pdzdntD_g</string>
     <string name="google_client_id">931496416191-pr28dm2ddhdq17jemlc684cjbjbau5hv.apps.googleusercontent.com</string>
     <string name="app_name">PTIT FOOD</string>
     <string name="cart_icon">Cart</string>
@@ -83,5 +84,11 @@
     <string name="male">Male</string>
     <string name="other">Other</string>
     <string name="change_password">Change Password</string>
+    <string name="address">Address</string>
+    <string name="old_password">Old Password</string>
+    <string name="new_password">New Password</string>
+    <string name="saved_location">Saved location</string>
+    <string name="company">Company</string>
+    <string name="save_this_location">Save this location</string>
 
 </resources>

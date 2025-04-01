@@ -23,12 +23,12 @@ import androidx.recyclerview.widget.SnapHelper;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.food_ordering_mobile_app.R;
-import com.example.food_ordering_mobile_app.adapters.CategoryAdapter;
+import com.example.food_ordering_mobile_app.adapters.StoreGroupByCategoryAdapter;
 import com.example.food_ordering_mobile_app.adapters.StoreBigCardAdapter;
 import com.example.food_ordering_mobile_app.adapters.FoodTypeAdapter;
 import com.example.food_ordering_mobile_app.adapters.StoreStandoutAdapter;
 import com.example.food_ordering_mobile_app.models.foodType.FoodType;
-import com.example.food_ordering_mobile_app.models.store.CategoryWithStores;
+import com.example.food_ordering_mobile_app.models.store.StoreGroupByCategory;
 import com.example.food_ordering_mobile_app.models.store.Store;
 import com.example.food_ordering_mobile_app.models.store.ListStoreResponse;
 import com.example.food_ordering_mobile_app.models.user.User;
@@ -60,8 +60,8 @@ public class HomeFragment extends Fragment {
     private List<FoodType> foodTypes;
     private RecyclerView foodTypeRecyclerView;
     private RecyclerView categoryRecyclerView;
-    private CategoryAdapter categoryAdapter;
-    private List<CategoryWithStores> categoryWithStoresList;
+    private StoreGroupByCategoryAdapter storeGroupByCategoryAdapter;
+    private List<StoreGroupByCategory> storeGroupByCategoryList;
     private RecyclerView ratingStoreRecyclerView;
     private StoreBigCardAdapter storeBigCardAdapter;
     private List<Store> ratingStores;
@@ -198,15 +198,12 @@ public class HomeFragment extends Fragment {
 
     private void setupFoodTypes() {
         foodTypeRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-
         foodTypes = new ArrayList<>();
-
         foodTypeAdapter = new FoodTypeAdapter(requireContext(), foodTypes, selectedFoodTypes, selectedFoodTypeIds -> {
             Intent intent = new Intent(getContext(), SearchActivity.class);
             intent.putStringArrayListExtra("selected_categories", new ArrayList<>(selectedFoodTypeIds));
             startActivity(intent);
         });
-
         foodTypeRecyclerView.setAdapter(foodTypeAdapter);
 
         foodTypeViewModel.getAllFoodTypesResponse().observe(getViewLifecycleOwner(), new Observer<Resource<List<FoodType>>>() {
@@ -342,9 +339,9 @@ public class HomeFragment extends Fragment {
 
     private void setupStores() {
         categoryRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        categoryWithStoresList = new ArrayList<>();
-        categoryAdapter = new CategoryAdapter(getContext(), categoryWithStoresList);
-        categoryRecyclerView.setAdapter(categoryAdapter);
+        storeGroupByCategoryList = new ArrayList<>();
+        storeGroupByCategoryAdapter = new StoreGroupByCategoryAdapter(getContext(), storeGroupByCategoryList);
+        categoryRecyclerView.setAdapter(storeGroupByCategoryAdapter);
 
         storeViewModel.getAllStoreResponse().observe(getViewLifecycleOwner(), new Observer<Resource<ListStoreResponse>>() {
             @Override
@@ -355,10 +352,10 @@ public class HomeFragment extends Fragment {
                         break;
                     case SUCCESS:
                         swipeRefreshLayout.setRefreshing(false);
-                        categoryWithStoresList.clear();
+                        storeGroupByCategoryList.clear();
                         List<Store> stores = resource.getData().getData();
-                        categoryWithStoresList.addAll(Functions.groupStoresByCategory(stores));
-                        categoryAdapter.notifyDataSetChanged();
+                        storeGroupByCategoryList.addAll(Functions.groupStoresByCategory(stores));
+                        storeGroupByCategoryAdapter.notifyDataSetChanged();
                         break;
                     case ERROR:
                         swipeRefreshLayout.setRefreshing(false);

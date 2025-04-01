@@ -2,6 +2,7 @@ package com.example.food_ordering_mobile_app.ui.customer.rating;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,7 +19,9 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.food_ordering_mobile_app.R;
 import com.example.food_ordering_mobile_app.adapters.RatingAdapter;
-import com.example.food_ordering_mobile_app.models.dish.Rating;
+import com.example.food_ordering_mobile_app.models.rating.ListRatingResponse;
+import com.example.food_ordering_mobile_app.models.rating.Rating;
+import com.example.food_ordering_mobile_app.utils.Resource;
 import com.example.food_ordering_mobile_app.viewmodels.RatingViewModel;
 
 import java.util.ArrayList;
@@ -45,6 +49,7 @@ public class RatingActivity extends AppCompatActivity {
         tvAverageRating = findViewById(R.id.tv_average_rating);
         tvTotalReviews = findViewById(R.id.tv_total_reviews);
         layoutRatingBar = findViewById(R.id.layoutRatingBar);
+        reviewRecyclerView = findViewById(R.id.reviewRecyclerView);
 
         Intent intent = getIntent();
         if (intent != null) {
@@ -57,39 +62,39 @@ public class RatingActivity extends AppCompatActivity {
     }
 
     private void setupRating() {
-        reviewRecyclerView = findViewById(R.id.reviewRecyclerView);
         reviewRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
         ratingList = new ArrayList<>();
-
         ratingAdapter = new RatingAdapter(this, ratingList);
         reviewRecyclerView.setAdapter(ratingAdapter);
 
-        ratingViewModel.getAllStoreRatingResponse().observe(this, resource -> {
-            switch (resource.getStatus()) {
-                case LOADING:
-                    swipeRefreshLayout.setRefreshing(true);
-                    break;
-                case SUCCESS:
-                    swipeRefreshLayout.setRefreshing(false);
-                    ratingList.clear();
-                    ratingList.addAll(resource.getData().getData());
-
-                    Map<Integer, Integer> ratings = countRatings(ratingList);
-                    setRatings(ratings);
-
-                    ratingAdapter.notifyDataSetChanged();
-                    break;
-                case ERROR:
-                    swipeRefreshLayout.setRefreshing(false);
-                    break;
+        ratingViewModel.getAllStoreRatingResponse().observe(this, new Observer<Resource<ListRatingResponse>>() {
+            @Override
+            public void onChanged(Resource<ListRatingResponse> resource) {
+                switch (resource.getStatus()) {
+                    case LOADING:
+                        swipeRefreshLayout.setRefreshing(true);
+                        break;
+                    case SUCCESS:
+                        swipeRefreshLayout.setRefreshing(false);
+                        ratingList.clear();
+                        ratingList.addAll(resource.getData().getData());
+                        Log.d("RatingActivity", "getAllStoreRatingResponse: " + resource.getData().toString());
+                        Map<Integer, Integer> ratings = countRatings(ratingList);
+                        setRatings(ratings);
+                        ratingAdapter.notifyDataSetChanged();
+                        break;
+                    case ERROR:
+                        swipeRefreshLayout.setRefreshing(false);
+                        Log.d("RatingActivity", "getAllStoreRatingResponse Error: " + resource.getData().toString());
+                        break;
+                }
             }
         });
 
         Map<String, String> queryParams = new HashMap<>();
         queryParams.put("sort", "");
-        queryParams.put("limit", "3");
-        queryParams.put("page", "1");
+        queryParams.put("limit", "");
+        queryParams.put("page", "");
 
         ratingViewModel.getAllStoreRating(storeId, queryParams);
     }

@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.food_ordering_mobile_app.R;
-import com.example.food_ordering_mobile_app.models.dish.Topping;
-import com.example.food_ordering_mobile_app.models.order.Order;
+import com.example.food_ordering_mobile_app.models.order.OrderItem;
+import com.example.food_ordering_mobile_app.models.order.OrderTopping;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,9 +20,9 @@ import java.util.List;
 public class OrderSummaryAdapter extends RecyclerView.Adapter<OrderSummaryAdapter.ViewHolder> {
     private Context context;
 
-    private List<Order> orderList;
+    private List<OrderItem> orderList;
 
-    public OrderSummaryAdapter(Context context, List<Order> orderList) {
+    public OrderSummaryAdapter(Context context, List<OrderItem> orderList) {
         this.context = context;
         this.orderList = orderList;
     }
@@ -37,25 +37,41 @@ public class OrderSummaryAdapter extends RecyclerView.Adapter<OrderSummaryAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Order order = orderList.get(position);
+        OrderItem item = orderList.get(position);
 
-        holder.name.setText(order.getStore().getName());
-      //  holder.quantity.setText(String.valueOf(order.getItems().getQuantity()));
-      //  holder.price.setText(String.valueOf(order.getItems().getDish().getPrice()));
+        holder.tvDishName.setText(item.getDish().getName());
+        holder.tvDishQuantity.setText(String.valueOf(item.getQuantity()));
 
-//        if (order.getItems().getToppings().isEmpty()) {
-//            holder.recyclerViewAddons.setVisibility(View.GONE);
-//        } else {
-//            holder.recyclerViewAddons.setVisibility(View.VISIBLE);
-//            List<String> toppingNames = new ArrayList<>();
-//            for (Topping topping : order.getItems().getToppings()) {
-//                toppingNames.add(topping.getName()); // Giả sử Topping có phương thức getName()
-//            }
-//            AddonAdapter addonAdapter = new AddonAdapter(toppingNames);
-//            holder.recyclerViewAddons.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
-//            holder.recyclerViewAddons.setAdapter(addonAdapter);
-//        }
+        // Lấy giá món chính
+        double dishPrice = item.getDish().getPrice();
+
+        // Tính tổng giá topping
+        double totalToppingPrice = 0;
+        for (OrderTopping topping : item.getToppings()) {
+            totalToppingPrice += topping.getPrice(); // Giả sử Topping có phương thức getPrice()
+        }
+
+        // Tính tổng giá
+        double totalPrice = (dishPrice + totalToppingPrice) * item.getQuantity();
+
+        // Hiển thị tổng giá
+        holder.tvDishPrice.setText(String.format("%.0f", totalPrice));
+
+        // Xử lý hiển thị topping
+        if (item.getToppings().isEmpty()) {
+            holder.recyclerViewAddons.setVisibility(View.GONE);
+        } else {
+            holder.recyclerViewAddons.setVisibility(View.VISIBLE);
+            List<String> toppingNames = new ArrayList<>();
+            for (OrderTopping topping : item.getToppings()) {
+                toppingNames.add(topping.getName());
+            }
+            AddonAdapter addonAdapter = new AddonAdapter(toppingNames);
+            holder.recyclerViewAddons.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
+            holder.recyclerViewAddons.setAdapter(addonAdapter);
+        }
     }
+
 
     @Override
     public int getItemCount() {
@@ -63,14 +79,14 @@ public class OrderSummaryAdapter extends RecyclerView.Adapter<OrderSummaryAdapte
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView name, quantity, price;
+        TextView tvDishName, tvDishQuantity, tvDishPrice;
         RecyclerView recyclerViewAddons;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            name = itemView.findViewById(R.id.name);
-            quantity = itemView.findViewById(R.id.quantity);
-            price = itemView.findViewById(R.id.price);
+            tvDishName = itemView.findViewById(R.id.tvDishName);
+            tvDishQuantity = itemView.findViewById(R.id.tvDishQuantity);
+            tvDishPrice = itemView.findViewById(R.id.tvDishPrice);
             recyclerViewAddons = itemView.findViewById(R.id.recyclerViewAddons);
         }
     }

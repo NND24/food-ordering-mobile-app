@@ -70,7 +70,7 @@
             <ImageView
                 android:id="@+id/ivStoreCover"
                 android:layout_width="match_parent"
-                android:layout_height="245dp"/>
+                android:layout_height="200dp"/>
 
             <LinearLayout
                 android:id="@+id/restaurantInfo"
@@ -85,8 +85,7 @@
                 <ImageView
                     android:id="@+id/ivStoreAvatar"
                     android:layout_width="95dp"
-                    android:layout_height="95dp"
-                    android:background="@drawable/rounded_corners" />
+                    android:layout_height="95dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -227,20 +226,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
-                    android:padding="20dp">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Mì xào"
-                    android:textSize="24sp"
-                    android:textColor="@color/onPrimary"
-                    android:textStyle="bold" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/dishRecyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" >
-                </androidx.recyclerview.widget.RecyclerView>
+                    android:paddingHorizontal="20dp">
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/dishRecyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"></androidx.recyclerview.widget.RecyclerView>
                 </LinearLayout>
 
                 <LinearLayout
@@ -269,7 +259,6 @@
                             android:textStyle="bold" />
 
                         <ImageButton
-                            android:id="@+id/imageButton5"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:background="@color/reviewBgColor"
@@ -288,6 +277,7 @@
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
     <LinearLayout
         android:id="@+id/footer"
         android:layout_width="match_parent"

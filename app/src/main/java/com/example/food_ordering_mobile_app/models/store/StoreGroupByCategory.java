@@ -4,7 +4,7 @@ import com.example.food_ordering_mobile_app.models.foodType.FoodType;
 
 import java.util.List;
 
-public class CategoryWithStores {
+public class StoreGroupByCategory {
     private FoodType category;
     private List<Store> stores;
 

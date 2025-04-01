@@ -1,13 +1,12 @@
 package com.example.food_ordering_mobile_app.network.services;
 
 
-import com.example.food_ordering_mobile_app.models.dish.ListRatingResponse;
-import com.example.food_ordering_mobile_app.models.dish.Rating;
+import com.example.food_ordering_mobile_app.models.rating.ListRatingResponse;
+import com.example.food_ordering_mobile_app.models.rating.Rating;
 
 import java.util.Map;
 
 import retrofit2.Call;
-import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;

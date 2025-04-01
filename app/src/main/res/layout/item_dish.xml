@@ -17,7 +17,6 @@
             android:id="@+id/dishAvatar"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:scaleType="centerCrop"
             android:src="@drawable/dess_1" />
 
         <LinearLayout

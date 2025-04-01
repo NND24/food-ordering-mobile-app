@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.food_ordering_mobile_app.models.order.Order;
 import com.example.food_ordering_mobile_app.models.order.ListOrderResponse;
+import com.example.food_ordering_mobile_app.models.order.OrderResponse;
 import com.example.food_ordering_mobile_app.network.RetrofitClient;
 import com.example.food_ordering_mobile_app.network.services.OrderService;
 import com.example.food_ordering_mobile_app.utils.PersistentCookieStore;
@@ -74,13 +75,13 @@ public class OrderRepository {
         return result;
     }
 
-    public LiveData<Resource<Order>> getOrderDetail(String orderId) {
-        MutableLiveData<Resource<Order>> result = new MutableLiveData<>();
+    public LiveData<Resource<OrderResponse>> getOrderDetail(String orderId) {
+        MutableLiveData<Resource<OrderResponse>> result = new MutableLiveData<>();
         result.setValue(Resource.loading(null));
 
-        orderService.getOrderDetail(orderId).enqueue(new Callback<Order>() {
+        orderService.getOrderDetail(orderId).enqueue(new Callback<OrderResponse>() {
             @Override
-            public void onResponse(Call<Order> call, Response<Order> response) {
+            public void onResponse(Call<OrderResponse> call, Response<OrderResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Log.d("OrderRepository", "getOrderDetail: " + response.body());
                     result.setValue(Resource.success("Lay thong tin thành công!", response.body()));
@@ -97,7 +98,7 @@ public class OrderRepository {
             }
 
             @Override
-            public void onFailure(Call<Order> call, Throwable t) {
+            public void onFailure(Call<OrderResponse> call, Throwable t) {
                 result.setValue(Resource.error("Lỗi kết nối: " + t.getMessage(), null));
             }
         });

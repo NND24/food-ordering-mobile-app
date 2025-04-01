@@ -20,6 +20,12 @@
         <action
             android:id="@+id/action_settings_to_profile"
             app:destination="@id/profile" />
+        <action
+            android:id="@+id/action_settings_to_change_password"
+            app:destination="@id/change_password" />
+        <action
+            android:id="@+id/action_settings_to_location"
+            app:destination="@id/action_settings_to_location" />
     </fragment>
 
     <fragment
@@ -28,6 +34,24 @@
         tools:layout="@layout/fragment_profile" >
         <action
             android:id="@+id/action_profile_to_settings"
+            app:destination="@id/settings" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/change_password"
+        android:name="com.example.food_ordering_mobile_app.ui.customer.account.ChangePasswordFragment"
+        tools:layout="@layout/fragment_change_password" >
+        <action
+            android:id="@+id/action_change_password_to_settings"
+            app:destination="@id/settings" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/action_settings_to_location"
+        android:name="com.example.food_ordering_mobile_app.ui.customer.account.location.LocationFragment"
+        tools:layout="@layout/fragment_location" >
+        <action
+            android:id="@+id/action_location_to_settings"
             app:destination="@id/settings" />
     </fragment>
 

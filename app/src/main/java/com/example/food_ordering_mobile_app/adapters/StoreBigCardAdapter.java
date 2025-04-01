@@ -85,7 +85,7 @@ public class StoreBigCardAdapter extends RecyclerView.Adapter<StoreBigCardAdapte
             String categoryText = categories.toString().replaceAll(", $", "");
             holder.tvStoreFoodType.setText(categoryText);
         } else {
-            holder.tvStoreFoodType.setText("Unknown");
+            holder.tvStoreFoodType.setVisibility(View.GONE);
         }
 
         String storeAvatarUrl = store.getAvatar() != null ? store.getAvatar().getUrl() : null;
@@ -97,7 +97,7 @@ public class StoreBigCardAdapter extends RecyclerView.Adapter<StoreBigCardAdapte
                     protected void setResource(Bitmap resource) {
                         RoundedBitmapDrawable roundedDrawable =
                                 RoundedBitmapDrawableFactory.create(context.getResources(), resource);
-                        roundedDrawable.setCornerRadius(6);
+                        roundedDrawable.setCornerRadius(8);
                         holder.imStoreAvatar.setImageDrawable(roundedDrawable);
                     }
                 });

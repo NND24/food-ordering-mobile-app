@@ -9,7 +9,7 @@ public class ToppingGroup {
     @SerializedName("_id")
     private String id;
     private String name;
-    private Store store;
+    private String store;
     private List<Topping> toppings;
 
     public String getId() {
@@ -28,11 +28,11 @@ public class ToppingGroup {
         this.name = name;
     }
 
-    public Store getStore() {
+    public String getStore() {
         return store;
     }
 
-    public void setStore(Store store) {
+    public void setStore(String store) {
         this.store = store;
     }
 

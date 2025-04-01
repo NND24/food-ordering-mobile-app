@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.food_ordering_mobile_app.models.cart.Cart;
+import com.example.food_ordering_mobile_app.models.cart.CartResponse;
 import com.example.food_ordering_mobile_app.models.cart.ListCartResponse;
 import com.example.food_ordering_mobile_app.network.RetrofitClient;
 import com.example.food_ordering_mobile_app.network.services.CartService;
@@ -67,6 +68,37 @@ public class CartRepository {
 
             @Override
             public void onFailure(Call<ListCartResponse> call, Throwable t) {
+                result.setValue(Resource.error("Lỗi kết nối: " + t.getMessage(), null));
+            }
+        });
+
+        return result;
+    }
+
+    public LiveData<Resource<CartResponse>> getUserCartInStore(String storeId) {
+        MutableLiveData<Resource<CartResponse>> result = new MutableLiveData<>();
+        result.setValue(Resource.loading(null));
+
+        cartService.getUserCartInStore(storeId).enqueue(new Callback<CartResponse>() {
+            @Override
+            public void onResponse(Call<CartResponse> call, Response<CartResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Log.d("CartRepository", "getUserCartInStore: " + response.body().toString());
+                    result.setValue(Resource.success("Lay thong tin thành công!", response.body()));
+                } else {
+                    try {
+                        String errorMessage = response.errorBody().string();
+                        JSONObject jsonObject = new JSONObject(errorMessage);
+                        String message = jsonObject.getString("message");
+                        result.setValue(Resource.error(message, null));
+                    } catch (Exception e) {
+                        result.setValue(Resource.error("Lỗi không xác định!", null));
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CartResponse> call, Throwable t) {
                 result.setValue(Resource.error("Lỗi kết nối: " + t.getMessage(), null));
             }
         });

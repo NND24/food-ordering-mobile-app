@@ -1,34 +1,52 @@
 package com.example.food_ordering_mobile_app.ui.customer.dish;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.drawable.RoundedBitmapDrawable;
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.example.food_ordering_mobile_app.R;
-import com.example.food_ordering_mobile_app.adapters.SideDishAdapter;
-import com.example.food_ordering_mobile_app.models.dish.Topping;
+import com.example.food_ordering_mobile_app.adapters.GroupToppingAdapter;
+import com.example.food_ordering_mobile_app.models.dish.DishResponse;
+import com.example.food_ordering_mobile_app.models.dish.ToppingGroup;
+import com.example.food_ordering_mobile_app.models.dish.ToppingGroupResponse;
+import com.example.food_ordering_mobile_app.utils.Resource;
+import com.example.food_ordering_mobile_app.viewmodels.DishViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class DishActivity extends AppCompatActivity {
-    private RecyclerView sideDishRecyclerView;
-    private SideDishAdapter dishAdapter;
-    private List<Topping> sideDishList;
-    TextView tvQuantity;
-    LinearLayout quantityContainer;
-    ImageButton btnIncrease, btnDecrease;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private DishViewModel dishViewModel;
+    private RecyclerView toppingGroupRecyclerView;
+    private GroupToppingAdapter groupToppingAdapter;
+    private List<ToppingGroup> toppingGroupList;
+    private TextView tvQuantity, tvDishName, tvDishDescription, tvPrice;
+    private ImageView ivDishAvatar;
+    private LinearLayout quantityContainer;
+    private ImageButton btnIncrease, btnDecrease;
+    private String dishId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,17 +54,12 @@ public class DishActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_dish);
 
-        sideDishRecyclerView = findViewById(R.id.sideDishRecyclerView);
-        sideDishRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        sideDishList = new ArrayList<>();
-        sideDishList.add(new Topping("Cơm them", 10000));
-        sideDishList.add(new Topping("Nhiều thịt bò", 15000));
-
-        dishAdapter = new SideDishAdapter(this, sideDishList);
-        sideDishRecyclerView.setAdapter(dishAdapter);
-
-        // Change quantity
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
+        toppingGroupRecyclerView = findViewById(R.id.toppingGroupRecyclerView);
+        tvDishName = findViewById(R.id.tvDishName);
+        tvDishDescription = findViewById(R.id.tvDishDescription);
+        tvPrice = findViewById(R.id.tvPrice);
+        ivDishAvatar = findViewById(R.id.ivDishAvatar);
         quantityContainer = findViewById(R.id.quantityContainer);
         tvQuantity = findViewById(R.id.tvQuantity);
         btnIncrease = findViewById(R.id.btnIncrease);
@@ -65,7 +78,94 @@ public class DishActivity extends AppCompatActivity {
                 tvQuantity.setText(String.valueOf(quantity));
             }
         });
+
+        dishId = getIntent().getStringExtra("dishId");
+
+        swipeRefreshLayout.setOnRefreshListener(this::refreshData);
+
+        dishViewModel = new ViewModelProvider(this).get(DishViewModel.class);
+
+        setupDish();
+        setupTopping();
     }
+
+    private void setupDish() {
+        dishViewModel.getDish(dishId);
+        dishViewModel.getDishResponse().observe(this, new Observer<Resource<DishResponse>>() {
+            @Override
+            public void onChanged(Resource<DishResponse> resource) {
+                switch (resource.getStatus()) {
+                    case LOADING:
+                        swipeRefreshLayout.setRefreshing(true);
+                        break;
+                    case SUCCESS:
+                        swipeRefreshLayout.setRefreshing(false);
+                        Log.d("DishActivity", "getDishResponse: " + resource.getData().getData().toString());
+                        tvDishName.setText(resource.getData().getData().getName());
+                        String description = resource.getData().getData().getDescription();
+                        if (description == null || description.isEmpty()) {
+                            tvDishDescription.setVisibility(View.GONE);
+                        } else {
+                            tvDishDescription.setVisibility(View.VISIBLE);
+                            tvDishDescription.setText(description);
+                        }
+
+                        tvPrice.setText(String.valueOf(resource.getData().getData().getPrice()));
+
+                        String dishAvatarUrl = resource.getData().getData().getImage() != null ? resource.getData().getData().getImage().getUrl() : null;
+                        Glide.with(ivDishAvatar)
+                                .asBitmap()
+                                .load(dishAvatarUrl)
+                                .into(new BitmapImageViewTarget(ivDishAvatar) {
+                                    @Override
+                                    protected void setResource(Bitmap resource) {
+                                        RoundedBitmapDrawable roundedDrawable =
+                                                RoundedBitmapDrawableFactory.create(ivDishAvatar.getResources(), resource);
+                                        roundedDrawable.setCornerRadius(0);
+                                        ivDishAvatar.setImageDrawable(roundedDrawable);
+                                    }
+                                });
+
+                        break;
+                    case ERROR:
+                        swipeRefreshLayout.setRefreshing(false);
+                        Log.d("DishActivity", "getDishResponse error: " + resource.getData().toString());
+                        break;
+                }
+            }
+        });
+    }
+
+    private void setupTopping() {
+        toppingGroupRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        toppingGroupList = new ArrayList<>();
+        groupToppingAdapter = new GroupToppingAdapter(this, toppingGroupList);
+        toppingGroupRecyclerView.setAdapter(groupToppingAdapter);
+
+        dishViewModel.getToppingFromDishResponse().observe(this, new Observer<Resource<ToppingGroupResponse>>() {
+            @Override
+            public void onChanged(Resource<ToppingGroupResponse> resource) {
+                switch (resource.getStatus()) {
+                    case LOADING:
+                        swipeRefreshLayout.setRefreshing(true);
+                        break;
+                    case SUCCESS:
+                        swipeRefreshLayout.setRefreshing(false);
+                        toppingGroupList.clear();
+                        toppingGroupList.addAll(resource.getData().getData());
+                        groupToppingAdapter.notifyDataSetChanged();
+                        break;
+                    case ERROR:
+                        swipeRefreshLayout.setRefreshing(false);
+                        break;
+                }
+            }
+        });
+
+        dishViewModel.getToppingFromDish(dishId);
+    }
+
+    private void refreshData() { }
 
     public void goBack(View view) {
         onBackPressed();

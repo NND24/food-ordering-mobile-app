@@ -8,29 +8,29 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
-import com.example.food_ordering_mobile_app.models.dish.Dish;
+import com.example.food_ordering_mobile_app.models.dish.DishResponse;
+import com.example.food_ordering_mobile_app.models.dish.ListDishResponse;
+import com.example.food_ordering_mobile_app.models.dish.ToppingGroupResponse;
 import com.example.food_ordering_mobile_app.repository.DishRepository;
 import com.example.food_ordering_mobile_app.utils.Resource;
-
-import java.util.List;
 
 public class DishViewModel extends AndroidViewModel {
     private final DishRepository dishRepository;
 
-    private final MutableLiveData<Resource<List<Dish>>> allBigDishResponse = new MutableLiveData<>();
-    public LiveData<Resource<List<Dish>>> getAllBigDishResponse() {
+    private final MutableLiveData<Resource<ListDishResponse>> allBigDishResponse = new MutableLiveData<>();
+    public LiveData<Resource<ListDishResponse>> getAllBigDishResponse() {
         return allBigDishResponse;
     }
-    private final MutableLiveData<Resource<List<Dish>>> allDishResponse = new MutableLiveData<>();
-    public LiveData<Resource<List<Dish>>> getAllDishResponse() {
+    private final MutableLiveData<Resource<ListDishResponse>> allDishResponse = new MutableLiveData<>();
+    public LiveData<Resource<ListDishResponse>> getAllDishResponse() {
         return allDishResponse;
     }
-    private final MutableLiveData<Resource<Dish>> dishResponse = new MutableLiveData<>();
-    public LiveData<Resource<Dish>> getDishResponse() {
+    private final MutableLiveData<Resource<DishResponse>> dishResponse = new MutableLiveData<>();
+    public LiveData<Resource<DishResponse>> getDishResponse() {
         return dishResponse;
     }
-    private final MutableLiveData<Resource<Dish>> toppingFromDishResponse = new MutableLiveData<>();
-    public LiveData<Resource<Dish>> getToppingFromDishResponse() {
+    private final MutableLiveData<Resource<ToppingGroupResponse>> toppingFromDishResponse = new MutableLiveData<>();
+    public LiveData<Resource<ToppingGroupResponse>> getToppingFromDishResponse() {
         return toppingFromDishResponse;
     }
 
@@ -40,21 +40,21 @@ public class DishViewModel extends AndroidViewModel {
     }
 
     public void getAllBigDish(String storeId) {
-        LiveData<Resource<List<Dish>>> result = dishRepository.getAllDish(storeId);
-        result.observeForever(new Observer<Resource<List<Dish>>>() {
+        LiveData<Resource<ListDishResponse>> result = dishRepository.getAllDish(storeId);
+        result.observeForever(new Observer<Resource<ListDishResponse>>() {
             @Override
-            public void onChanged(Resource<List<Dish>> resource) {
-                Log.d("DishViewModel", "getAllBigDish: " + resource);
+            public void onChanged(Resource<ListDishResponse> resource) {
+                Log.d("DishViewModel", "getAllBigDish: " + resource.toString());
                 allBigDishResponse.setValue(resource);
             }
         });
     }
 
     public void getAllDish(String storeId) {
-        LiveData<Resource<List<Dish>>> result = dishRepository.getAllDish(storeId);
-        result.observeForever(new Observer<Resource<List<Dish>>>() {
+        LiveData<Resource<ListDishResponse>> result = dishRepository.getAllDish(storeId);
+        result.observeForever(new Observer<Resource<ListDishResponse>>() {
             @Override
-            public void onChanged(Resource<List<Dish>> resource) {
+            public void onChanged(Resource<ListDishResponse> resource) {
                 Log.d("DishViewModel", "getAllDish: " + resource);
                 allDishResponse.setValue(resource);
             }
@@ -62,21 +62,21 @@ public class DishViewModel extends AndroidViewModel {
     }
 
     public void getDish(String dishId) {
-        LiveData<Resource<Dish>> result = dishRepository.getDish(dishId);
-        result.observeForever(new Observer<Resource<Dish>>() {
+        LiveData<Resource<DishResponse>> result = dishRepository.getDish(dishId);
+        result.observeForever(new Observer<Resource<DishResponse>>() {
             @Override
-            public void onChanged(Resource<Dish> resource) {
-                Log.d("DishViewModel", "getDish: " + resource);
+            public void onChanged(Resource<DishResponse> resource) {
+                Log.d("DishViewModel", "getDish: " + resource.toString());
                 dishResponse.setValue(resource);
             }
         });
     }
 
     public void getToppingFromDish(String dishId) {
-        LiveData<Resource<Dish>> result = dishRepository.getToppingFromDish(dishId);
-        result.observeForever(new Observer<Resource<Dish>>() {
+        LiveData<Resource<ToppingGroupResponse>> result = dishRepository.getToppingFromDish(dishId);
+        result.observeForever(new Observer<Resource<ToppingGroupResponse>>() {
             @Override
-            public void onChanged(Resource<Dish> resource) {
+            public void onChanged(Resource<ToppingGroupResponse> resource) {
                 Log.d("DishViewModel", "getToppingFromDish: " + resource);
                 toppingFromDishResponse.setValue(resource);
             }

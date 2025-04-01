@@ -84,7 +84,7 @@ public class StoreStandoutAdapter extends RecyclerView.Adapter<StoreStandoutAdap
             String categoryText = categories.toString().replaceAll(", $", "");
             holder.tvStoreFoodType.setText(categoryText);
         } else {
-            holder.tvStoreFoodType.setText("Unknown");
+            holder.tvStoreFoodType.setVisibility(View.GONE);
         }
 
         String storeAvatarUrl = store.getAvatar() != null ? store.getAvatar().getUrl() : null;

@@ -7,7 +7,7 @@ public class Topping {
     private String id;
     private String name;
     private Integer price;
-    private ToppingGroup toppingGroup;
+    private String toppingGroup;
 
     public Topping(String name, Integer price) {
         this.name = name;
@@ -38,11 +38,11 @@ public class Topping {
         this.price = price;
     }
 
-    public ToppingGroup getToppingGroup() {
+    public String getToppingGroup() {
         return toppingGroup;
     }
 
-    public void setToppingGroup(ToppingGroup toppingGroup) {
+    public void setToppingGroup(String toppingGroup) {
         this.toppingGroup = toppingGroup;
     }
 }

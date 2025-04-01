@@ -35,6 +35,10 @@ public class AuthViewModel extends AndroidViewModel {
     public LiveData<Resource<String>> getResetPasswordResponse() {
         return resetPasswordResponse;
     }
+    public MutableLiveData<Resource<String>> changePasswordResponse = new MutableLiveData<Resource<String>>();
+    public LiveData<Resource<String>> getChangePasswordResponse() {
+        return changePasswordResponse;
+    }
     public MutableLiveData<Resource<String>> logoutResponse = new MutableLiveData<Resource<String>>();
     public LiveData<Resource<String>> getLogoutResponse() {
         return logoutResponse;
@@ -101,6 +105,16 @@ public class AuthViewModel extends AndroidViewModel {
             @Override
             public void onChanged(Resource<String> resource) {
                 resetPasswordResponse.setValue(resource);
+            }
+        });
+    }
+
+    public void changePassword(String oldPassword, String password) {
+        LiveData<Resource<String>> result = authRepository.changePassword(oldPassword, password);
+        result.observeForever(new Observer<Resource<String>>() {
+            @Override
+            public void onChanged(Resource<String> resource) {
+                changePasswordResponse.setValue(resource);
             }
         });
     }

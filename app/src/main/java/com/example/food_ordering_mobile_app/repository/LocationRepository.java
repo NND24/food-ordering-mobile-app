@@ -18,6 +18,7 @@ import org.json.JSONObject;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -73,11 +74,11 @@ public class LocationRepository {
         return result;
     }
 
-    public LiveData<Resource<Location>> getLocation(String id) {
+    public LiveData<Resource<Location>> getLocation(String locationId) {
         MutableLiveData<Resource<Location>> result = new MutableLiveData<>();
         result.setValue(Resource.loading(null));
 
-        locationService.getLocation(id).enqueue(new Callback<Location>() {
+        locationService.getLocation(locationId).enqueue(new Callback<Location>() {
             @Override
             public void onResponse(Call<Location> call, Response<Location> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -104,15 +105,14 @@ public class LocationRepository {
         return result;
     }
 
-    public LiveData<Resource<Location>> getUserLocations() {
-        MutableLiveData<Resource<Location>> result = new MutableLiveData<>();
+    public LiveData<Resource<List<Location>>> getUserLocations() {
+        MutableLiveData<Resource<List<Location>>> result = new MutableLiveData<>();
         result.setValue(Resource.loading(null));
 
-        locationService.getUserLocations().enqueue(new Callback<Location>() {
+        locationService.getUserLocations().enqueue(new Callback<List<Location>>() {
             @Override
-            public void onResponse(Call<Location> call, Response<Location> response) {
+            public void onResponse(Call<List<Location>> call, Response<List<Location>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    Log.d("LocationRepository", "getUserLocations: " + response.body());
                     result.setValue(Resource.success("Lay thong tin thành công!", response.body()));
                 } else {
                     try {
@@ -127,7 +127,7 @@ public class LocationRepository {
             }
 
             @Override
-            public void onFailure(Call<Location> call, Throwable t) {
+            public void onFailure(Call<List<Location>> call, Throwable t) {
                 result.setValue(Resource.error("Lỗi kết nối: " + t.getMessage(), null));
             }
         });

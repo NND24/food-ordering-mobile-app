@@ -36,7 +36,8 @@ public class SettingsFragment extends Fragment {
     private UserViewModel userViewModel;
     private ImageView ivAvatar;
     private TextView tvUserName, tvPhonenumber;
-    private Button btnLogout;
+    private Button btnLogout, goToSettingBtn, btnChangePassword, btnLocation;
+    private LinearLayout profileContainer;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -47,6 +48,10 @@ public class SettingsFragment extends Fragment {
         btnLogout = view.findViewById(R.id.btnLogout);
         tvUserName = view.findViewById(R.id.tvUserName);
         tvPhonenumber = view.findViewById(R.id.tvPhonenumber);
+        profileContainer = view.findViewById(R.id.profile_container);
+        btnChangePassword = view.findViewById(R.id.btnChangePassword);
+        btnLocation = view.findViewById(R.id.btnLocation);
+        goToSettingBtn = view.findViewById(R.id.setting_button);
 
         // Initialize AuthViewModel
         authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
@@ -74,15 +79,23 @@ public class SettingsFragment extends Fragment {
             }
         });
 
-        LinearLayout profileContainer = view.findViewById(R.id.profile_container);
-
         profileContainer.setOnClickListener(v -> {
             Bundle bundle = new Bundle();
             NavHostFragment.findNavController(SettingsFragment.this)
                     .navigate(R.id.action_settings_to_profile, bundle);
         });
 
-        Button goToSettingBtn = view.findViewById(R.id.setting_button);
+        btnChangePassword.setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+            NavHostFragment.findNavController(SettingsFragment.this)
+                    .navigate(R.id.action_settings_to_change_password, bundle);
+        });
+
+        btnLocation.setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+            NavHostFragment.findNavController(SettingsFragment.this)
+                    .navigate(R.id.action_settings_to_location, bundle);
+        });
 
         // Initialize UserViewModel
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
