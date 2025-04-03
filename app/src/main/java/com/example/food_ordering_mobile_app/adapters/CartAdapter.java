@@ -13,6 +13,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -24,6 +26,8 @@ import com.example.food_ordering_mobile_app.models.cart.Cart;
 import com.example.food_ordering_mobile_app.models.cart.CartItem;
 import com.example.food_ordering_mobile_app.models.foodType.FoodType;
 import com.example.food_ordering_mobile_app.models.order.OrderItem;
+import com.example.food_ordering_mobile_app.viewmodels.CartViewModel;
+import com.example.food_ordering_mobile_app.viewmodels.FavoriteViewModel;
 
 import java.util.List;
 
@@ -31,14 +35,22 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
     private Context context;
     private List<Cart> cartList;
     private OnCartClickListener onCartClickListener;
+    private FragmentActivity activity;
+
     public interface OnCartClickListener {
         void onCartClick(Cart cart);
     }
 
-    public CartAdapter(Context context, List<Cart> cartList) {
+    public CartAdapter(FragmentActivity activity, Context context, List<Cart> cartList) {
+        this.activity = activity;  // Store the activity reference
         this.context = context;
         this.cartList = cartList;
     }
+
+//    public CartAdapter(Context context, List<Cart> cartList) {
+//        this.context = context;
+//        this.cartList = cartList;
+//    }
 
     public CartAdapter(Context context, List<Cart> restaurantList, OnCartClickListener onCartClickListener) {
         this.context = context;
@@ -112,6 +124,12 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                         holder.imStoreAvatar.setImageDrawable(roundedDrawable);
                     }
                 });
+
+        CartViewModel cartViewModel = new ViewModelProvider(activity).get(CartViewModel.class);
+
+        holder.btnRemoveFromCart.setOnClickListener(v -> {
+            cartViewModel.clearCartItem(cart.getId());
+        });
     }
 
     @Override
@@ -122,7 +140,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvStoreName, tvStoreFoodType, tvAvgRating, tvAmountRating, tvRatingOpen, tvRatingText, tvRatingClose, tvQuantity;
         ImageView imStoreAvatar, ivStar;
-        ImageButton btnRemove;
+        ImageButton btnRemoveFromCart;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -135,7 +153,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
             tvRatingOpen = itemView.findViewById(R.id.tvRatingOpen);
             tvRatingText = itemView.findViewById(R.id.tvRatingText);
             tvRatingClose = itemView.findViewById(R.id.tvRatingClose);
-            btnRemove = itemView.findViewById(R.id.btnRemove);
+            btnRemoveFromCart = itemView.findViewById(R.id.btnRemoveFromCart);
             tvQuantity = itemView.findViewById(R.id.tvQuantity);
         }
     }

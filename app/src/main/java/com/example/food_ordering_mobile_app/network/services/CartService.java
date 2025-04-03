@@ -1,5 +1,6 @@
 package com.example.food_ordering_mobile_app.network.services;
 
+import com.example.food_ordering_mobile_app.models.MessageResponse;
 import com.example.food_ordering_mobile_app.models.cart.Cart;
 import com.example.food_ordering_mobile_app.models.cart.CartResponse;
 import com.example.food_ordering_mobile_app.models.cart.ListCartResponse;
@@ -24,11 +25,11 @@ public interface CartService {
     @POST("/api/v1/cart/update")
     Call<Cart> updateCart(@Body Cart cart);
     @POST("/api/v1/cart/clear/item/{storeId}")
-    Call<Cart> clearCartItem(@Path("storeId") String cartId);
+    Call<MessageResponse> clearCartItem(@Path("storeId") String cartId);
     @POST("/api/v1/cart/clear/")
-    Call<Cart> clearCart();
+    Call<MessageResponse> clearCart();
     @POST("/api/v1/cart/complete")
-    Call<Cart> completeCart(@Body Cart cart);
+    Call<MessageResponse> completeCart(@Body Cart cart);
     @POST("/api/v1/cart/re-order")
     Call<Cart> reOrder(@Body Cart cart);
 }

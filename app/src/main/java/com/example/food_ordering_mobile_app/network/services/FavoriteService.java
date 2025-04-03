@@ -1,5 +1,6 @@
 package com.example.food_ordering_mobile_app.network.services;
 
+import com.example.food_ordering_mobile_app.models.MessageResponse;
 import com.example.food_ordering_mobile_app.models.favorite.Favorite;
 import com.example.food_ordering_mobile_app.models.favorite.FavoriteResponse;
 
@@ -16,7 +17,7 @@ public interface FavoriteService {
     @POST("/api/v1/favorite/add")
     Call<Favorite> addFavorite(@Body Favorite favorite);
     @DELETE("/api/v1/favorite/remove/{id}")
-    Call<Favorite> removeFavorite(@Path("id") String id);
+    Call<MessageResponse> removeFavorite(@Path("id") String id);
     @DELETE("/api/v1/favorite/remove-all")
-    Call<Favorite> removeAllFavorite();
+    Call<MessageResponse> removeAllFavorite();
 }

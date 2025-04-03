@@ -20,7 +20,7 @@
             android:src="@drawable/dess_1" />
 
         <ImageButton
-            android:id="@+id/btnRemove"
+            android:id="@+id/btnRemoveFromCart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="top|end"

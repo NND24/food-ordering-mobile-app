@@ -87,6 +87,12 @@
                 android:textSize="24dp"
                 android:textStyle="bold" />
 
+            <Button
+                android:id="@+id/btnRemoveAllCart"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Button" />
+
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="20dp" />

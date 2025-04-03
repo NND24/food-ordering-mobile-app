@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
+import com.example.food_ordering_mobile_app.models.MessageResponse;
 import com.example.food_ordering_mobile_app.models.favorite.Favorite;
 import com.example.food_ordering_mobile_app.models.favorite.FavoriteResponse;
 import com.example.food_ordering_mobile_app.repository.FavoriteRepository;
@@ -24,12 +25,12 @@ public class FavoriteViewModel extends AndroidViewModel {
     public LiveData<Resource<Favorite>> getAddFavoriteResponse() {
         return addFavoriteResponse;
     }
-    private final MutableLiveData<Resource<Favorite>> removeFavoriteResponse = new MutableLiveData<>();
-    public LiveData<Resource<Favorite>> getRemoveFavoriteResponse() {
+    private final MutableLiveData<Resource<MessageResponse>> removeFavoriteResponse = new MutableLiveData<>();
+    public LiveData<Resource<MessageResponse>> getRemoveFavoriteResponse() {
         return removeFavoriteResponse;
     }
-    private final MutableLiveData<Resource<Favorite>> removeAllFavoriteResponse = new MutableLiveData<>();
-    public LiveData<Resource<Favorite>> getRemoveAllFavoriteResponse() {
+    private final MutableLiveData<Resource<MessageResponse>> removeAllFavoriteResponse = new MutableLiveData<>();
+    public LiveData<Resource<MessageResponse>> getRemoveAllFavoriteResponse() {
         return removeAllFavoriteResponse;
     }
 
@@ -61,10 +62,10 @@ public class FavoriteViewModel extends AndroidViewModel {
     }
 
     public void removeFavorite(String id) {
-        LiveData<Resource<Favorite>> result = favoriteRepository.removeFavorite(id);
-        result.observeForever(new Observer<Resource<Favorite>>() {
+        LiveData<Resource<MessageResponse>> result = favoriteRepository.removeFavorite(id);
+        result.observeForever(new Observer<Resource<MessageResponse>>() {
             @Override
-            public void onChanged(Resource<Favorite> resource) {
+            public void onChanged(Resource<MessageResponse> resource) {
                 Log.d("FavoriteViewModel", "removeFavorite: " + resource);
                 removeFavoriteResponse.setValue(resource);
             }
@@ -72,10 +73,10 @@ public class FavoriteViewModel extends AndroidViewModel {
     }
 
     public void removeAllFavorite() {
-        LiveData<Resource<Favorite>> result = favoriteRepository.removeAllFavorite();
-        result.observeForever(new Observer<Resource<Favorite>>() {
+        LiveData<Resource<MessageResponse>> result = favoriteRepository.removeAllFavorite();
+        result.observeForever(new Observer<Resource<MessageResponse>>() {
             @Override
-            public void onChanged(Resource<Favorite> resource) {
+            public void onChanged(Resource<MessageResponse> resource) {
                 Log.d("FavoriteViewModel", "removeAllFavorite: " + resource);
                 removeAllFavoriteResponse.setValue(resource);
             }

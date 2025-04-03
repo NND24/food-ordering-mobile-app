@@ -152,15 +152,16 @@
                         android:textColor="@color/blackColor"/>
                 </LinearLayout>
 
-                <EditText
-                    android:id="@+id/etLocationAddress"
+                <TextView
+                    android:id="@+id/tvLocationAddress"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="none"
-                    android:focusable="false"
-                    android:clickable="false"
+                    android:layout_height="40dp"
                     android:textSize="16sp"
                     android:drawableEnd="@drawable/ic_arrow_right_24"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/secondaryColor"/>
             </LinearLayout>
 
             <Space

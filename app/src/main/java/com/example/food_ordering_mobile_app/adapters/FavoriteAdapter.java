@@ -13,23 +13,27 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.example.food_ordering_mobile_app.R;
-import com.example.food_ordering_mobile_app.models.favorite.Favorite;
 import com.example.food_ordering_mobile_app.models.foodType.FoodType;
 import com.example.food_ordering_mobile_app.models.store.Store;
+import com.example.food_ordering_mobile_app.viewmodels.FavoriteViewModel;
 
 import java.util.List;
 
 public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.FavoriteViewHolder> {
     private Context context;
-
     private List<Store> favoriteList;
+    private FragmentActivity fragment;
 
-    public FavoriteAdapter(Context context, List<Store> favoriteList) {
+    public FavoriteAdapter(FragmentActivity fragment, Context context, List<Store> favoriteList) {
+        this.fragment = fragment;
         this.context = context;
         this.favoriteList = favoriteList;
     }
@@ -95,6 +99,12 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.Favori
                         holder.imStoreAvatar.setImageDrawable(roundedDrawable);
                     }
                 });
+
+        FavoriteViewModel favoriteViewModel = new ViewModelProvider(fragment).get(FavoriteViewModel.class);
+
+        holder.btnRemoveFromFavorite.setOnClickListener(v -> {
+            favoriteViewModel.removeFavorite(favorite.getId());
+        });
     }
 
     @Override
@@ -105,7 +115,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.Favori
     public static class FavoriteViewHolder extends RecyclerView.ViewHolder {
         TextView tvStoreName, tvStoreFoodType, tvAvgRating, tvAmountRating, tvRatingOpen, tvRatingText, tvRatingClose;
         ImageView imStoreAvatar, ivStar;
-        ImageButton btnRemove;
+        ImageButton btnRemoveFromFavorite;
 
         public FavoriteViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -118,7 +128,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.Favori
             tvRatingOpen = itemView.findViewById(R.id.tvRatingOpen);
             tvRatingText = itemView.findViewById(R.id.tvRatingText);
             tvRatingClose = itemView.findViewById(R.id.tvRatingClose);
-            btnRemove = itemView.findViewById(R.id.btnRemove);
+            btnRemoveFromFavorite = itemView.findViewById(R.id.btnRemoveFromFavorite);
         }
     }
 }

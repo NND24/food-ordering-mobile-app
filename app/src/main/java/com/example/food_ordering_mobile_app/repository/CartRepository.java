@@ -6,6 +6,7 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.food_ordering_mobile_app.models.MessageResponse;
 import com.example.food_ordering_mobile_app.models.cart.Cart;
 import com.example.food_ordering_mobile_app.models.cart.CartResponse;
 import com.example.food_ordering_mobile_app.models.cart.ListCartResponse;
@@ -168,13 +169,13 @@ public class CartRepository {
         return result;
     }
 
-    public LiveData<Resource<Cart>> clearCartItem(String storeId) {
-        MutableLiveData<Resource<Cart>> result = new MutableLiveData<>();
+    public LiveData<Resource<MessageResponse>> clearCartItem(String storeId) {
+        MutableLiveData<Resource<MessageResponse>> result = new MutableLiveData<>();
         result.setValue(Resource.loading(null));
 
-        cartService.clearCartItem(storeId).enqueue(new Callback<Cart>() {
+        cartService.clearCartItem(storeId).enqueue(new Callback<MessageResponse>() {
             @Override
-            public void onResponse(Call<Cart> call, Response<Cart> response) {
+            public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Log.d("CartRepository", "getUserCart: " + response.body().toString());
                     result.setValue(Resource.success("Lay thong tin thành công!", response.body()));
@@ -191,7 +192,7 @@ public class CartRepository {
             }
 
             @Override
-            public void onFailure(Call<Cart> call, Throwable t) {
+            public void onFailure(Call<MessageResponse> call, Throwable t) {
                 result.setValue(Resource.error("Lỗi kết nối: " + t.getMessage(), null));
             }
         });
@@ -199,13 +200,13 @@ public class CartRepository {
         return result;
     }
 
-    public LiveData<Resource<Cart>> clearCart() {
-        MutableLiveData<Resource<Cart>> result = new MutableLiveData<>();
+    public LiveData<Resource<MessageResponse>> clearCart() {
+        MutableLiveData<Resource<MessageResponse>> result = new MutableLiveData<>();
         result.setValue(Resource.loading(null));
 
-        cartService.clearCart().enqueue(new Callback<Cart>() {
+        cartService.clearCart().enqueue(new Callback<MessageResponse>() {
             @Override
-            public void onResponse(Call<Cart> call, Response<Cart> response) {
+            public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Log.d("CartRepository", "getUserCart: " + response.body().toString());
                     result.setValue(Resource.success("Lay thong tin thành công!", response.body()));
@@ -222,7 +223,7 @@ public class CartRepository {
             }
 
             @Override
-            public void onFailure(Call<Cart> call, Throwable t) {
+            public void onFailure(Call<MessageResponse> call, Throwable t) {
                 result.setValue(Resource.error("Lỗi kết nối: " + t.getMessage(), null));
             }
         });
@@ -230,13 +231,13 @@ public class CartRepository {
         return result;
     }
 
-    public LiveData<Resource<Cart>> completeCart(Cart cart) {
-        MutableLiveData<Resource<Cart>> result = new MutableLiveData<>();
+    public LiveData<Resource<MessageResponse>> completeCart(Cart cart) {
+        MutableLiveData<Resource<MessageResponse>> result = new MutableLiveData<>();
         result.setValue(Resource.loading(null));
 
-        cartService.completeCart(cart).enqueue(new Callback<Cart>() {
+        cartService.completeCart(cart).enqueue(new Callback<MessageResponse>() {
             @Override
-            public void onResponse(Call<Cart> call, Response<Cart> response) {
+            public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Log.d("CartRepository", "getUserCart: " + response.body().toString());
                     result.setValue(Resource.success("Lay thong tin thành công!", response.body()));
@@ -253,7 +254,7 @@ public class CartRepository {
             }
 
             @Override
-            public void onFailure(Call<Cart> call, Throwable t) {
+            public void onFailure(Call<MessageResponse> call, Throwable t) {
                 result.setValue(Resource.error("Lỗi kết nối: " + t.getMessage(), null));
             }
         });

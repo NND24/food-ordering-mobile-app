@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
+import com.example.food_ordering_mobile_app.models.MessageResponse;
 import com.example.food_ordering_mobile_app.models.cart.Cart;
 import com.example.food_ordering_mobile_app.models.cart.CartResponse;
 import com.example.food_ordering_mobile_app.models.cart.ListCartResponse;
@@ -34,18 +35,18 @@ public class CartViewModel extends AndroidViewModel {
         return updateCartResponse;
     }
 
-    private final MutableLiveData<Resource<Cart>> clearCartItemResponse = new MutableLiveData<>();
-    public LiveData<Resource<Cart>> getClearCartItemResponse() {
+    private final MutableLiveData<Resource<MessageResponse>> clearCartItemResponse = new MutableLiveData<>();
+    public LiveData<Resource<MessageResponse>> getClearCartItemResponse() {
         return clearCartItemResponse;
     }
 
-    private final MutableLiveData<Resource<Cart>> clearCartResponse = new MutableLiveData<>();
-    public LiveData<Resource<Cart>> getClearCartResponse() {
+    private final MutableLiveData<Resource<MessageResponse>> clearCartResponse = new MutableLiveData<>();
+    public LiveData<Resource<MessageResponse>> getClearCartResponse() {
         return clearCartResponse;
     }
 
-    private final MutableLiveData<Resource<Cart>> completeCartResponse = new MutableLiveData<>();
-    public LiveData<Resource<Cart>> getCompleteCartResponse() {
+    private final MutableLiveData<Resource<MessageResponse>> completeCartResponse = new MutableLiveData<>();
+    public LiveData<Resource<MessageResponse>> getCompleteCartResponse() {
         return completeCartResponse;
     }
 
@@ -105,10 +106,10 @@ public class CartViewModel extends AndroidViewModel {
     }
 
     public void clearCartItem(String storeId) {
-        LiveData<Resource<Cart>> result = cartRepository.clearCartItem(storeId);
-        result.observeForever(new Observer<Resource<Cart>>() {
+        LiveData<Resource<MessageResponse>> result = cartRepository.clearCartItem(storeId);
+        result.observeForever(new Observer<Resource<MessageResponse>>() {
             @Override
-            public void onChanged(Resource<Cart> resource) {
+            public void onChanged(Resource<MessageResponse> resource) {
                 Log.d("CartViewModel", "getCurrentUser: " + resource);
                 clearCartItemResponse.setValue(resource);
             }
@@ -116,10 +117,10 @@ public class CartViewModel extends AndroidViewModel {
     }
 
     public void clearCart() {
-        LiveData<Resource<Cart>> result = cartRepository.clearCart();
-        result.observeForever(new Observer<Resource<Cart>>() {
+        LiveData<Resource<MessageResponse>> result = cartRepository.clearCart();
+        result.observeForever(new Observer<Resource<MessageResponse>>() {
             @Override
-            public void onChanged(Resource<Cart> resource) {
+            public void onChanged(Resource<MessageResponse> resource) {
                 Log.d("CartViewModel", "getCurrentUser: " + resource);
                 clearCartResponse.setValue(resource);
             }
@@ -127,10 +128,10 @@ public class CartViewModel extends AndroidViewModel {
     }
 
     public void completeCart(Cart cart) {
-        LiveData<Resource<Cart>> result = cartRepository.completeCart(cart);
-        result.observeForever(new Observer<Resource<Cart>>() {
+        LiveData<Resource<MessageResponse>> result = cartRepository.completeCart(cart);
+        result.observeForever(new Observer<Resource<MessageResponse>>() {
             @Override
-            public void onChanged(Resource<Cart> resource) {
+            public void onChanged(Resource<MessageResponse> resource) {
                 Log.d("CartViewModel", "getCurrentUser: " + resource);
                 completeCartResponse.setValue(resource);
             }
