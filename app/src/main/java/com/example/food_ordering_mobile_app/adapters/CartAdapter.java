@@ -42,15 +42,10 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
     }
 
     public CartAdapter(FragmentActivity activity, Context context, List<Cart> cartList) {
-        this.activity = activity;  // Store the activity reference
+        this.activity = activity;
         this.context = context;
         this.cartList = cartList;
     }
-
-//    public CartAdapter(Context context, List<Cart> cartList) {
-//        this.context = context;
-//        this.cartList = cartList;
-//    }
 
     public CartAdapter(Context context, List<Cart> restaurantList, OnCartClickListener onCartClickListener) {
         this.context = context;
@@ -128,7 +123,17 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         CartViewModel cartViewModel = new ViewModelProvider(activity).get(CartViewModel.class);
 
         holder.btnRemoveFromCart.setOnClickListener(v -> {
-            cartViewModel.clearCartItem(cart.getId());
+            new android.app.AlertDialog.Builder(context)
+                    .setTitle("Xác nhận xóa")
+                    .setMessage("Bạn có chắc chắn muốn xóa cửa hàng này khỏi mục giỏ hàng?")
+                    .setPositiveButton("Có", (dialog, which) -> {
+                        cartViewModel.clearCartItem(cart.getStore().getId());
+                    })
+                    .setNegativeButton("Không", (dialog, which) -> {
+                        dialog.dismiss();
+                    })
+                    .create()
+                    .show();
         });
     }
 

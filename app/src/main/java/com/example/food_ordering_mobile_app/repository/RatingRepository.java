@@ -6,6 +6,8 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.food_ordering_mobile_app.models.dish.Dish;
+import com.example.food_ordering_mobile_app.models.dish.DishImage;
 import com.example.food_ordering_mobile_app.models.rating.ListRatingResponse;
 import com.example.food_ordering_mobile_app.models.rating.Rating;
 import com.example.food_ordering_mobile_app.network.RetrofitClient;
@@ -19,6 +21,8 @@ import org.json.JSONObject;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -106,13 +110,18 @@ public class RatingRepository {
         return result;
     }
 
-    public LiveData<Resource<Rating>> addStoreRating(String storeId, Rating rating) {
-        MutableLiveData<Resource<Rating>> result = new MutableLiveData<>();
+    public LiveData<Resource<String>> addStoreRating(String storeId, List<String> dishes, float rating, String comment) {
+        MutableLiveData<Resource<String>> result = new MutableLiveData<>();
         result.setValue(Resource.loading(null));
 
-        ratingService.addStoreRating(storeId, rating).enqueue(new Callback<Rating>() {
+        Map<String, Object> data = new HashMap<>();
+        data.put("dishes", dishes);
+        data.put("ratingValue", rating);
+        data.put("comment", comment);
+
+        ratingService.addStoreRating(storeId, data).enqueue(new Callback<String>() {
             @Override
-            public void onResponse(Call<Rating> call, Response<Rating> response) {
+            public void onResponse(Call<String> call, Response<String> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Log.d("RatingRepository", "getAllStoreRating: " + response.body());
                     result.setValue(Resource.success("Lay thong tin thành công!", response.body()));
@@ -129,7 +138,44 @@ public class RatingRepository {
             }
 
             @Override
-            public void onFailure(Call<Rating> call, Throwable t) {
+            public void onFailure(Call<String> call, Throwable t) {
+                result.setValue(Resource.error("Lỗi kết nối: " + t.getMessage(), null));
+            }
+        });
+
+        return result;
+    }
+
+    public LiveData<Resource<String>> addStoreRatingImage(String storeId, List<String> dishes, float rating, String comment, List<DishImage> imageUrls) {
+        MutableLiveData<Resource<String>> result = new MutableLiveData<>();
+        result.setValue(Resource.loading(null));
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("dishes", dishes);
+        data.put("ratingValue", rating);
+        data.put("comment", comment);
+        data.put("images", imageUrls);
+
+        ratingService.addStoreRating(storeId, data).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Log.d("RatingRepository", "getAllStoreRating: " + response.body());
+                    result.setValue(Resource.success("Lay thong tin thành công!", response.body()));
+                } else {
+                    try {
+                        String errorMessage = response.errorBody().string();
+                        JSONObject jsonObject = new JSONObject(errorMessage);
+                        String message = jsonObject.getString("message");
+                        result.setValue(Resource.error(message, null));
+                    } catch (Exception e) {
+                        result.setValue(Resource.error("Lỗi không xác định!", null));
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
                 result.setValue(Resource.error("Lỗi kết nối: " + t.getMessage(), null));
             }
         });

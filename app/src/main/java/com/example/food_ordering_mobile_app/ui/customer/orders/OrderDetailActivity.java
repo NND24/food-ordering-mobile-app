@@ -65,10 +65,10 @@ public class OrderDetailActivity extends AppCompatActivity {
 
         orderViewModel = new ViewModelProvider(this).get(OrderViewModel.class);
 
-        setupCartDetail();
+        setupOrderDetail();
     }
 
-    private void setupCartDetail() {
+    private void setupOrderDetail() {
         orderSummaryRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         orderItemList = new ArrayList<>();
         orderSummaryAdapter = new OrderSummaryAdapter(this, orderItemList);

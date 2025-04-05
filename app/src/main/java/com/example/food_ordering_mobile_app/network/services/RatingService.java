@@ -7,6 +7,7 @@ import com.example.food_ordering_mobile_app.models.rating.Rating;
 import java.util.Map;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
@@ -20,7 +21,7 @@ public interface RatingService {
     @GET("/api/v1/rating/detail/{ratingId}")
     Call<Rating> getDetailRating(@Path("ratingId") String ratingId);
     @POST("/api/v1/rating/{storeId}")
-    Call<Rating> addStoreRating(@Path("storeId") String storeId, Rating rating);
+    Call<String> addStoreRating(@Path("storeId") String storeId, @Body Map<String, Object> data);
     @PUT("/api/v1/rating/{storeId}")
     Call<Rating> editStoreRating(@Path("storeId") String storeId, Rating rating);
     @DELETE("/api/v1/rating/{ratingId}")

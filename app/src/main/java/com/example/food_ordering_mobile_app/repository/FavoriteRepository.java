@@ -62,7 +62,6 @@ public class FavoriteRepository {
                         String message = jsonObject.getString("message");
                         result.setValue(Resource.error(message, null));
                     } catch (Exception e) {
-                        Log.d("FavoriteRepository","API Response" + response.body().toString());
                         result.setValue(Resource.error("Lỗi không xác định!", null));
                     }
                 }

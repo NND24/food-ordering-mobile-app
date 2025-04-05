@@ -71,12 +71,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:gravity="center"
             android:padding="20dp">
 
             <ImageView
-                android:id="@+id/imageView5"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:id="@+id/ivStoreAvatar"
+                android:layout_width="95dp"
+                android:layout_height="95dp"
                 app:srcCompat="@drawable/shops" />
 
             <Space
@@ -87,18 +88,40 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Đánh giá bữa ăn này"
-                android:textSize="24dp"
-                android:textStyle="bold"
+                android:textAlignment="center"
                 android:textColor="@color/onPrimary"
-                android:textAlignment="center"/>
+                android:textSize="24dp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bạn thấy món ăn hoặc thức uống từ "
+                    android:textColor="@color/onPrimary"
+                    android:textSize="16dp" />
+
+                <TextView
+                    android:id="@+id/tvStoreName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Phở Gà BMT"
+                    android:textAlignment="center"
+                    android:textColor="@color/onPrimary"
+                    android:textSize="16dp" />
+            </LinearLayout>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Bạn thấy món ăn hoặc thức uống từ Phở Gà BMT như thế nào?"
-                android:textSize="16dp"
+                android:text="như thế nào?"
+                android:textAlignment="center"
                 android:textColor="@color/onPrimary"
-                android:textAlignment="center"/>
+                android:textSize="16dp" />
 
             <Space
                 android:layout_width="match_parent"
@@ -133,13 +156,14 @@
                 android:layout_height="5dp" />
 
             <LinearLayout
+                android:id="@+id/btnChooseImage"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
-                android:layout_gravity="right">
+                android:layout_gravity="right"
+                android:layout_marginVertical="10dp">
 
                 <ImageView
-                    android:id="@+id/imageView6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/ic_camera_24" />
@@ -152,6 +176,19 @@
                     android:textColor="@color/onPrimary"
                     android:textAlignment="center"/>
             </LinearLayout>
+
+            <HorizontalScrollView
+                android:id="@+id/imageScrollView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:id="@+id/imagePreviewContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" />
+            </HorizontalScrollView>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
@@ -171,6 +208,7 @@
         app:layout_constraintBottom_toBottomOf="parent">
 
             <Button
+                android:id="@+id/btnAddRating"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/custom_button_normal"

@@ -2,6 +2,7 @@ package com.example.food_ordering_mobile_app.adapters;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.example.food_ordering_mobile_app.R;
 import com.example.food_ordering_mobile_app.models.dish.Dish;
+import com.example.food_ordering_mobile_app.models.dish.DishImage;
 import com.example.food_ordering_mobile_app.models.foodType.FoodType;
 import com.example.food_ordering_mobile_app.models.rating.DishRating;
 import com.example.food_ordering_mobile_app.models.rating.Rating;
@@ -117,27 +119,47 @@ public class RatingAdapter extends RecyclerView.Adapter<RatingAdapter.ViewHolder
                     }
                 });
 
-        // Kiểm tra nếu danh sách hình ảnh không rỗng và có ít nhất một ảnh
+        holder.imageContainer.removeAllViews(); // Xóa ảnh cũ nếu có
+
         if (rating.getImages() != null && !rating.getImages().isEmpty()) {
-            String ratingImageUrl = rating.getImages().get(0).getUrl();
-            holder.ivRatingImage.setVisibility(View.VISIBLE);
-            Glide.with(context)
-                    .asBitmap()
-                    .load(ratingImageUrl)
-                    .override(50, 50)
-                    .centerCrop()
-                    .into(new BitmapImageViewTarget(holder.ivRatingImage) {
-                        @Override
-                        protected void setResource(Bitmap resource) {
-                            RoundedBitmapDrawable roundedDrawable =
-                                    RoundedBitmapDrawableFactory.create(context.getResources(), resource);
-                            roundedDrawable.setCornerRadius(6);
-                            holder.ivRatingImage.setImageDrawable(roundedDrawable);
-                        }
-                    });
+            int marginInDp = (int) TypedValue.applyDimension(
+                    TypedValue.COMPLEX_UNIT_DIP, 10, context.getResources().getDisplayMetrics());
+
+            int sizeInDp = (int) TypedValue.applyDimension(
+                    TypedValue.COMPLEX_UNIT_DIP, 200, context.getResources().getDisplayMetrics());
+
+            List<DishImage> images = rating.getImages();
+            for (int i = 0; i < images.size(); i++) {
+                DishImage image = images.get(i);
+                ImageView imageView = new ImageView(context);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(sizeInDp, sizeInDp);
+
+                // Thêm margin phải 10dp trừ ảnh cuối cùng
+                if (i != images.size() - 1) {
+                    params.setMargins(0, 0, marginInDp, 0);
+                }
+
+                imageView.setLayoutParams(params);
+
+                Glide.with(context)
+                        .asBitmap()
+                        .load(image.getUrl())
+                        .override(50, 50)
+                        .centerCrop()
+                        .into(new BitmapImageViewTarget(imageView) {
+                            @Override
+                            protected void setResource(Bitmap resource) {
+                                RoundedBitmapDrawable roundedDrawable =
+                                        RoundedBitmapDrawableFactory.create(context.getResources(), resource);
+                                roundedDrawable.setCornerRadius(6);
+                                imageView.setImageDrawable(roundedDrawable);
+                            }
+                        });
+
+                holder.imageContainer.addView(imageView);
+            }
         } else {
-            // Nếu danh sách rỗng hoặc null, ẩn ImageView
-            holder.ivRatingImage.setVisibility(View.GONE);
+            holder.imageContainer.setVisibility(View.GONE);
         }
 
 
@@ -178,9 +200,10 @@ public class RatingAdapter extends RecyclerView.Adapter<RatingAdapter.ViewHolder
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvCustomerName, tvComment, answer, tvRatingTime, answerTime, tvListOrderedDish;
-        ImageView ivCustomerAvatar, ivRatingImage;
+        ImageView ivCustomerAvatar;
         LinearLayout starContainer;
         ImageButton btnOption;
+        LinearLayout imageContainer;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -189,9 +212,10 @@ public class RatingAdapter extends RecyclerView.Adapter<RatingAdapter.ViewHolder
             tvComment = itemView.findViewById(R.id.tvComment);
             tvRatingTime = itemView.findViewById(R.id.tvRatingTime);
             tvListOrderedDish = itemView.findViewById(R.id.tvListOrderedDish);
-            ivRatingImage = itemView.findViewById(R.id.ivRatingImage);
             starContainer = itemView.findViewById(R.id.starContainer);
             btnOption = itemView.findViewById(R.id.btnOption);
+            imageContainer = itemView.findViewById(R.id.imageContainer);
+
 //            answer = itemView.findViewById(R.id.answer);
 //            answerTime = itemView.findViewById(R.id.answer_time);
         }

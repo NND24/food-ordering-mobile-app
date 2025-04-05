@@ -112,6 +112,15 @@
             android:name=".ui.customer.account.location.ChooseLocationActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.customer.account.location.LocationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.customer.account.ProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.customer.account.ChangePasswordActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.common.SplashActivity"
             android:exported="true">
             <intent-filter>

@@ -88,7 +88,17 @@ public class FavoritesFragment extends Fragment {
     }
 
     private void handleRemoveAllFavorite(View view) {
-        favoriteViewModel.removeAllFavorite();
+        new android.app.AlertDialog.Builder(getContext())
+                .setTitle("Xác nhận xóa")
+                .setMessage("Bạn có chắc chắn muốn xóa tất cả các mục yêu thích?")
+                .setPositiveButton("Có", (dialog, which) -> {
+                    favoriteViewModel.removeAllFavorite();
+                })
+                .setNegativeButton("Không", (dialog, which) -> {
+                    dialog.dismiss();
+                })
+                .create()
+                .show();
     }
 
     private void setupUserFavorite() {
@@ -111,6 +121,8 @@ public class FavoritesFragment extends Fragment {
                         favoriteAdapter.notifyDataSetChanged();
                         break;
                     case ERROR:
+                        favoriteList.clear();
+                        favoriteAdapter.notifyDataSetChanged();
                         swipeRefreshLayout.setRefreshing(false);
                         break;
                 }

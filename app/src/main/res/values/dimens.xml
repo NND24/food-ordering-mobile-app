@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Kích thước cho nút xóa -->
+    <dimen name="delete_button_size">18dp</dimen> <!-- Thay đổi giá trị nếu cần -->
+</resources>

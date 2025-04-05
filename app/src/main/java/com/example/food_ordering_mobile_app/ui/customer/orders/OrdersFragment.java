@@ -20,6 +20,7 @@ import com.example.food_ordering_mobile_app.adapters.OrderCurrentAdapter;
 import com.example.food_ordering_mobile_app.adapters.OrderHistoryAdapter;
 import com.example.food_ordering_mobile_app.models.order.Order;
 import com.example.food_ordering_mobile_app.models.order.ListOrderResponse;
+import com.example.food_ordering_mobile_app.ui.common.CustomHeaderView;
 import com.example.food_ordering_mobile_app.utils.Resource;
 import com.example.food_ordering_mobile_app.viewmodels.OrderViewModel;
 
@@ -35,6 +36,7 @@ public class OrdersFragment extends Fragment {
     private RecyclerView orderHistoryRecyclerView;
     private OrderHistoryAdapter orderHistoryAdapter;
     private List<Order> orderHistoryList;
+    private CustomHeaderView customHeaderView;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -43,6 +45,10 @@ public class OrdersFragment extends Fragment {
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
         orderCurrentRecyclerView = view.findViewById(R.id.orderCurrentRecyclerView);
         orderHistoryRecyclerView = view.findViewById(R.id.orderHistoryRecyclerView);
+        customHeaderView = view.findViewById(R.id.customHeaderView);
+
+        customHeaderView.setLifecycleOwner(this);
+        customHeaderView.setText("Đơn hàng");
 
         swipeRefreshLayout.setOnRefreshListener(this::refreshData);
 
@@ -92,7 +98,7 @@ public class OrdersFragment extends Fragment {
     private void setupHistoryOrder() {
         orderHistoryRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         orderHistoryList = new ArrayList<>();
-        orderHistoryAdapter = new OrderHistoryAdapter(getContext(), orderHistoryList);
+        orderHistoryAdapter = new OrderHistoryAdapter(requireActivity(), getContext(), orderHistoryList);
         orderHistoryRecyclerView.setAdapter(orderHistoryAdapter);
 
         orderViewModel.getHistoryOrderResponse().observe(getViewLifecycleOwner(), new Observer<Resource<ListOrderResponse>>() {

@@ -23,8 +23,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     buildFeatures {
         viewBinding = true
@@ -55,7 +55,7 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
     implementation("com.squareup.okhttp3:okhttp-urlconnection:4.12.0")
     implementation("com.google.code.gson:gson:2.10.1")
-    implementation("com.mapbox.maps:android:11.11.0")
+    implementation("io.socket:socket.io-client:2.0.0")
     implementation("org.osmdroid:osmdroid-android:6.1.14")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")

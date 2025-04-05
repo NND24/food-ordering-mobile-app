@@ -1,8 +1,5 @@
 package com.example.food_ordering_mobile_app.ui.customer.account;
 
-import static android.content.Intent.getIntent;
-
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.method.PasswordTransformationMethod;
 import android.view.LayoutInflater;
@@ -11,19 +8,20 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.food_ordering_mobile_app.R;
-import com.example.food_ordering_mobile_app.ui.common.LoginActivity;
+import com.example.food_ordering_mobile_app.ui.common.CustomHeaderView;
 import com.example.food_ordering_mobile_app.utils.Resource;
 import com.example.food_ordering_mobile_app.viewmodels.AuthViewModel;
 
-public class ChangePasswordFragment extends Fragment {
+public class ChangePasswordActivity extends AppCompatActivity {
     private AuthViewModel authViewModel;
     private EditText edtOldPassword, edtPassword, edtConfirmPassword;
     private ImageButton btnShowOldPassword, btnShowPassword, btnShowConfirmPassword;
@@ -32,35 +30,38 @@ public class ChangePasswordFragment extends Fragment {
     private boolean isPasswordVisible = true;
     private boolean isConfirmPasswordVisible = true;
     private String email;
+    private CustomHeaderView customHeaderView;
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_change_password, container, false);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_change_password);
 
-        edtOldPassword = view.findViewById(R.id.edtOldPassword);
-        edtPassword = view.findViewById(R.id.edtPassword);
-        edtConfirmPassword = view.findViewById(R.id.edtConfirmPassword);
-        btnShowOldPassword = view.findViewById(R.id.btnShowOldPassword);
-        btnShowPassword = view.findViewById(R.id.btnShowPassword);
-        btnShowConfirmPassword = view.findViewById(R.id.btnShowConfirmPassword);
-        btnResetPassword = view.findViewById(R.id.btnResetPassword);
+        edtOldPassword = findViewById(R.id.edtOldPassword);
+        edtPassword = findViewById(R.id.edtPassword);
+        edtConfirmPassword = findViewById(R.id.edtConfirmPassword);
+        btnShowOldPassword = findViewById(R.id.btnShowOldPassword);
+        btnShowPassword = findViewById(R.id.btnShowPassword);
+        btnShowConfirmPassword = findViewById(R.id.btnShowConfirmPassword);
+        btnResetPassword = findViewById(R.id.btnResetPassword);
+        customHeaderView = findViewById(R.id.customHeaderView);
+
+        customHeaderView.setText("Đổi mật khẩu");
 
         // Initialize ViewModel
         authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
 
         // Observe reset password response
-        authViewModel.getChangePasswordResponse().observe(getViewLifecycleOwner(), new Observer<Resource<String>>() {
+        authViewModel.getChangePasswordResponse().observe(this, new Observer<Resource<String>>() {
             @Override
             public void onChanged(Resource<String> resource) {
                 switch (resource.getStatus()) {
                     case LOADING:
-                        // Hiển thị progress bar
                         break;
                     case SUCCESS:
                         break;
                     case ERROR:
-                        // Ẩn progress bar và hiển thị thông báo lỗi
                         String errorMessage = resource.getMessage();
                         break;
                 }
@@ -74,8 +75,6 @@ public class ChangePasswordFragment extends Fragment {
         btnShowOldPassword.setOnClickListener(v -> togglePasswordVisibility(edtOldPassword, btnShowOldPassword));
         btnShowPassword.setOnClickListener(v -> togglePasswordVisibility(edtPassword, btnShowPassword));
         btnShowConfirmPassword.setOnClickListener(v -> togglePasswordVisibility(edtConfirmPassword, btnShowConfirmPassword));
-
-        return view;
     }
 
     private void handleChangePassword() {

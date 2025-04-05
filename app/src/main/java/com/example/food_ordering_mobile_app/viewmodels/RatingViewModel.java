@@ -8,11 +8,14 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
+import com.example.food_ordering_mobile_app.models.dish.Dish;
+import com.example.food_ordering_mobile_app.models.dish.DishImage;
 import com.example.food_ordering_mobile_app.models.rating.ListRatingResponse;
 import com.example.food_ordering_mobile_app.models.rating.Rating;
 import com.example.food_ordering_mobile_app.repository.RatingRepository;
 import com.example.food_ordering_mobile_app.utils.Resource;
 
+import java.util.List;
 import java.util.Map;
 
 public class RatingViewModel extends AndroidViewModel {
@@ -26,8 +29,8 @@ public class RatingViewModel extends AndroidViewModel {
     public LiveData<Resource<Rating>> getDetailRatingResponse() {
         return detailRatingResponse;
     }
-    private final MutableLiveData<Resource<Rating>> addStoreRatingResponse = new MutableLiveData<>();
-    public LiveData<Resource<Rating>> getAddStoreRatingResponse() {
+    private final MutableLiveData<Resource<String>> addStoreRatingResponse = new MutableLiveData<>();
+    public LiveData<Resource<String>> getAddStoreRatingResponse() {
         return addStoreRatingResponse;
     }
     private final MutableLiveData<Resource<Rating>> editStoreRatingResponse = new MutableLiveData<>();
@@ -66,11 +69,22 @@ public class RatingViewModel extends AndroidViewModel {
         });
     }
 
-    public void addStoreRating(String storeId, Rating rating) {
-        LiveData<Resource<Rating>> result = ratingRepository.addStoreRating(storeId, rating);
-        result.observeForever(new Observer<Resource<Rating>>() {
+    public void addStoreRating(String storeId, List<String> dishes, float rating, String comment) {
+        LiveData<Resource<String>> result = ratingRepository.addStoreRating(storeId, dishes, rating, comment);
+        result.observeForever(new Observer<Resource<String>>() {
             @Override
-            public void onChanged(Resource<Rating> resource) {
+            public void onChanged(Resource<String> resource) {
+                Log.d("RatingViewModel", "getCurrentUser: " + resource);
+                addStoreRatingResponse.setValue(resource);
+            }
+        });
+    }
+
+    public void addStoreRatingImages(String storeId, List<String> dishes, float rating, String comment, List<DishImage> imageUrls) {
+        LiveData<Resource<String>> result = ratingRepository.addStoreRatingImage(storeId, dishes, rating, comment, imageUrls);
+        result.observeForever(new Observer<Resource<String>>() {
+            @Override
+            public void onChanged(Resource<String> resource) {
                 Log.d("RatingViewModel", "getCurrentUser: " + resource);
                 addStoreRatingResponse.setValue(resource);
             }

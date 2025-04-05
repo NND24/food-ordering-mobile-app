@@ -12,7 +12,28 @@ public class Notification {
     private String message;
     private String type;
     private String status;
-    private Timestamp timestamps;
+    private Timestamp createdAt;
+    private Timestamp updatedAt;
+
+    public Notification(String id, String userId, String title, String message, String type, String status, Timestamp createdAt, Timestamp updatedAt) {
+        this.id = id;
+        this.userId = userId;
+        this.title = title;
+        this.message = message;
+        this.type = type;
+        this.status = status;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
+    @Override
+    public String toString() {
+        return "Notification{" +
+                "title='" + title + '\'' +
+                ", message='" + message + '\'' +
+                ", createdAt='" + createdAt + '\'' +
+                '}';
+    }
 
     public String getId() {
         return id;
@@ -62,11 +83,19 @@ public class Notification {
         this.message = message;
     }
 
-    public Timestamp getTimestamps() {
-        return timestamps;
+    public Timestamp getCreatedAt() {
+        return createdAt;
     }
 
-    public void setTimestamps(Timestamp timestamps) {
-        this.timestamps = timestamps;
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Timestamp getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Timestamp updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

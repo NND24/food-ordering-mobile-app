@@ -10,10 +10,14 @@ import androidx.lifecycle.Observer;
 
 import com.example.food_ordering_mobile_app.models.MessageResponse;
 import com.example.food_ordering_mobile_app.models.cart.Cart;
+import com.example.food_ordering_mobile_app.models.cart.CartItem;
 import com.example.food_ordering_mobile_app.models.cart.CartResponse;
 import com.example.food_ordering_mobile_app.models.cart.ListCartResponse;
+import com.example.food_ordering_mobile_app.models.order.OrderItem;
 import com.example.food_ordering_mobile_app.repository.CartRepository;
 import com.example.food_ordering_mobile_app.utils.Resource;
+
+import java.util.List;
 
 public class CartViewModel extends AndroidViewModel {
     private final CartRepository cartRepository;
@@ -138,8 +142,8 @@ public class CartViewModel extends AndroidViewModel {
         });
     }
 
-    public void reOrder(Cart cart) {
-        LiveData<Resource<Cart>> result = cartRepository.reOrder(cart);
+    public void reOrder(String storeId, List<OrderItem> items) {
+        LiveData<Resource<Cart>> result = cartRepository.reOrder(storeId, items);
         result.observeForever(new Observer<Resource<Cart>>() {
             @Override
             public void onChanged(Resource<Cart> resource) {

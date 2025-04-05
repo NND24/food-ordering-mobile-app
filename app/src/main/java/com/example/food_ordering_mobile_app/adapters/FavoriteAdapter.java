@@ -103,7 +103,17 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.Favori
         FavoriteViewModel favoriteViewModel = new ViewModelProvider(fragment).get(FavoriteViewModel.class);
 
         holder.btnRemoveFromFavorite.setOnClickListener(v -> {
-            favoriteViewModel.removeFavorite(favorite.getId());
+            new android.app.AlertDialog.Builder(context)
+                    .setTitle("Xác nhận xóa")
+                    .setMessage("Bạn có chắc chắn muốn xóa cửa hàng này khỏi mục yêu thích?")
+                    .setPositiveButton("Có", (dialog, which) -> {
+                        favoriteViewModel.removeFavorite(favorite.getId());
+                    })
+                    .setNegativeButton("Không", (dialog, which) -> {
+                        dialog.dismiss();
+                    })
+                    .create()
+                    .show();
         });
     }
 

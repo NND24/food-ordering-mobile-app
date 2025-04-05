@@ -22,7 +22,7 @@
         app:labelVisibilityMode="labeled"
         android:title="@string/favorites" />
     <item
-        android:id="@+id/settings"
+        android:id="@+id/account"
         android:icon="@drawable/shortcut_settings_state"
         app:labelVisibilityMode="labeled"
         android:title="@string/account" />

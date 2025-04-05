@@ -1,7 +1,6 @@
 package com.example.food_ordering_mobile_app.ui.customer.cart;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -66,10 +65,38 @@ public class CartActivity extends AppCompatActivity {
                 }
             }
         });
+
+        cartViewModel.getClearCartItemResponse().observe(this, new Observer<Resource<MessageResponse>>() {
+            @Override
+            public void onChanged(Resource<MessageResponse> resource) {
+                switch (resource.getStatus()) {
+                    case LOADING:
+                        swipeRefreshLayout.setRefreshing(true);
+                        break;
+                    case SUCCESS:
+                        swipeRefreshLayout.setRefreshing(false);
+                        cartViewModel.getUserCart();
+                        break;
+                    case ERROR:
+                        swipeRefreshLayout.setRefreshing(false);
+                        break;
+                }
+            }
+        });
     }
 
     private void handleRemoveAllCart(View view) {
-        cartViewModel.clearCart();
+        new android.app.AlertDialog.Builder(this)
+                .setTitle("Xác nhận xóa")
+                .setMessage("Bạn có chắc chắn muốn xóa tất cả các mục giỏ hàng?")
+                .setPositiveButton("Có", (dialog, which) -> {
+                    cartViewModel.clearCart();
+                })
+                .setNegativeButton("Không", (dialog, which) -> {
+                    dialog.dismiss();
+                })
+                .create()
+                .show();
     }
 
     private void setupUserCart() {
@@ -90,11 +117,11 @@ public class CartActivity extends AppCompatActivity {
                         cartList.clear();
                         cartList.addAll(resource.getData().getData());
                         cartAdapter.notifyDataSetChanged();
-                        Log.d("CartActivity", "getUserCart: " + resource.getData().getData().toString());
                         break;
                     case ERROR:
                         swipeRefreshLayout.setRefreshing(false);
-                        Log.d("CartActivity", "getUserCart Error: " + resource.getMessage());
+                        cartList.clear();
+                        cartAdapter.notifyDataSetChanged();
                         break;
                 }
             }
@@ -105,9 +132,5 @@ public class CartActivity extends AppCompatActivity {
 
     private void refreshData() {
         cartViewModel.getUserCart();
-    }
-
-    public void goBack(View view) {
-        onBackPressed();
     }
 }

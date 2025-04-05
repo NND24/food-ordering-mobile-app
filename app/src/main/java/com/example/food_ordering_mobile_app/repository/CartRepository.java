@@ -8,8 +8,10 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.food_ordering_mobile_app.models.MessageResponse;
 import com.example.food_ordering_mobile_app.models.cart.Cart;
+import com.example.food_ordering_mobile_app.models.cart.CartItem;
 import com.example.food_ordering_mobile_app.models.cart.CartResponse;
 import com.example.food_ordering_mobile_app.models.cart.ListCartResponse;
+import com.example.food_ordering_mobile_app.models.order.OrderItem;
 import com.example.food_ordering_mobile_app.network.RetrofitClient;
 import com.example.food_ordering_mobile_app.network.services.CartService;
 import com.example.food_ordering_mobile_app.utils.PersistentCookieStore;
@@ -21,6 +23,9 @@ import org.json.JSONObject;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -262,11 +267,15 @@ public class CartRepository {
         return result;
     }
 
-    public LiveData<Resource<Cart>> reOrder(Cart cart) {
+    public LiveData<Resource<Cart>> reOrder(String storeId, List<OrderItem> items) {
         MutableLiveData<Resource<Cart>> result = new MutableLiveData<>();
         result.setValue(Resource.loading(null));
 
-        cartService.reOrder(cart).enqueue(new Callback<Cart>() {
+        Map<String, Object> data = new HashMap<>();
+        data.put("storeId", storeId);
+        data.put("items", items);
+
+        cartService.reOrder(data).enqueue(new Callback<Cart>() {
             @Override
             public void onResponse(Call<Cart> call, Response<Cart> response) {
                 if (response.isSuccessful() && response.body() != null) {

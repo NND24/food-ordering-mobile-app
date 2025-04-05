@@ -9,8 +9,11 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
+import com.example.food_ordering_mobile_app.models.dish.DishImage;
 import com.example.food_ordering_mobile_app.repository.UploadRepository;
 import com.example.food_ordering_mobile_app.utils.Resource;
+
+import java.util.List;
 
 public class UploadViewModel extends AndroidViewModel {
     private final UploadRepository uploadRepository;
@@ -18,6 +21,10 @@ public class UploadViewModel extends AndroidViewModel {
     private final MutableLiveData<Resource<String>> uploadAvatarResponse = new MutableLiveData<>();
     public LiveData<Resource<String>> getUploadAvatarResponse() {
         return uploadAvatarResponse;
+    }
+    private final MutableLiveData<Resource<List<DishImage>>> uploadImagesResponse = new MutableLiveData<>();
+    public LiveData<Resource<List<DishImage>>> getUploadImagesResponse() {
+        return uploadImagesResponse;
     }
 
     public UploadViewModel(Application application) {
@@ -35,4 +42,13 @@ public class UploadViewModel extends AndroidViewModel {
         });
     }
 
+    public void uploadImages(List<Uri> imageUris, Context context) {
+        LiveData<Resource<List<DishImage>>> result = uploadRepository.uploadMultipleImages(imageUris, context);
+        result.observeForever(new Observer<Resource<List<DishImage>>>() {
+            @Override
+            public void onChanged(Resource<List<DishImage>> resource) {
+                uploadImagesResponse.setValue(resource);
+            }
+        });
+    }
 }

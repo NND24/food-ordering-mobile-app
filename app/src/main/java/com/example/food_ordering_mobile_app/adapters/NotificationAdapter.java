@@ -1,6 +1,7 @@
 package com.example.food_ordering_mobile_app.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.ViewHolder> {
     private Context context;
@@ -53,12 +55,22 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         holder.tvTitle.setText(notification.getTitle());
         holder.tvMessage.setText(notification.getMessage());
 
-        Timestamp timestamp = notification.getTimestamps();
+        Timestamp timestamp = notification.getUpdatedAt();
+
+        // Lấy múi giờ Việt Nam
+        TimeZone vietnamTimeZone = TimeZone.getTimeZone("Asia/Ho_Chi_Minh");
+
+        // Đặt SimpleDateFormat sử dụng múi giờ Việt Nam
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
-        String formattedDate = sdf.format(timestamp);
+        sdf.setTimeZone(vietnamTimeZone);
+
+        // Chuyển đổi thời gian từ UTC sang giờ Việt Nam
+        Date vietnamDate = new Date(timestamp.getTime() + vietnamTimeZone.getOffset(timestamp.getTime()));
+
+        String formattedDate = sdf.format(vietnamDate);
         holder.tvDate.setText(formattedDate);
 
-        Boolean isRead = notification.getStatus() == "read";
+        Boolean isRead = "read".equals(notification.getStatus());
 
         if (isRead) {
             holder.notificationContainer.setBackgroundColor(context.getResources().getColor(R.color.backgroundColor));

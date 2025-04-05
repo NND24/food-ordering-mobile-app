@@ -9,13 +9,8 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -23,15 +18,15 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
@@ -39,17 +34,16 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.example.food_ordering_mobile_app.R;
 import com.example.food_ordering_mobile_app.models.user.User;
-import com.example.food_ordering_mobile_app.ui.customer.notifications.NotificationActivity;
+import com.example.food_ordering_mobile_app.ui.common.CustomHeaderView;
 import com.example.food_ordering_mobile_app.utils.Resource;
 import com.example.food_ordering_mobile_app.utils.SharedPreferencesHelper;
 import com.example.food_ordering_mobile_app.viewmodels.UploadViewModel;
 import com.example.food_ordering_mobile_app.viewmodels.UserViewModel;
 import android.Manifest;
 
-
 import java.io.ByteArrayOutputStream;
 
-public class ProfileFragment extends Fragment {
+public class ProfileActivity extends AppCompatActivity {
     private SwipeRefreshLayout swipeRefreshLayout;
     private UserViewModel userViewModel;
     private UploadViewModel uploadViewModel;
@@ -59,54 +53,48 @@ public class ProfileFragment extends Fragment {
     private LinearLayout layoutFemale, layoutMale, layoutOther;
     private RadioButton radioFemale, radioMale, radioOther;
     private ImageView ivAvatar;
-    private TextView backBtn, tvShowName;
-    private ImageButton goToNotificationBtn;
+    private TextView tvShowName;
     private ImageView  btnUploadAvatar;
     private static final int CAMERA_REQUEST = 100;
     private static final int GALLERY_REQUEST = 200;
     private static final int REQUEST_CAMERA_PERMISSION = 100;
+    private CustomHeaderView customHeaderView;
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_profile);
 
-        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
-        edtName = view.findViewById(R.id.edtName);
-        edtEmail = view.findViewById(R.id.edtEmail);
-        edtPhonenumber = view.findViewById(R.id.edtPhonenumber);
-        radioGroupGender = view.findViewById(R.id.radioGroupGender);
-        layoutFemale = view.findViewById(R.id.layoutFemale);
-        layoutMale = view.findViewById(R.id.layoutMale);
-        layoutOther = view.findViewById(R.id.layoutOther);
-        radioFemale = view.findViewById(R.id.radioFemale);
-        radioMale = view.findViewById(R.id.radioMale);
-        radioOther = view.findViewById(R.id.radioOther);
-        btnUpdate = view.findViewById(R.id.btnUpdate);
-        ivAvatar = view.findViewById(R.id.ivAvatar);
-        btnUploadAvatar = view.findViewById(R.id.btnUploadAvatar);
-        backBtn = view.findViewById(R.id.backBtn);
-        tvShowName = view.findViewById(R.id.tvShowName);
-        goToNotificationBtn = view.findViewById(R.id.goToNotificationBtn);
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
+        edtName = findViewById(R.id.edtName);
+        edtEmail = findViewById(R.id.edtEmail);
+        edtPhonenumber = findViewById(R.id.edtPhonenumber);
+        radioGroupGender = findViewById(R.id.radioGroupGender);
+        layoutFemale = findViewById(R.id.layoutFemale);
+        layoutMale = findViewById(R.id.layoutMale);
+        layoutOther = findViewById(R.id.layoutOther);
+        radioFemale = findViewById(R.id.radioFemale);
+        radioMale = findViewById(R.id.radioMale);
+        radioOther = findViewById(R.id.radioOther);
+        btnUpdate = findViewById(R.id.btnUpdate);
+        ivAvatar = findViewById(R.id.ivAvatar);
+        btnUploadAvatar = findViewById(R.id.btnUploadAvatar);
+        tvShowName = findViewById(R.id.tvShowName);
 
         layoutFemale.setOnClickListener(v -> radioGroupGender.check(R.id.radioFemale));
         layoutMale.setOnClickListener(v -> radioGroupGender.check(R.id.radioMale));
         layoutOther.setOnClickListener(v -> radioGroupGender.check(R.id.radioOther));
+        customHeaderView = findViewById(R.id.customHeaderView);
+
+        customHeaderView.setText("Thông tin cá nhân");
 
         swipeRefreshLayout.setOnRefreshListener(this::refreshData);
-
-        backBtn.setOnClickListener(v -> {
-            Bundle bundle = new Bundle();
-            NavHostFragment.findNavController(ProfileFragment.this)
-                    .navigate(R.id.action_profile_to_settings, bundle);
-        });
-
-        goToNotificationBtn.setOnClickListener(v -> goToActivity(NotificationActivity.class));
 
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         uploadViewModel = new ViewModelProvider(this).get(UploadViewModel.class);
 
-        User savedUser = SharedPreferencesHelper.getInstance(requireContext()).getCurrentUser();
+        User savedUser = SharedPreferencesHelper.getInstance(this).getCurrentUser();
         if (savedUser != null) {
             edtName.setText(savedUser.getName());
             tvShowName.setText(savedUser.getName());
@@ -130,7 +118,7 @@ public class ProfileFragment extends Fragment {
             // Lấy URL avatar từ savedUser
             String avatarUrl = savedUser.getAvatar() != null ? savedUser.getAvatar().getUrl() : null;
 
-            Glide.with(requireContext())
+            Glide.with(this)
                     .asBitmap()
                     .load(avatarUrl != null ? avatarUrl : R.drawable.default_avatar)
                     .apply(new RequestOptions().override(110, 110).centerCrop())
@@ -138,27 +126,26 @@ public class ProfileFragment extends Fragment {
                         @Override
                         protected void setResource(Bitmap resource) {
                             RoundedBitmapDrawable roundedDrawable =
-                                    RoundedBitmapDrawableFactory.create(requireContext().getResources(), resource);
+                                    RoundedBitmapDrawableFactory.create(getResources(), resource);
                             roundedDrawable.setCornerRadius(999);
                             ivAvatar.setImageDrawable(roundedDrawable);
                         }
                     });
         }
 
-        userViewModel.getUpdateUserResponse().observe(getViewLifecycleOwner(), resource -> {
+        userViewModel.getUpdateUserResponse().observe(this, resource -> {
             switch (resource.getStatus()) {
                 case LOADING:
                     swipeRefreshLayout.setRefreshing(true);
                     break;
                 case SUCCESS:
                     swipeRefreshLayout.setRefreshing(false);
-                    Toast.makeText(requireContext(), "Cập nhật thông tin thành công!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Cập nhật thông tin thành công!", Toast.LENGTH_SHORT).show();
                     userViewModel.getCurrentUser();
                     break;
                 case ERROR:
                     swipeRefreshLayout.setRefreshing(false);
                     String errorMessage = resource.getMessage();
-                    Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show();
                     break;
             }
         });
@@ -167,7 +154,7 @@ public class ProfileFragment extends Fragment {
 
         btnUploadAvatar.setOnClickListener(v -> showImagePickerDialog());
 
-        uploadViewModel.getUploadAvatarResponse().observe(getViewLifecycleOwner(), new Observer<Resource<String>>() {
+        uploadViewModel.getUploadAvatarResponse().observe(this, new Observer<Resource<String>>() {
             @Override
             public void onChanged(Resource<String> resource) {
                 switch (resource.getStatus()) {
@@ -176,7 +163,6 @@ public class ProfileFragment extends Fragment {
                         break;
                     case SUCCESS:
                         swipeRefreshLayout.setRefreshing(false);
-                        Toast.makeText(getContext(), "Cập nhật ảnh đại diện thành công!", Toast.LENGTH_SHORT).show();
                         userViewModel.getCurrentUser();
                         break;
                     case ERROR:
@@ -185,15 +171,13 @@ public class ProfileFragment extends Fragment {
                 }
             }
         });
-
-        return view;
     }
 
     private void refreshData() {
         if (userViewModel != null) {
-            userViewModel.getCurrentUserResponse().removeObservers(getViewLifecycleOwner());
+            userViewModel.getCurrentUserResponse().removeObservers(this);
             userViewModel.getCurrentUser();
-            userViewModel.getCurrentUserResponse().observe(getViewLifecycleOwner(), new Observer<Resource<User>>() {
+            userViewModel.getCurrentUserResponse().observe(this, new Observer<Resource<User>>() {
                 @Override
                 public void onChanged(Resource<User> resource) {
                     switch (resource.getStatus()) {
@@ -205,7 +189,6 @@ public class ProfileFragment extends Fragment {
                             break;
                         case ERROR:
                             swipeRefreshLayout.setRefreshing(false);
-                            Log.d("HomeFragment", "Error loading data: " + resource.getMessage());
                             break;
                     }
                 }
@@ -232,7 +215,7 @@ public class ProfileFragment extends Fragment {
         // Check gender selection
         int selectedId = radioGroupGender.getCheckedRadioButtonId();
         if (selectedId == -1) {
-            Toast.makeText(requireContext(), "Vui lòng chọn giới tính", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Vui lòng chọn giới tính", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -251,7 +234,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void showImagePickerDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Chọn ảnh")
                 .setItems(new CharSequence[]{"Chụp ảnh", "Chọn từ thư viện"}, (dialog, which) -> {
                     if (which == 0) {
@@ -270,16 +253,16 @@ public class ProfileFragment extends Fragment {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 openCamera(); // Gọi lại phương thức mở camera nếu đã được cấp quyền
             } else {
-                Toast.makeText(requireContext(), "Bạn cần cấp quyền Camera để sử dụng tính năng này", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Bạn cần cấp quyền Camera để sử dụng tính năng này", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
 
     private void openCamera() {
-        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA)
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(requireActivity(),
+            ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.CAMERA},
                     REQUEST_CAMERA_PERMISSION);
         } else {
@@ -302,7 +285,6 @@ public class ProfileFragment extends Fragment {
         return Uri.parse(path);
     }
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -310,19 +292,19 @@ public class ProfileFragment extends Fragment {
         if (resultCode == Activity.RESULT_OK) { // Use Activity.RESULT_OK instead of RESULT_OK
             if (requestCode == CAMERA_REQUEST && data != null) {
                 Bitmap photo = (Bitmap) data.getExtras().get("data");
-                Uri imageUri = getImageUri(getContext(), photo);
-                uploadViewModel.uploadAvatar(imageUri, getContext());
+                Uri imageUri = getImageUri(this, photo);
+                uploadViewModel.uploadAvatar(imageUri, this);
                 ivAvatar.setImageBitmap(photo);
             } else if (requestCode == GALLERY_REQUEST && data != null) {
                 Uri selectedImageUri = data.getData();
-                uploadViewModel.uploadAvatar(selectedImageUri, getContext());
+                uploadViewModel.uploadAvatar(selectedImageUri, this);
                 ivAvatar.setImageURI(selectedImageUri);
             }
         }
     }
 
     private void goToActivity(Class<?> activityClass) {
-        Intent intent = new Intent(requireContext(), activityClass);
+        Intent intent = new Intent(this, activityClass);
         startActivity(intent);
     }
 }

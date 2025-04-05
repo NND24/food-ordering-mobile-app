@@ -19,45 +19,10 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
+        <com.example.food_ordering_mobile_app.ui.common.CustomHeaderView
+            android:id="@+id/customHeaderView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
-
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/orders"
-                android:textColor="@color/onPrimary"
-                android:textSize="28sp"
-                android:textStyle="bold" />
-
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
-            <ImageButton
-                android:id="@+id/imageButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/backgroundColor"
-                android:src="@drawable/ic_notification_24" />
-
-            <Space
-                android:layout_width="20dp"
-                android:layout_height="wrap_content" />
-
-            <ImageButton
-                android:id="@+id/imageButton2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/backgroundColor"
-                android:src="@drawable/ic_cart_24" />
-        </LinearLayout>
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout

@@ -31,5 +31,5 @@ public interface CartService {
     @POST("/api/v1/cart/complete")
     Call<MessageResponse> completeCart(@Body Cart cart);
     @POST("/api/v1/cart/re-order")
-    Call<Cart> reOrder(@Body Cart cart);
+    Call<Cart> reOrder(@Body Map<String, Object> data);
 }

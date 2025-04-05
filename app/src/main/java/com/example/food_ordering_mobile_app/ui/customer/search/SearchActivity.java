@@ -23,6 +23,7 @@ import com.example.food_ordering_mobile_app.adapters.StoreAdapter;
 import com.example.food_ordering_mobile_app.models.foodType.FoodType;
 import com.example.food_ordering_mobile_app.models.store.Store;
 import com.example.food_ordering_mobile_app.models.user.User;
+import com.example.food_ordering_mobile_app.ui.common.CustomHeaderView;
 import com.example.food_ordering_mobile_app.ui.customer.store.StoreActivity;
 import com.example.food_ordering_mobile_app.utils.SharedPreferencesHelper;
 import com.example.food_ordering_mobile_app.viewmodels.FoodTypeViewModel;
@@ -45,7 +46,7 @@ public class SearchActivity extends AppCompatActivity {
     private StoreAdapter searchStoreAdapter;
     private List<Store> searchStores;
     private RecyclerView searchStoreRecyclerView;
-    private TextView tvName, tvRefresh, tvAmountFilter;
+    private TextView tvRefresh, tvAmountFilter;
     private EditText etSearch;
     private ImageButton btnSearch;
     private String name = "";
@@ -53,6 +54,7 @@ public class SearchActivity extends AppCompatActivity {
     private String sort = "";
     private Map<String, String> queryParams = new HashMap<>();
     private int filterAmount = 0;
+    private CustomHeaderView customHeaderView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,10 +67,11 @@ public class SearchActivity extends AppCompatActivity {
         btnSearch = findViewById(R.id.btnSearch);
         foodTypeRecyclerView = findViewById(R.id.foodTypeRecyclerView);
         searchStoreRecyclerView = findViewById(R.id.searchStoreRecyclerView);
-        tvName = findViewById(R.id.tvName);
         tvRefresh = findViewById(R.id.tvRefresh);
         tvAmountFilter = findViewById(R.id.tvAmountFilter);
+        customHeaderView = findViewById(R.id.customHeaderView);
 
+        customHeaderView.setLifecycleOwner(this);
         swipeRefreshLayout.setOnRefreshListener(this::refreshData);
 
         Intent intent = getIntent();
@@ -117,9 +120,9 @@ public class SearchActivity extends AppCompatActivity {
             if (fullName != null && !fullName.trim().isEmpty()) {
                 String[] nameParts = fullName.trim().split("\\s+");
                 String lastName = nameParts[nameParts.length - 1];
-                tvName.setText(lastName);
+                customHeaderView.setName(lastName);
             } else {
-                tvName.setText("");
+                customHeaderView.setName("");
             }
         }
 

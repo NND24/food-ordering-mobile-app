@@ -13,6 +13,9 @@ import com.example.food_ordering_mobile_app.models.notification.Notification;
 import com.example.food_ordering_mobile_app.repository.NotificationRepository;
 import com.example.food_ordering_mobile_app.utils.Resource;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class NotificationViewModel extends AndroidViewModel {
     private final NotificationRepository notificationRepository;
 
@@ -23,6 +26,11 @@ public class NotificationViewModel extends AndroidViewModel {
     private final MutableLiveData<Resource<Notification>> updateNotificationStatusResponse = new MutableLiveData<>();
     public LiveData<Resource<Notification>> getUpdateNotificationStatusResponse() {
         return updateNotificationStatusResponse;
+    }
+
+    private MutableLiveData<Resource<List<Notification>>> notifications = new MutableLiveData<>();
+    public LiveData<Resource<List<Notification>>> getNotificationsResponse() {
+        return notifications;
     }
 
     public NotificationViewModel(Application application) {
@@ -47,8 +55,18 @@ public class NotificationViewModel extends AndroidViewModel {
             @Override
             public void onChanged(Resource<Notification> resource) {
                 Log.d("NotificationViewModel", "updateNotificationStatus: " + resource);
-                updateNotificationStatusResponse.setValue(resource);
+                updateNotificationStatusResponse.postValue(resource);
             }
         });
     }
+
+    public void updateNotifications(List<Notification> notificationsList) {
+        // Tạo một đối tượng List<Notification> mới (dùng ArrayList để lưu trữ dữ liệu)
+        List<Notification> response = new ArrayList<>(notificationsList);
+
+        // Cập nhật LiveData với giá trị thành công
+        notifications.postValue(new Resource<>(Resource.Status.SUCCESS, response, null));
+    }
+
+
 }

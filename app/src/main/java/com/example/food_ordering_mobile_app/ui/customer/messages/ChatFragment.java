@@ -18,6 +18,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.food_ordering_mobile_app.R;
 import com.example.food_ordering_mobile_app.adapters.ChatAdapter;
 import com.example.food_ordering_mobile_app.models.chat.Chat;
+import com.example.food_ordering_mobile_app.ui.common.CustomHeaderView;
 import com.example.food_ordering_mobile_app.utils.Resource;
 import com.example.food_ordering_mobile_app.viewmodels.ChatViewModel;
 
@@ -30,6 +31,7 @@ public class ChatFragment extends Fragment {
     private RecyclerView chatRecyclerView;
     private ChatAdapter chatAdapter;
     private List<Chat> chatList;
+    private CustomHeaderView customHeaderView;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -37,6 +39,10 @@ public class ChatFragment extends Fragment {
 
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
         chatRecyclerView = view.findViewById(R.id.messageRecyclerView);
+        customHeaderView = view.findViewById(R.id.customHeaderView);
+
+        customHeaderView.setLifecycleOwner(getViewLifecycleOwner());
+        customHeaderView.setText("Tin nhắn");
 
         chatViewModel = new ViewModelProvider(requireActivity()).get(ChatViewModel.class);
 

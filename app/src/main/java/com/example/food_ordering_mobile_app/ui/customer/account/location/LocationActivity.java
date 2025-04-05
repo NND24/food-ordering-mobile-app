@@ -10,7 +10,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -21,13 +23,14 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.food_ordering_mobile_app.R;
 import com.example.food_ordering_mobile_app.adapters.LocationAdapter;
 import com.example.food_ordering_mobile_app.models.location.Location;
+import com.example.food_ordering_mobile_app.ui.common.CustomHeaderView;
 import com.example.food_ordering_mobile_app.utils.Resource;
 import com.example.food_ordering_mobile_app.viewmodels.LocationViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class LocationFragment extends Fragment {
+public class LocationActivity extends AppCompatActivity {
     private SwipeRefreshLayout swipeRefreshLayout;
     private LocationViewModel locationViewModel;
     private LocationAdapter locationAdapter;
@@ -37,25 +40,31 @@ public class LocationFragment extends Fragment {
     private TextView tvHomeLocationAddress, tvCompanyLocationAddress;
     private ImageView btnHomeEdit, btnHomeRemove, btnCompanyEdit, btnCompanyRemove;
     private String homeLocationId, companyLocationId;
+    private CustomHeaderView customHeaderView;
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_location, container, false);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_location);
 
-        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
-        locationRecyclerView = view.findViewById(R.id.locationRecyclerView);
-        btnAddHomeAddress = view.findViewById(R.id.btnAddHomeAddress);
-        btnCurrentHomeAddress = view.findViewById(R.id.btnCurrentHomeAddress);
-        btnAddCompanyAddress = view.findViewById(R.id.btnAddCompanyAddress);
-        btnAddNewAddress = view.findViewById(R.id.btnAddNewAddress);
-        btnCurrentCompanyAddress = view.findViewById(R.id.btnCurrentCompanyAddress);
-        tvHomeLocationAddress = view.findViewById(R.id.tvHomeLocationAddress);
-        tvCompanyLocationAddress = view.findViewById(R.id.tvCompanyLocationAddress);
-        btnHomeEdit = view.findViewById(R.id.btnHomeEdit);
-        btnHomeRemove = view.findViewById(R.id.btnHomeRemove);
-        btnCompanyEdit = view.findViewById(R.id.btnCompanyEdit);
-        btnCompanyRemove = view.findViewById(R.id.btnCompanyRemove);
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
+        locationRecyclerView = findViewById(R.id.locationRecyclerView);
+        btnAddHomeAddress = findViewById(R.id.btnAddHomeAddress);
+        btnCurrentHomeAddress = findViewById(R.id.btnCurrentHomeAddress);
+        btnAddCompanyAddress = findViewById(R.id.btnAddCompanyAddress);
+        btnAddNewAddress = findViewById(R.id.btnAddNewAddress);
+        btnCurrentCompanyAddress = findViewById(R.id.btnCurrentCompanyAddress);
+        tvHomeLocationAddress = findViewById(R.id.tvHomeLocationAddress);
+        tvCompanyLocationAddress = findViewById(R.id.tvCompanyLocationAddress);
+        btnHomeEdit = findViewById(R.id.btnHomeEdit);
+        btnHomeRemove = findViewById(R.id.btnHomeRemove);
+        btnCompanyEdit = findViewById(R.id.btnCompanyEdit);
+        btnCompanyRemove =findViewById(R.id.btnCompanyRemove);
+        customHeaderView = findViewById(R.id.customHeaderView);
+
+        customHeaderView.setLifecycleOwner(this);
+        customHeaderView.setText("Địa chỉ");
 
         // Initialize ViewModel
         locationViewModel = new ViewModelProvider(this).get(LocationViewModel.class);
@@ -64,47 +73,45 @@ public class LocationFragment extends Fragment {
         setupLocation();
 
         btnAddHomeAddress.setOnClickListener(v -> {
-            Intent intent = new Intent(this.getContext(), AddLocationActivity.class);
+            Intent intent = new Intent(this, AddLocationActivity.class);
             intent.putExtra("type", "home");
-            this.getContext().startActivity(intent);
+            this.startActivity(intent);
         });
 
         btnHomeEdit.setOnClickListener(v -> {
-            Intent intent = new Intent(this.getContext(), EditLocationActivity.class);
+            Intent intent = new Intent(this, EditLocationActivity.class);
             intent.putExtra("locationId", homeLocationId);
             intent.putExtra("type", "home");
-            this.getContext().startActivity(intent);
+            this.startActivity(intent);
         });
 
         btnAddCompanyAddress.setOnClickListener(v -> {
-            Intent intent = new Intent(this.getContext(), AddLocationActivity.class);
+            Intent intent = new Intent(this, AddLocationActivity.class);
             intent.putExtra("type", "company");
-            this.getContext().startActivity(intent);
+            this.startActivity(intent);
         });
 
         btnCompanyEdit.setOnClickListener(v -> {
-            Intent intent = new Intent(this.getContext(), EditLocationActivity.class);
+            Intent intent = new Intent(this, EditLocationActivity.class);
             intent.putExtra("locationId", companyLocationId);
             intent.putExtra("type", "company");
-            this.getContext().startActivity(intent);
+            this.startActivity(intent);
         });
 
         btnAddNewAddress.setOnClickListener(v -> {
-            Intent intent = new Intent(this.getContext(), AddLocationActivity.class);
+            Intent intent = new Intent(this, AddLocationActivity.class);
             intent.putExtra("type", "familiar");
-            this.getContext().startActivity(intent);
+            this.startActivity(intent);
         });
-
-        return view;
     }
 
     private void setupLocation() {
-        locationRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        locationRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         locationList = new ArrayList<>();
-        locationAdapter = new LocationAdapter(requireContext(), locationList);
+        locationAdapter = new LocationAdapter(this, locationList);
         locationRecyclerView.setAdapter(locationAdapter);
 
-        locationViewModel.getUserLocationsResponse().observe(getViewLifecycleOwner(), new Observer<Resource<List<Location>>>() {
+        locationViewModel.getUserLocationsResponse().observe(this, new Observer<Resource<List<Location>>>() {
             @Override
             public void onChanged(Resource<List<Location>> resource) {
                 switch (resource.getStatus()) {

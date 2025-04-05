@@ -16,7 +16,10 @@ import com.example.food_ordering_mobile_app.R;
 import com.example.food_ordering_mobile_app.adapters.NotificationAdapter;
 import com.example.food_ordering_mobile_app.models.notification.ListNotificationResponse;
 import com.example.food_ordering_mobile_app.models.notification.Notification;
+import com.example.food_ordering_mobile_app.models.user.User;
+import com.example.food_ordering_mobile_app.network.SocketManager;
 import com.example.food_ordering_mobile_app.utils.Resource;
+import com.example.food_ordering_mobile_app.utils.SharedPreferencesHelper;
 import com.example.food_ordering_mobile_app.viewmodels.NotificationViewModel;
 
 import java.util.ArrayList;
@@ -36,24 +39,24 @@ public class NotificationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_notification);
 
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
+        notificationRecyclerView = findViewById(R.id.notificationRecyclerView);
 
         notificationViewModel = new ViewModelProvider(this).get(NotificationViewModel.class);
+
+        SocketManager.connectSocket(this, notificationViewModel);
 
         setupUserNotification();
     }
 
     private void setupUserNotification() {
-        notificationRecyclerView = findViewById(R.id.notificationRecyclerView);
         notificationRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
         notificationList = new ArrayList<>();
-
         notificationAdapter = new NotificationAdapter(this, notificationList);
         notificationRecyclerView.setAdapter(notificationAdapter);
 
-        notificationViewModel.getAllNotificationsResponse().observe(this, new Observer<Resource<ListNotificationResponse>>() {
+        notificationViewModel.getNotificationsResponse().observe(this, new Observer<Resource<List<Notification>>>() {
             @Override
-            public void onChanged(Resource<ListNotificationResponse> resource) {
+            public void onChanged(Resource<List<Notification>> resource) {
                 switch (resource.getStatus()) {
                     case LOADING:
                         swipeRefreshLayout.setRefreshing(true);
@@ -61,9 +64,9 @@ public class NotificationActivity extends AppCompatActivity {
                     case SUCCESS:
                         swipeRefreshLayout.setRefreshing(false);
                         notificationList.clear();
-                        notificationList.addAll(resource.getData().getData());
+                        notificationList.addAll(resource.getData());
                         notificationAdapter.notifyDataSetChanged();
-                        Log.d("NotificationActivity", "getAllNotifications: " + resource.getData().getData().toString());
+                        Log.d("NotificationActivity", "getAllNotifications: " + resource.getData().toString());
                         break;
                     case ERROR:
                         swipeRefreshLayout.setRefreshing(false);
@@ -72,8 +75,6 @@ public class NotificationActivity extends AppCompatActivity {
                 }
             }
         });
-
-        notificationViewModel.getAllNotifications();
     }
 
     public void goBack(View view) {

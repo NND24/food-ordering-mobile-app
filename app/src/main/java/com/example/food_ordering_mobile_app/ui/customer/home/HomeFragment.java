@@ -32,13 +32,14 @@ import com.example.food_ordering_mobile_app.models.store.StoreGroupByCategory;
 import com.example.food_ordering_mobile_app.models.store.Store;
 import com.example.food_ordering_mobile_app.models.store.ListStoreResponse;
 import com.example.food_ordering_mobile_app.models.user.User;
-import com.example.food_ordering_mobile_app.ui.customer.cart.CartActivity;
-import com.example.food_ordering_mobile_app.ui.customer.notifications.NotificationActivity;
+import com.example.food_ordering_mobile_app.network.SocketManager;
+import com.example.food_ordering_mobile_app.ui.common.CustomHeaderView;
 import com.example.food_ordering_mobile_app.ui.customer.store.StoreActivity;
 import com.example.food_ordering_mobile_app.ui.customer.search.SearchActivity;
 import com.example.food_ordering_mobile_app.utils.Resource;
 import com.example.food_ordering_mobile_app.utils.SharedPreferencesHelper;
 import com.example.food_ordering_mobile_app.viewmodels.FoodTypeViewModel;
+import com.example.food_ordering_mobile_app.viewmodels.NotificationViewModel;
 import com.example.food_ordering_mobile_app.viewmodels.StoreViewModel;
 import com.example.food_ordering_mobile_app.viewmodels.UserViewModel;
 
@@ -56,6 +57,7 @@ public class HomeFragment extends Fragment {
     private UserViewModel userViewModel;
     private FoodTypeViewModel foodTypeViewModel;
     private StoreViewModel storeViewModel;
+    private NotificationViewModel notificationViewModel;
     private FoodTypeAdapter foodTypeAdapter;
     private List<FoodType> foodTypes;
     private RecyclerView foodTypeRecyclerView;
@@ -68,10 +70,11 @@ public class HomeFragment extends Fragment {
     private RecyclerView standoutStoreRecyclerView;
     private StoreStandoutAdapter standoutStoreAdapter;
     private List<Store> standoutStores;
-    private ImageButton goToNotificationBtn, goToCartBtn, btnSearch;
-    private TextView tvName, searchAllStandoutStore, searchAllRatingStore;
+    private ImageButton btnSearch;
+    private TextView searchAllStandoutStore, searchAllRatingStore;
     private EditText etSearch;
     private Set<String> selectedFoodTypes = new HashSet<>();
+    private CustomHeaderView customHeaderView;
 
     @Nullable
     @Override
@@ -85,20 +88,16 @@ public class HomeFragment extends Fragment {
         categoryRecyclerView = view.findViewById(R.id.categoryRecyclerView);
         ratingStoreRecyclerView = view.findViewById(R.id.ratingStoreRecyclerView);
         standoutStoreRecyclerView = view.findViewById(R.id.standoutStoreRecyclerView);
-        goToNotificationBtn = view.findViewById(R.id.goToNotificationBtn);
-        goToCartBtn = view.findViewById(R.id.goToCartBtn);
-        tvName = view.findViewById(R.id.tvName);
         etSearch = view.findViewById(R.id.etSearch);
         btnSearch = view.findViewById(R.id.btnSearch);
         searchAllStandoutStore = view.findViewById(R.id.searchAllStandoutStore);
         searchAllRatingStore = view.findViewById(R.id.searchAllRatingStore);
+        customHeaderView = view.findViewById(R.id.customHeaderView);
+
+        customHeaderView.setLifecycleOwner(getViewLifecycleOwner());
 
         // Sự kiện khi kéo xuống làm mới dữ liệu
         swipeRefreshLayout.setOnRefreshListener(this::refreshData);
-
-        // Sự kiện điều hướng
-        goToNotificationBtn.setOnClickListener(v -> goToActivity(NotificationActivity.class));
-        goToCartBtn.setOnClickListener(v -> goToActivity(CartActivity.class));
 
         searchAllStandoutStore.setOnClickListener(v -> {
             Intent intent = new Intent(requireContext(), SearchActivity.class);
@@ -128,6 +127,7 @@ public class HomeFragment extends Fragment {
         userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
         foodTypeViewModel = new ViewModelProvider(requireActivity()).get(FoodTypeViewModel.class);
         storeViewModel = new ViewModelProvider(requireActivity()).get(StoreViewModel.class);
+        notificationViewModel = new ViewModelProvider(this).get(NotificationViewModel.class);
 
         // Lấy dữ liệu người dùng từ SharedPreferences
         User savedUser = SharedPreferencesHelper.getInstance(requireContext()).getCurrentUser();
@@ -136,9 +136,9 @@ public class HomeFragment extends Fragment {
             if (fullName != null && !fullName.trim().isEmpty()) {
                 String[] nameParts = fullName.trim().split("\\s+");
                 String lastName = nameParts[nameParts.length - 1];
-                tvName.setText(lastName);
+                customHeaderView.setName(lastName);
             } else {
-                tvName.setText("");
+                customHeaderView.setName("");
             }
         } else {
             userViewModel.getCurrentUser();
@@ -157,9 +157,9 @@ public class HomeFragment extends Fragment {
                         if (fullName != null && !fullName.trim().isEmpty()) {
                             String[] nameParts = fullName.trim().split("\\s+");
                             String lastName = nameParts[nameParts.length - 1];
-                            tvName.setText(lastName);
+                            customHeaderView.setName(lastName);
                         } else {
-                            tvName.setText("");
+                            customHeaderView.setName("");
                         }
                         break;
                     case ERROR:
@@ -408,8 +408,5 @@ public class HomeFragment extends Fragment {
         storeViewModel.getAllStore(categoryQueryParams);
     }
 
-    private void goToActivity(Class<?> activityClass) {
-        Intent intent = new Intent(requireContext(), activityClass);
-        startActivity(intent);
-    }
+
 }
