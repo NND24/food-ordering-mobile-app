@@ -17,8 +17,8 @@ import java.util.List;
 public class LocationViewModel extends AndroidViewModel {
     private final LocationRepository locationRepository;
 
-    private final MutableLiveData<Resource<Location>> addLocationResponse = new MutableLiveData<>();
-    public LiveData<Resource<Location>> getAddLocationResponse() {
+    private final MutableLiveData<Resource<String>> addLocationResponse = new MutableLiveData<>();
+    public LiveData<Resource<String>> getAddLocationResponse() {
         return addLocationResponse;
     }
     private final MutableLiveData<Resource<Location>> locationResponse = new MutableLiveData<>();
@@ -29,12 +29,12 @@ public class LocationViewModel extends AndroidViewModel {
     public LiveData<Resource<List<Location>>> getUserLocationsResponse() {
         return userLocationsResponse;
     }
-    private final MutableLiveData<Resource<Location>> updateLocationResponse = new MutableLiveData<>();
-    public LiveData<Resource<Location>> getUpdateLocationResponse() {
+    private final MutableLiveData<Resource<String>> updateLocationResponse = new MutableLiveData<>();
+    public LiveData<Resource<String>> getUpdateLocationResponse() {
         return updateLocationResponse;
     }
-    private final MutableLiveData<Resource<Location>> deleteLocationResponse = new MutableLiveData<>();
-    public LiveData<Resource<Location>> getDeleteLocationResponse() {
+    private final MutableLiveData<Resource<String>> deleteLocationResponse = new MutableLiveData<>();
+    public LiveData<Resource<String>> getDeleteLocationResponse() {
         return deleteLocationResponse;
     }
 
@@ -44,12 +44,12 @@ public class LocationViewModel extends AndroidViewModel {
     }
 
     public void addLocation(Location location) {
-        LiveData<Resource<Location>> result = locationRepository.addLocation(location);
-        result.observeForever(new Observer<Resource<Location>>() {
+        LiveData<Resource<String>> result = locationRepository.addLocation(location);
+        result.observeForever(new Observer<Resource<String>>() {
             @Override
-            public void onChanged(Resource<Location> resource) {
+            public void onChanged(Resource<String> resource) {
                 Log.d("LocationViewModel", "addLocation: " + resource);
-                locationResponse.setValue(resource);
+                addLocationResponse.setValue(resource);
             }
         });
     }
@@ -76,11 +76,11 @@ public class LocationViewModel extends AndroidViewModel {
         });
     }
 
-    public void updateLocation(String id) {
-        LiveData<Resource<Location>> result = locationRepository.updateLocation(id);
-        result.observeForever(new Observer<Resource<Location>>() {
+    public void updateLocation(String id, Location location) {
+        LiveData<Resource<String>> result = locationRepository.updateLocation(id, location);
+        result.observeForever(new Observer<Resource<String>>() {
             @Override
-            public void onChanged(Resource<Location> resource) {
+            public void onChanged(Resource<String> resource) {
                 Log.d("LocationViewModel", "updateLocation: " + resource);
                 updateLocationResponse.setValue(resource);
             }
@@ -88,10 +88,10 @@ public class LocationViewModel extends AndroidViewModel {
     }
 
     public void deleteLocation(String id) {
-        LiveData<Resource<Location>> result = locationRepository.deleteLocation(id);
-        result.observeForever(new Observer<Resource<Location>>() {
+        LiveData<Resource<String>> result = locationRepository.deleteLocation(id);
+        result.observeForever(new Observer<Resource<String>>() {
             @Override
-            public void onChanged(Resource<Location> resource) {
+            public void onChanged(Resource<String> resource) {
                 Log.d("LocationViewModel", "deleteLocation: " + resource);
                 deleteLocationResponse.setValue(resource);
             }

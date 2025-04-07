@@ -23,7 +23,7 @@ public interface RatingService {
     @POST("/api/v1/rating/{storeId}")
     Call<String> addStoreRating(@Path("storeId") String storeId, @Body Map<String, Object> data);
     @PUT("/api/v1/rating/{storeId}")
-    Call<Rating> editStoreRating(@Path("storeId") String storeId, Rating rating);
+    Call<String> editStoreRating(@Path("ratingId") String ratingId, @Body Map<String, Object> data);
     @DELETE("/api/v1/rating/{ratingId}")
-    Call<Rating> deleteStoreRating(@Path("ratingId") String ratingId);
+    Call<String> deleteStoreRating(@Path("ratingId") String ratingId);
 }

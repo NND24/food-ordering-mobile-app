@@ -143,11 +143,11 @@ public class CartRepository {
         return result;
     }
 
-    public LiveData<Resource<Cart>> updateCart(Cart cart) {
+    public LiveData<Resource<Cart>> updateCart(Map<String, Object> data) {
         MutableLiveData<Resource<Cart>> result = new MutableLiveData<>();
         result.setValue(Resource.loading(null));
 
-        cartService.updateCart(cart).enqueue(new Callback<Cart>() {
+        cartService.updateCart(data).enqueue(new Callback<Cart>() {
             @Override
             public void onResponse(Call<Cart> call, Response<Cart> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -236,11 +236,11 @@ public class CartRepository {
         return result;
     }
 
-    public LiveData<Resource<MessageResponse>> completeCart(Cart cart) {
+    public LiveData<Resource<MessageResponse>> completeCart(Map<String, Object> data) {
         MutableLiveData<Resource<MessageResponse>> result = new MutableLiveData<>();
         result.setValue(Resource.loading(null));
 
-        cartService.completeCart(cart).enqueue(new Callback<MessageResponse>() {
+        cartService.completeCart(data).enqueue(new Callback<MessageResponse>() {
             @Override
             public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {

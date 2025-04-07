@@ -90,5 +90,6 @@
     <string name="saved_location">Saved location</string>
     <string name="company">Company</string>
     <string name="save_this_location">Save this location</string>
+    <string name="choose_this_location">Choose this location</string>
 
 </resources>

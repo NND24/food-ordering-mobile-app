@@ -23,13 +23,13 @@ public interface CartService {
     @GET("/api/v1/cart/{cartId}")
     Call<Cart> getDetailCart(@Path("cartId") String cartId);
     @POST("/api/v1/cart/update")
-    Call<Cart> updateCart(@Body Cart cart);
+    Call<Cart> updateCart(@Body Map<String, Object> data);
     @POST("/api/v1/cart/clear/item/{storeId}")
     Call<MessageResponse> clearCartItem(@Path("storeId") String cartId);
     @POST("/api/v1/cart/clear/")
     Call<MessageResponse> clearCart();
     @POST("/api/v1/cart/complete")
-    Call<MessageResponse> completeCart(@Body Cart cart);
+    Call<MessageResponse> completeCart(@Body Map<String, Object> data);
     @POST("/api/v1/cart/re-order")
     Call<Cart> reOrder(@Body Map<String, Object> data);
 }

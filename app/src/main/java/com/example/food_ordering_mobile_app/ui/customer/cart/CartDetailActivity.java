@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,15 +23,19 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.example.food_ordering_mobile_app.R;
 import com.example.food_ordering_mobile_app.adapters.CartSummaryAdapter;
+import com.example.food_ordering_mobile_app.models.cart.Cart;
 import com.example.food_ordering_mobile_app.models.cart.CartItem;
 import com.example.food_ordering_mobile_app.models.cart.CartResponse;
 import com.example.food_ordering_mobile_app.models.dish.Topping;
+import com.example.food_ordering_mobile_app.models.order.Order;
 import com.example.food_ordering_mobile_app.ui.customer.orders.OrderDetailActivity;
 import com.example.food_ordering_mobile_app.utils.Resource;
 import com.example.food_ordering_mobile_app.viewmodels.CartViewModel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CartDetailActivity extends AppCompatActivity {
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -39,7 +45,8 @@ public class CartDetailActivity extends AppCompatActivity {
     private List<CartItem> cartItemList;
     private TextView tvStoreName, tvStoreDescription, tvProvisionalTotal, tvFee, tvTotalPrice;
     private ImageView ivStoreAvatar;
-    private String storeId;
+    private Button btnCompleteCart;
+    private String storeId, deliveryAddress, customerName, customerPhonenumber, detailAddress, note, lat, lon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,14 +62,25 @@ public class CartDetailActivity extends AppCompatActivity {
         tvProvisionalTotal = findViewById(R.id.tvProvisionalTotal);
         tvFee = findViewById(R.id.tvFee);
         tvTotalPrice = findViewById(R.id.tvTotalPrice);
+        btnCompleteCart = findViewById(R.id.btnCompleteCart);
 
         storeId = getIntent().getStringExtra("storeId");
+
+        deliveryAddress = getIntent().getStringExtra("deliveryAddress") != null ? getIntent().getStringExtra("deliveryAddress") : "";
+        customerName = getIntent().getStringExtra("customerName") != null ? getIntent().getStringExtra("customerName") : "";
+        customerPhonenumber = getIntent().getStringExtra("customerPhonenumber") != null ? getIntent().getStringExtra("customerPhonenumber") : "";
+        detailAddress = getIntent().getStringExtra("detailAddress") != null ? getIntent().getStringExtra("detailAddress") : "";
+        note = getIntent().getStringExtra("note") != null ? getIntent().getStringExtra("note") : "";
+        lat = getIntent().getStringExtra("lat") != null ? getIntent().getStringExtra("lat") : "";
+        lon = getIntent().getStringExtra("lon") != null ? getIntent().getStringExtra("lon") : "";
 
         swipeRefreshLayout.setOnRefreshListener(this::refreshData);
 
         cartViewModel = new ViewModelProvider(this).get(CartViewModel.class);
 
         setupCartDetail();
+
+        btnCompleteCart.setOnClickListener(v -> handleCompleteCart());
     }
 
     private void setupCartDetail() {
@@ -133,6 +151,46 @@ public class CartDetailActivity extends AppCompatActivity {
         });
 
         cartViewModel.getUserCartInStore(storeId);
+    }
+
+    private void handleCompleteCart() {
+        // Kiểm tra các trường bắt buộc có giá trị hợp lệ
+        if (storeId == null || storeId.isEmpty()) {
+            Toast.makeText(this, "Store ID không hợp lệ", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (deliveryAddress == null || deliveryAddress.isEmpty() || lat.equals("200")  || lon.equals("200")) {
+            Toast.makeText(this, "Địa chỉ giao hàng không hợp lệ", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (customerName == null || customerName.isEmpty()) {
+            Toast.makeText(this, "Tên khách hàng không hợp lệ", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (customerPhonenumber == null || customerPhonenumber.isEmpty()) {
+            Toast.makeText(this, "Số điện thoại khách hàng không hợp lệ", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("storeId", storeId);
+        data.put("paymentMethod", "cash");
+        data.put("deliveryAddress", deliveryAddress);
+        data.put("customerName", customerName);
+        data.put("customerPhonenumber", customerPhonenumber);
+        data.put("detailAddress", detailAddress);
+        data.put("note", note);
+
+        List<Double> location = new ArrayList<>();
+        location.add(Double.parseDouble(getIntent().getStringExtra("lat")));
+        location.add(Double.parseDouble(getIntent().getStringExtra("lon")));
+        data.put("location", location);
+
+        // Gọi phương thức completeCart trong ViewModel
+        cartViewModel.completeCart(data);
     }
 
     private void refreshData() {

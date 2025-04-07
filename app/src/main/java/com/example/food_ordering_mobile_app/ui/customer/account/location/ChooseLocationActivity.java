@@ -77,7 +77,6 @@ public class ChooseLocationActivity extends AppCompatActivity implements MapEven
     private Button btnSaveLocation;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private FusedLocationProviderClient fusedLocationClient;
-    private static final String MAPBOX_ACCESS_TOKEN = "sk.eyJ1Ijoibm5kMjQiLCJhIjoiY204eTluZzl6MDhtcjJqc2FsMzN3Z3ozaCJ9.wigbyhwGl22d2pdzdntD_g"; // Replace with your token
     private Province province;
     private boolean isSelectingSuggestion = false;
     private static final int REQUEST_CODE_PROVINCE = 100;

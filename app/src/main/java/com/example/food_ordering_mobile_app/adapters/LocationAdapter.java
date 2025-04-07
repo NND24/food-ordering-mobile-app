@@ -13,6 +13,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -23,15 +25,18 @@ import com.example.food_ordering_mobile_app.models.order.Order;
 import com.example.food_ordering_mobile_app.models.order.OrderItem;
 import com.example.food_ordering_mobile_app.ui.customer.account.location.EditLocationActivity;
 import com.example.food_ordering_mobile_app.ui.customer.orders.OrderDetailActivity;
+import com.example.food_ordering_mobile_app.viewmodels.CartViewModel;
+import com.example.food_ordering_mobile_app.viewmodels.LocationViewModel;
 
 import java.util.List;
 
 public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHolder> {
     private Context context;
-
     private List<Location> locationList;
+    private FragmentActivity activity;
 
-    public LocationAdapter(Context context, List<Location> locationList) {
+    public LocationAdapter(FragmentActivity activity, Context context, List<Location> locationList) {
+        this.activity = activity;
         this.context = context;
         this.locationList = locationList;
     }
@@ -58,7 +63,20 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
             context.startActivity(intent);
         });
 
+        LocationViewModel locationViewModel = new ViewModelProvider(activity).get(LocationViewModel.class);
+
         holder.btnRemove.setOnClickListener(v -> {
+            new android.app.AlertDialog.Builder(context)
+                    .setTitle("Xác nhận xóa")
+                    .setMessage("Bạn có chắc chắn muốn xóa địa chỉ này?")
+                    .setPositiveButton("Có", (dialog, which) -> {
+                        locationViewModel.deleteLocation(location.getId());
+                    })
+                    .setNegativeButton("Không", (dialog, which) -> {
+                        dialog.dismiss();
+                    })
+                    .create()
+                    .show();
         });
     }
 

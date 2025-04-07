@@ -23,8 +23,8 @@ public class NotificationViewModel extends AndroidViewModel {
     public LiveData<Resource<ListNotificationResponse>> getAllNotificationsResponse() {
         return allNotificationsResponse;
     }
-    private final MutableLiveData<Resource<Notification>> updateNotificationStatusResponse = new MutableLiveData<>();
-    public LiveData<Resource<Notification>> getUpdateNotificationStatusResponse() {
+    private final MutableLiveData<Resource<ListNotificationResponse>> updateNotificationStatusResponse = new MutableLiveData<>();
+    public LiveData<Resource<ListNotificationResponse>> getUpdateNotificationStatusResponse() {
         return updateNotificationStatusResponse;
     }
 
@@ -50,10 +50,10 @@ public class NotificationViewModel extends AndroidViewModel {
     }
 
     public void updateNotificationStatus(String id) {
-        LiveData<Resource<Notification>> result = notificationRepository.updateNotificationStatus(id);
-        result.observeForever(new Observer<Resource<Notification>>() {
+        LiveData<Resource<ListNotificationResponse>> result = notificationRepository.updateNotificationStatus(id);
+        result.observeForever(new Observer<Resource<ListNotificationResponse>>() {
             @Override
-            public void onChanged(Resource<Notification> resource) {
+            public void onChanged(Resource<ListNotificationResponse> resource) {
                 Log.d("NotificationViewModel", "updateNotificationStatus: " + resource);
                 updateNotificationStatusResponse.postValue(resource);
             }

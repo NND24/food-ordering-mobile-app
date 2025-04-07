@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -26,10 +28,18 @@ import com.example.food_ordering_mobile_app.R;
 import com.example.food_ordering_mobile_app.adapters.DishBigAdapter;
 import com.example.food_ordering_mobile_app.adapters.DishAdapter;
 import com.example.food_ordering_mobile_app.adapters.DishGroupByCategoryAdapter;
+import com.example.food_ordering_mobile_app.adapters.FavoriteAdapter;
 import com.example.food_ordering_mobile_app.adapters.RatingShortAdapter;
+import com.example.food_ordering_mobile_app.models.MessageResponse;
+import com.example.food_ordering_mobile_app.models.cart.Cart;
+import com.example.food_ordering_mobile_app.models.cart.CartItem;
+import com.example.food_ordering_mobile_app.models.cart.ListCartResponse;
 import com.example.food_ordering_mobile_app.models.dish.DishGroupByCategory;
 import com.example.food_ordering_mobile_app.models.dish.DishStore;
 import com.example.food_ordering_mobile_app.models.dish.ListDishResponse;
+import com.example.food_ordering_mobile_app.models.dish.Topping;
+import com.example.food_ordering_mobile_app.models.favorite.Favorite;
+import com.example.food_ordering_mobile_app.models.favorite.FavoriteResponse;
 import com.example.food_ordering_mobile_app.models.rating.ListRatingResponse;
 import com.example.food_ordering_mobile_app.models.rating.Rating;
 import com.example.food_ordering_mobile_app.models.foodType.FoodType;
@@ -40,10 +50,13 @@ import com.example.food_ordering_mobile_app.ui.customer.dish.DishActivity;
 import com.example.food_ordering_mobile_app.ui.customer.rating.RatingActivity;
 import com.example.food_ordering_mobile_app.utils.Functions;
 import com.example.food_ordering_mobile_app.utils.Resource;
+import com.example.food_ordering_mobile_app.viewmodels.CartViewModel;
 import com.example.food_ordering_mobile_app.viewmodels.DishViewModel;
+import com.example.food_ordering_mobile_app.viewmodels.FavoriteViewModel;
 import com.example.food_ordering_mobile_app.viewmodels.RatingViewModel;
 import com.example.food_ordering_mobile_app.viewmodels.StoreViewModel;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -54,6 +67,8 @@ public class StoreActivity extends AppCompatActivity {
     private StoreViewModel storeViewModel;
     private DishViewModel dishViewModel;
     private RatingViewModel ratingViewModel;
+    private FavoriteViewModel favoriteViewModel;
+    private CartViewModel cartViewModel;
     private RecyclerView dishRecyclerView;
     private DishGroupByCategoryAdapter dishGroupByCategoryAdapter;
     private List<DishGroupByCategory> dishGroupByCategoryList;
@@ -63,9 +78,13 @@ public class StoreActivity extends AppCompatActivity {
     private RecyclerView reviewRecyclerView;
     private RatingShortAdapter reviewAdapter;
     private List<Rating> reviewList;
+    private List<Store> favoriteList;
     private ImageView ivStoreAvatar, ivStoreCover, ivStar;
-    private TextView tvStoreName, tvStoreFoodType, tvAvgRating, tvRatingOpen, tvAmountRating, tvRatingText, tvRatingClose, tvDescription, tvDot;
+    private ImageButton btnFavorite;
+    private TextView tvStoreName, tvStoreFoodType, tvAvgRating, tvRatingOpen, tvAmountRating, tvRatingText, tvRatingClose, tvDescription, tvDot, tvTotalPrice, tvTotalQuantity;
     private String storeId;
+    private Cart currentCart = null;
+    private LinearLayout footer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,9 +105,13 @@ public class StoreActivity extends AppCompatActivity {
         tvRatingClose = findViewById(R.id.tvRatingClose);
         tvDescription = findViewById(R.id.tvDescription);
         tvDot = findViewById(R.id.tvDot);
+        btnFavorite = findViewById(R.id.btnFavorite);
         dishBigRecyclerView = findViewById(R.id.dishBigRecyclerView);
         dishRecyclerView = findViewById(R.id.dishRecyclerView);
         reviewRecyclerView = findViewById(R.id.reviewRecyclerView);
+        footer = findViewById(R.id.footer);
+        tvTotalPrice = findViewById(R.id.tvTotalPrice);
+        tvTotalQuantity = findViewById(R.id.tvTotalQuantity);
 
         storeId = getIntent().getStringExtra("storeId");
 
@@ -97,11 +120,51 @@ public class StoreActivity extends AppCompatActivity {
         storeViewModel = new ViewModelProvider(this).get(StoreViewModel.class);
         dishViewModel = new ViewModelProvider(this).get(DishViewModel.class);
         ratingViewModel = new ViewModelProvider(this).get(RatingViewModel.class);
+        favoriteViewModel = new ViewModelProvider(this).get(FavoriteViewModel.class);
+        cartViewModel = new ViewModelProvider(this).get(CartViewModel.class);
 
         setupStore();
         setupBigDish();
         setupDish();
         setupShortRating();
+        setupUserFavorite();
+        setupUserCart();
+
+        favoriteViewModel.getRemoveFavoriteResponse().observe(this, new Observer<Resource<MessageResponse>>() {
+            @Override
+            public void onChanged(Resource<MessageResponse> resource) {
+                switch (resource.getStatus()) {
+                    case LOADING:
+                        swipeRefreshLayout.setRefreshing(true);
+                        break;
+                    case SUCCESS:
+                        swipeRefreshLayout.setRefreshing(false);
+                        setupUserFavorite();
+                        break;
+                    case ERROR:
+                        swipeRefreshLayout.setRefreshing(false);
+                        break;
+                }
+            }
+        });
+
+        favoriteViewModel.getAddFavoriteResponse().observe(this, new Observer<Resource<MessageResponse>>() {
+            @Override
+            public void onChanged(Resource<MessageResponse> resource) {
+                switch (resource.getStatus()) {
+                    case LOADING:
+                        swipeRefreshLayout.setRefreshing(true);
+                        break;
+                    case SUCCESS:
+                        swipeRefreshLayout.setRefreshing(false);
+                        setupUserFavorite();
+                        break;
+                    case ERROR:
+                        swipeRefreshLayout.setRefreshing(false);
+                        break;
+                }
+            }
+        });
     }
 
     private void setupStore() {
@@ -194,7 +257,7 @@ public class StoreActivity extends AppCompatActivity {
     private void setupBigDish() {
         dishBigRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         dishBigList = new ArrayList<>();
-        dishBigAdapter = new DishBigAdapter(this, dishBigList, dishBig -> {
+        dishBigAdapter = new DishBigAdapter(this,this, dishBigList, dishBig -> {
             Intent intent = new Intent(this, DishActivity.class);
             intent.putExtra("dishId", dishBig.getId());
             startActivity(intent);
@@ -292,16 +355,123 @@ public class StoreActivity extends AppCompatActivity {
         ratingViewModel.getAllStoreRating(storeId, queryParams);
     }
 
-    private void refreshData() {
-        storeViewModel.getStoreInformation(storeId);
-        dishViewModel.getAllBigDish(storeId);
-        dishViewModel.getAllDish(storeId);
+    private void setupUserFavorite() {
+        favoriteViewModel.getUserFavorite();
+        favoriteViewModel.getUserFavoriteResponse().observe(this, new Observer<Resource<FavoriteResponse>>() {
+            @Override
+            public void onChanged(Resource<FavoriteResponse> resource) {
+                switch (resource.getStatus()) {
+                    case LOADING:
+                        swipeRefreshLayout.setRefreshing(true);
+                        break;
+                    case SUCCESS:
+                        swipeRefreshLayout.setRefreshing(false);
+                        List<Store> stores = resource.getData().getData().getStore();
+                        favoriteList.clear();
+                        favoriteList.addAll(stores);
 
-        Map<String, String> queryParams = new HashMap<>();
-        queryParams.put("sort", "");
-        queryParams.put("limit", "3");
-        queryParams.put("page", "1");
-        ratingViewModel.getAllStoreRating(storeId, queryParams);
+                        boolean isFavorite = false;
+
+                        for (Store store : stores) {
+                            if (store.getId().equals(storeId)) {
+                                isFavorite = true;
+                                break;
+                            }
+                        }
+
+                        if (isFavorite) {
+                            btnFavorite.setImageResource(R.drawable.ic_favorite_active_24); // icon active
+                            btnFavorite.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    favoriteViewModel.removeFavorite(storeId);
+                                }
+                            });
+                        } else {
+                            btnFavorite.setImageResource(R.drawable.ic_favorite_white_24); // icon mặc định
+                            btnFavorite.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    favoriteViewModel.addFavorite(storeId);
+                                }
+                            });
+                        }
+                        break;
+                    case ERROR:
+                        swipeRefreshLayout.setRefreshing(false);
+                        break;
+                }
+            }
+        });
+    }
+
+    private void setupUserCart() {
+        cartViewModel.getUserCart();
+        cartViewModel.getUserCartResponse().observe(this, new Observer<Resource<ListCartResponse>>() {
+            @Override
+            public void onChanged(Resource<ListCartResponse> resource) {
+                switch (resource.getStatus()) {
+                    case LOADING:
+                        swipeRefreshLayout.setRefreshing(true);
+                        break;
+                    case SUCCESS:
+                        swipeRefreshLayout.setRefreshing(false);
+                        List<Cart> cartList = resource.getData().getData();
+
+                        for (Cart cart : cartList) {
+                            if (cart.getStore() != null && storeId.equals(cart.getStore().getId())) {
+                                currentCart = cart;
+                                break;
+                            }
+                        }
+
+                        boolean hasCart = currentCart != null;
+                        footer.setVisibility(hasCart ? View.VISIBLE : View.GONE);
+                        swipeRefreshLayout.setPadding(0, 0, 0, hasCart ? 0 : 70);
+
+                        break;
+                    case ERROR:
+                        swipeRefreshLayout.setRefreshing(false);
+                        currentCart = null;
+                        break;
+                }
+            }
+        });
+    }
+
+    private void calculateCartPrice(Cart currentCart) {
+        double totalPrice = 0;
+        int totalQuantity = 0;
+
+        if (currentCart != null && currentCart.getItems() != null) {
+            for (CartItem item : currentCart.getItems()) {
+                double dishPrice = (item.getDish() != null ? item.getDish().getPrice() : 0) * item.getQuantity();
+
+                double toppingsPrice = 0;
+                if (item.getToppings() != null) {
+                    for (Topping topping : item.getToppings()) {
+                        toppingsPrice += (topping.getPrice() != null ? topping.getPrice() : 0);
+                    }
+                    toppingsPrice *= item.getQuantity();
+                }
+
+                totalPrice += dishPrice + toppingsPrice;
+                totalQuantity += item.getQuantity();
+            }
+        }
+
+        DecimalFormat formatter = new DecimalFormat("#,### đ");
+        tvTotalPrice.setText(formatter.format(totalPrice));
+        tvTotalQuantity.setText(String.valueOf(totalQuantity));
+    }
+
+    private void refreshData() {
+        setupStore();
+        setupBigDish();
+        setupDish();
+        setupShortRating();
+        setupUserFavorite();
+        setupUserCart();
     }
 
     public void goBack(View view) {

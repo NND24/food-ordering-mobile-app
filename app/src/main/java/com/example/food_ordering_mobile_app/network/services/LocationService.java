@@ -15,13 +15,13 @@ import retrofit2.http.Path;
 
 public interface LocationService {
     @POST("/api/v1/location/add-location")
-    Call<Location> addLocation(@Body Location location);
+    Call<String> addLocation(@Body Location location);
     @GET("/api/v1/location/get-location/{id}")
     Call<Location> getLocation(@Path("id") String locationId);
     @GET("/api/v1/location/get-user-locations")
     Call<List<Location>> getUserLocations();
     @PUT("/api/v1/location/update-location/{id}")
-    Call<Location> updateLocation(@Path("id") String id);
+    Call<String> updateLocation(@Path("id") String id, @Body Location location);
     @DELETE("/api/v1/location/delete-location/{id}")
-    Call<Location> deleteLocation(@Path("id") String id);
+    Call<String> deleteLocation(@Path("id") String id);
 }

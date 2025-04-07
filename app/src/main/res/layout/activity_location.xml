@@ -246,8 +246,8 @@
 
                 <ImageView
                     android:id="@+id/btnCompanyRemove"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     app:srcCompat="@drawable/ic_trash" />
             </LinearLayout>
 
@@ -261,15 +261,6 @@
             android:layout_width="match_parent"
             android:layout_height="6dp"
             android:background="@color/primaryBorderColor" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="15dp" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/locationRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
 
         <Space
             android:layout_width="match_parent"
@@ -317,6 +308,16 @@
             </LinearLayout>
 
         </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="15dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/locationRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
     </LinearLayout>
     </androidx.core.widget.NestedScrollView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

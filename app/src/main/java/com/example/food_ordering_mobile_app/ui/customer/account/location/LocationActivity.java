@@ -24,6 +24,7 @@ import com.example.food_ordering_mobile_app.R;
 import com.example.food_ordering_mobile_app.adapters.LocationAdapter;
 import com.example.food_ordering_mobile_app.models.location.Location;
 import com.example.food_ordering_mobile_app.ui.common.CustomHeaderView;
+import com.example.food_ordering_mobile_app.ui.customer.cart.CartActivity;
 import com.example.food_ordering_mobile_app.utils.Resource;
 import com.example.food_ordering_mobile_app.viewmodels.LocationViewModel;
 
@@ -39,7 +40,7 @@ public class LocationActivity extends AppCompatActivity {
     private LinearLayout btnAddHomeAddress, btnCurrentHomeAddress, btnAddCompanyAddress, btnCurrentCompanyAddress, btnAddNewAddress;
     private TextView tvHomeLocationAddress, tvCompanyLocationAddress;
     private ImageView btnHomeEdit, btnHomeRemove, btnCompanyEdit, btnCompanyRemove;
-    private String homeLocationId, companyLocationId;
+    private String homeLocationId = "", companyLocationId = "";
     private CustomHeaderView customHeaderView;
 
     @Override
@@ -103,12 +104,80 @@ public class LocationActivity extends AppCompatActivity {
             intent.putExtra("type", "familiar");
             this.startActivity(intent);
         });
+
+        btnHomeRemove.setOnClickListener(v -> {
+            if(homeLocationId != "") {
+                new android.app.AlertDialog.Builder(this)
+                        .setTitle("Xác nhận xóa")
+                        .setMessage("Bạn có chắc chắn muốn xóa địa chỉ này?")
+                        .setPositiveButton("Có", (dialog, which) -> {
+                            locationViewModel.deleteLocation(homeLocationId);
+                        })
+                        .setNegativeButton("Không", (dialog, which) -> {
+                            dialog.dismiss();
+                        })
+                        .create()
+                        .show();
+            }
+        });
+
+        btnCompanyRemove.setOnClickListener(v -> {
+            if(companyLocationId != "") {
+                new android.app.AlertDialog.Builder(this)
+                        .setTitle("Xác nhận xóa")
+                        .setMessage("Bạn có chắc chắn muốn xóa địa chỉ này?")
+                        .setPositiveButton("Có", (dialog, which) -> {
+                            locationViewModel.deleteLocation(companyLocationId);
+                        })
+                        .setNegativeButton("Không", (dialog, which) -> {
+                            dialog.dismiss();
+                        })
+                        .create()
+                        .show();
+            }
+        });
+
+        locationViewModel.getUpdateLocationResponse().observe(this, new Observer<Resource<String>>() {
+            @Override
+            public void onChanged(Resource<String> resource) {
+                switch (resource.getStatus()) {
+                    case LOADING:
+                        swipeRefreshLayout.setRefreshing(true);
+                        break;
+                    case SUCCESS:
+                        swipeRefreshLayout.setRefreshing(false);
+                        locationViewModel.getUserLocations();
+                        break;
+                    case ERROR:
+                        swipeRefreshLayout.setRefreshing(false);
+                        break;
+                }
+            }
+        });
+
+        locationViewModel.getDeleteLocationResponse().observe(this, new Observer<Resource<String>>() {
+            @Override
+            public void onChanged(Resource<String> resource) {
+                switch (resource.getStatus()) {
+                    case LOADING:
+                        swipeRefreshLayout.setRefreshing(true);
+                        break;
+                    case SUCCESS:
+                        swipeRefreshLayout.setRefreshing(false);
+                        locationViewModel.getUserLocations();
+                        break;
+                    case ERROR:
+                        swipeRefreshLayout.setRefreshing(false);
+                        break;
+                }
+            }
+        });
     }
 
     private void setupLocation() {
-        locationRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        locationRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         locationList = new ArrayList<>();
-        locationAdapter = new LocationAdapter(this, locationList);
+        locationAdapter = new LocationAdapter(LocationActivity.this,this, locationList);
         locationRecyclerView.setAdapter(locationAdapter);
 
         locationViewModel.getUserLocationsResponse().observe(this, new Observer<Resource<List<Location>>>() {
@@ -150,14 +219,14 @@ public class LocationActivity extends AppCompatActivity {
                         if(!companyLocations.isEmpty()) {
                             btnAddCompanyAddress.setVisibility(View.GONE);
                             btnCurrentCompanyAddress.setVisibility(View.VISIBLE);
-                            tvHomeLocationAddress.setText(companyLocations.get(0).getAddress());
+                            tvCompanyLocationAddress.setText(companyLocations.get(0).getAddress());
                             homeLocationId = companyLocations.get(0).getId();
                         } else {
                             btnAddCompanyAddress.setVisibility(View.VISIBLE);
                             btnCurrentCompanyAddress.setVisibility(View.GONE);
                         }
 
-                        locationList.addAll(resource.getData());
+                        locationList.addAll(familiarLocations);
                         locationAdapter.notifyDataSetChanged();
                         break;
                     case ERROR:

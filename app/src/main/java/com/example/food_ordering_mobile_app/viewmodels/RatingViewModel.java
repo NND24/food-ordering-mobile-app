@@ -18,6 +18,8 @@ import com.example.food_ordering_mobile_app.utils.Resource;
 import java.util.List;
 import java.util.Map;
 
+import retrofit2.http.Body;
+
 public class RatingViewModel extends AndroidViewModel {
     private final RatingRepository ratingRepository;
 
@@ -33,12 +35,12 @@ public class RatingViewModel extends AndroidViewModel {
     public LiveData<Resource<String>> getAddStoreRatingResponse() {
         return addStoreRatingResponse;
     }
-    private final MutableLiveData<Resource<Rating>> editStoreRatingResponse = new MutableLiveData<>();
-    public LiveData<Resource<Rating>> getEditStoreRatingResponse() {
+    private final MutableLiveData<Resource<String>> editStoreRatingResponse = new MutableLiveData<>();
+    public LiveData<Resource<String>> getEditStoreRatingResponse() {
         return editStoreRatingResponse;
     }
-    private final MutableLiveData<Resource<Rating>> deleteStoreRatingResponse = new MutableLiveData<>();
-    public LiveData<Resource<Rating>> getDeleteStoreRatingResponse() {
+    private final MutableLiveData<Resource<String>> deleteStoreRatingResponse = new MutableLiveData<>();
+    public LiveData<Resource<String>> getDeleteStoreRatingResponse() {
         return deleteStoreRatingResponse;
     }
 
@@ -69,8 +71,8 @@ public class RatingViewModel extends AndroidViewModel {
         });
     }
 
-    public void addStoreRating(String storeId, List<String> dishes, float rating, String comment) {
-        LiveData<Resource<String>> result = ratingRepository.addStoreRating(storeId, dishes, rating, comment);
+    public void addStoreRating(String storeId, Map<String, Object> data) {
+        LiveData<Resource<String>> result = ratingRepository.addStoreRating(storeId, data);
         result.observeForever(new Observer<Resource<String>>() {
             @Override
             public void onChanged(Resource<String> resource) {
@@ -80,34 +82,22 @@ public class RatingViewModel extends AndroidViewModel {
         });
     }
 
-    public void addStoreRatingImages(String storeId, List<String> dishes, float rating, String comment, List<DishImage> imageUrls) {
-        LiveData<Resource<String>> result = ratingRepository.addStoreRatingImage(storeId, dishes, rating, comment, imageUrls);
+    public void editStoreRating(String ratingId, Map<String, Object> data) {
+        LiveData<Resource<String>> result = ratingRepository.editStoreRating(ratingId, data);
         result.observeForever(new Observer<Resource<String>>() {
             @Override
             public void onChanged(Resource<String> resource) {
-                Log.d("RatingViewModel", "getCurrentUser: " + resource);
-                addStoreRatingResponse.setValue(resource);
-            }
-        });
-    }
-
-    public void editStoreRating(String storeId, Rating rating) {
-        LiveData<Resource<Rating>> result = ratingRepository.editStoreRating(storeId, rating);
-        result.observeForever(new Observer<Resource<Rating>>() {
-            @Override
-            public void onChanged(Resource<Rating> resource) {
                 Log.d("RatingViewModel", "getCurrentUser: " + resource);
                 editStoreRatingResponse.setValue(resource);
             }
         });
     }
 
-
     public void deleteStoreRating(String ratingId) {
-        LiveData<Resource<Rating>> result = ratingRepository.deleteStoreRating(ratingId);
-        result.observeForever(new Observer<Resource<Rating>>() {
+        LiveData<Resource<String>> result = ratingRepository.deleteStoreRating(ratingId);
+        result.observeForever(new Observer<Resource<String>>() {
             @Override
-            public void onChanged(Resource<Rating> resource) {
+            public void onChanged(Resource<String> resource) {
                 Log.d("RatingViewModel", "getCurrentUser: " + resource);
                 deleteStoreRatingResponse.setValue(resource);
             }

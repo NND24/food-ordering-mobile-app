@@ -18,6 +18,7 @@ import com.example.food_ordering_mobile_app.repository.CartRepository;
 import com.example.food_ordering_mobile_app.utils.Resource;
 
 import java.util.List;
+import java.util.Map;
 
 public class CartViewModel extends AndroidViewModel {
     private final CartRepository cartRepository;
@@ -98,8 +99,8 @@ public class CartViewModel extends AndroidViewModel {
         });
     }
 
-    public void updateCart(Cart cart) {
-        LiveData<Resource<Cart>> result = cartRepository.updateCart(cart);
+    public void updateCart(Map<String, Object> data) {
+        LiveData<Resource<Cart>> result = cartRepository.updateCart(data);
         result.observeForever(new Observer<Resource<Cart>>() {
             @Override
             public void onChanged(Resource<Cart> resource) {
@@ -131,8 +132,8 @@ public class CartViewModel extends AndroidViewModel {
         });
     }
 
-    public void completeCart(Cart cart) {
-        LiveData<Resource<MessageResponse>> result = cartRepository.completeCart(cart);
+    public void completeCart(Map<String, Object> data) {
+        LiveData<Resource<MessageResponse>> result = cartRepository.completeCart(data);
         result.observeForever(new Observer<Resource<MessageResponse>>() {
             @Override
             public void onChanged(Resource<MessageResponse> resource) {

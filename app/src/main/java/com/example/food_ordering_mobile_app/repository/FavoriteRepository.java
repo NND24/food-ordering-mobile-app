@@ -76,13 +76,13 @@ public class FavoriteRepository {
         return result;
     }
 
-    public LiveData<Resource<Favorite>> addFavorite(Favorite favorite) {
-        MutableLiveData<Resource<Favorite>> result = new MutableLiveData<>();
+    public LiveData<Resource<MessageResponse>> addFavorite(String storeId) {
+        MutableLiveData<Resource<MessageResponse>> result = new MutableLiveData<>();
         result.setValue(Resource.loading(null));
 
-        favoriteService.addFavorite(favorite).enqueue(new Callback<Favorite>() {
+        favoriteService.addFavorite(storeId).enqueue(new Callback<MessageResponse>() {
             @Override
-            public void onResponse(Call<Favorite> call, Response<Favorite> response) {
+            public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Log.d("FavoriteRepository", "Success getCurrentUser: " + response.body());
                     result.setValue(Resource.success("Lay thong tin thành công!", response.body()));
@@ -99,7 +99,7 @@ public class FavoriteRepository {
             }
 
             @Override
-            public void onFailure(Call<Favorite> call, Throwable t) {
+            public void onFailure(Call<MessageResponse> call, Throwable t) {
                 result.setValue(Resource.error("Lỗi kết nối: " + t.getMessage(), null));
             }
         });

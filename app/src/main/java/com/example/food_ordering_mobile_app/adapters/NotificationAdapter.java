@@ -9,10 +9,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.food_ordering_mobile_app.R;
 import com.example.food_ordering_mobile_app.models.notification.Notification;
+import com.example.food_ordering_mobile_app.viewmodels.LocationViewModel;
+import com.example.food_ordering_mobile_app.viewmodels.NotificationViewModel;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -25,11 +29,13 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     private Context context;
     private List<Notification> notificationList;
     private OnNotificationClickListener onNotificationClickListener;
+    private FragmentActivity activity;
     public interface OnNotificationClickListener {
         void onNotificationClick(Notification notification);
     }
 
-    public NotificationAdapter(Context context, List<Notification> cartList) {
+    public NotificationAdapter(FragmentActivity activity, Context context, List<Notification> cartList) {
+        this.activity = activity;
         this.context = context;
         this.notificationList = cartList;
     }
@@ -86,10 +92,10 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             holder.tvStatus.setTextColor((context.getResources().getColor(R.color.primaryColor)));
         }
 
-        holder.itemView.setOnClickListener(v -> {
-            if (onNotificationClickListener != null) {
-                onNotificationClickListener.onNotificationClick(notification);
-            }
+        NotificationViewModel notificationViewModel = new ViewModelProvider(activity).get(NotificationViewModel.class);
+
+        holder.notificationContainer.setOnClickListener(v -> {
+            notificationViewModel.updateNotificationStatus(notification.getId());
         });
     }
 

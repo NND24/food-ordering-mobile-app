@@ -27,10 +27,9 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.example.food_ordering_mobile_app.R;
 import com.example.food_ordering_mobile_app.models.dish.DishImage;
-import com.example.food_ordering_mobile_app.models.order.OrderItem;
 import com.example.food_ordering_mobile_app.models.order.OrderResponse;
 import com.example.food_ordering_mobile_app.models.order.OrderStore;
-import com.example.food_ordering_mobile_app.models.store.Store;
+import com.example.food_ordering_mobile_app.models.rating.Rating;
 import com.example.food_ordering_mobile_app.utils.Resource;
 import com.example.food_ordering_mobile_app.viewmodels.OrderViewModel;
 import com.example.food_ordering_mobile_app.viewmodels.RatingViewModel;
@@ -41,18 +40,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AddRatingActivity extends AppCompatActivity {
+public class EditRatingActivity extends AppCompatActivity {
     private UploadViewModel uploadViewModel;
     private RatingViewModel ratingViewModel;
-    private OrderViewModel orderViewModel;
-    private String storeId, orderId;
+    private String storeId, ratingId;
     private static final int PICK_IMAGES_REQUEST = 1;
     private List<Uri> selectedImageUris = new ArrayList<>();
     private RatingBar ratingBar;
     private EditText editText;
     private LinearLayout imagePreviewContainer, btnChooseImage;
     private Button submitButton;
-    private List<OrderItem> orderItemList;
     private TextView tvStoreName;
     private ImageView ivStoreAvatar;
 
@@ -60,11 +57,11 @@ public class AddRatingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_add_rating);
+        setContentView(R.layout.activity_edit_rating);
 
         Intent intent = getIntent();
         storeId = intent.getStringExtra("storeId");
-        orderId = intent.getStringExtra("orderId");
+        ratingId = intent.getStringExtra("ratingId");
 
         ratingBar = findViewById(R.id.ratingBar);
         editText = findViewById(R.id.editText);
@@ -76,15 +73,14 @@ public class AddRatingActivity extends AppCompatActivity {
 
         uploadViewModel = new ViewModelProvider(this).get(UploadViewModel.class);
         ratingViewModel = new ViewModelProvider(this).get(RatingViewModel.class);
-        orderViewModel = new ViewModelProvider(this).get(OrderViewModel.class);
+
+        setupGetRating();
 
         btnChooseImage.setOnClickListener(view -> openImagePicker());
 
-        setupOrderDetail();
-
         submitButton.setOnClickListener(view -> uploadImagesAndSubmitRating());
 
-        ratingViewModel.getAddStoreRatingResponse().observe(this, new Observer<Resource<String>>() {
+        ratingViewModel.getEditStoreRatingResponse().observe(this, new Observer<Resource<String>>() {
             @Override
             public void onChanged(Resource<String> resource) {
                 switch (resource.getStatus()) {
@@ -92,52 +88,14 @@ public class AddRatingActivity extends AppCompatActivity {
                         // Hiển thị loading nếu cần
                         break;
                     case SUCCESS:
-                        Intent intent = new Intent(AddRatingActivity.this, RatingActivity.class);
+                        Intent intent = new Intent(EditRatingActivity.this, RatingActivity.class);
                         intent.putExtra("storeId", storeId);
                         startActivity(intent);
 
-                        Toast.makeText(AddRatingActivity.this, "Đánh giá đã được gửi!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EditRatingActivity.this, "Sửa đánh giá thành công!", Toast.LENGTH_SHORT).show();
                         break;
                     case ERROR:
-                        Toast.makeText(AddRatingActivity.this, "Lỗi khi upload ảnh", Toast.LENGTH_SHORT).show();
-                        break;
-                }
-            }
-        });
-    }
-
-    private void setupOrderDetail() {
-        orderItemList = new ArrayList<>();
-        orderViewModel.getOrderDetail(orderId);
-        orderViewModel.getOrderDetailResponse().observe(this, new Observer<Resource<OrderResponse>>() {
-            @Override
-            public void onChanged(Resource<OrderResponse> resource) {
-                switch (resource.getStatus()) {
-                    case LOADING:
-                        break;
-                    case SUCCESS:
-                        orderItemList.clear();
-                        orderItemList.addAll(resource.getData().getData().getItems());
-                        OrderStore store = resource.getData().getData().getStore();
-                        tvStoreName.setText(store.getName());
-
-                        String storeAvatarUrl = store.getAvatar() != null ? store.getAvatar().getUrl() : null;
-                        Glide.with(ivStoreAvatar)
-                                .asBitmap()
-                                .load(storeAvatarUrl)
-                                .override(95, 95)
-                                .centerCrop()
-                                .into(new BitmapImageViewTarget(ivStoreAvatar) {
-                                    @Override
-                                    protected void setResource(Bitmap resource) {
-                                        RoundedBitmapDrawable roundedDrawable =
-                                                RoundedBitmapDrawableFactory.create(ivStoreAvatar.getResources(), resource);
-                                        roundedDrawable.setCornerRadius(6);
-                                        ivStoreAvatar.setImageDrawable(roundedDrawable);
-                                    }
-                                });
-                        break;
-                    case ERROR:
+                        Toast.makeText(EditRatingActivity.this, "Lỗi khi upload ảnh", Toast.LENGTH_SHORT).show();
                         break;
                 }
             }
@@ -166,6 +124,55 @@ public class AddRatingActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    private void setupGetRating() {
+        ratingViewModel.getDetailRating(ratingId);
+        ratingViewModel.getDetailRatingResponse().observe(this, new Observer<Resource<Rating>>() {
+            @Override
+            public void onChanged(Resource<Rating> resource) {
+                switch (resource.getStatus()) {
+                    case LOADING:
+                        break;
+                    case SUCCESS:
+                        Rating rating = resource.getData();
+                        tvStoreName.setText(rating.getStore().getName());
+
+                        String storeAvatarUrl = rating.getStore().getAvatar() != null ? rating.getStore().getAvatar().getUrl() : null;
+                        Glide.with(ivStoreAvatar)
+                                .asBitmap()
+                                .load(storeAvatarUrl)
+                                .override(95, 95)
+                                .centerCrop()
+                                .into(new BitmapImageViewTarget(ivStoreAvatar) {
+                                    @Override
+                                    protected void setResource(Bitmap resource) {
+                                        RoundedBitmapDrawable roundedDrawable =
+                                                RoundedBitmapDrawableFactory.create(ivStoreAvatar.getResources(), resource);
+                                        roundedDrawable.setCornerRadius(6);
+                                        ivStoreAvatar.setImageDrawable(roundedDrawable);
+                                    }
+                                });
+
+                        ratingBar.setRating(rating.getRatingValue());
+
+                        // Điền nội dung vào EditText
+                        editText.setText(rating.getComment());
+
+                        // Hiển thị ảnh nếu có
+                        if (rating.getImages() != null && !rating.getImages().isEmpty()) {
+                            for (DishImage dishImage : rating.getImages()) {
+                                Uri imageUri = Uri.parse(dishImage.getUrl());
+                                selectedImageUris.add(imageUri);  // Thêm vào danh sách ảnh đã chọn
+                                addImagePreview(imageUri);  // Thêm ảnh vào giao diện
+                            }
+                        }
+                        break;
+                    case ERROR:
+                        break;
+                }
+            }
+        });
     }
 
     private void addImagePreview(Uri uri) {
@@ -244,21 +251,13 @@ public class AddRatingActivity extends AppCompatActivity {
             return; // Dừng nếu không hợp lệ
         }
 
-        List<String> dishIds = new ArrayList<>();
-        for (OrderItem item : orderItemList) {
-            if (item.getDish() != null) {
-                dishIds.add(item.getDish().getId());
-            }
-        }
-
         if (selectedImageUris.isEmpty()) {
             Log.d("RatingDebug", "No images selected.");
             // Không có ảnh, gửi đánh giá bình thường
             Map<String, Object> data = new HashMap<>();
-            data.put("dishes", dishIds);
             data.put("ratingValue", rating);
             data.put("comment", comment);
-            ratingViewModel.addStoreRating(storeId, data);
+            ratingViewModel.editStoreRating(ratingId, data);
             Toast.makeText(this, "Đánh giá đã được gửi!", Toast.LENGTH_SHORT).show();
         } else {
             Log.d("RatingDebug", "Images selected: ");
@@ -274,7 +273,7 @@ public class AddRatingActivity extends AppCompatActivity {
                             submitRating(uploadedImageUrls);
                             break;
                         case ERROR:
-                            Toast.makeText(AddRatingActivity.this, "Lỗi khi upload ảnh", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(EditRatingActivity.this, "Lỗi khi upload ảnh", Toast.LENGTH_SHORT).show();
                             break;
                         default:
                             break;
@@ -303,21 +302,12 @@ public class AddRatingActivity extends AppCompatActivity {
             return;
         }
 
-        List<String> dishIds = new ArrayList<>();
-        for (OrderItem item : orderItemList) {
-            if (item.getDish() != null) {
-                dishIds.add(item.getDish().getId());
-            }
-        }
-
         Log.d("RatingDebug", "Image URLs: "  + imageUrls);
-
         Map<String, Object> data = new HashMap<>();
-        data.put("dishes", dishIds);
         data.put("ratingValue", rating);
         data.put("comment", comment);
         data.put("images", imageUrls);
-        ratingViewModel.addStoreRating(storeId, data);
+        ratingViewModel.editStoreRating(ratingId, data);
     }
 
     private void openImagePicker() {

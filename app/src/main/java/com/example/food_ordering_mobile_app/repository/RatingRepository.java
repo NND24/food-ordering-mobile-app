@@ -28,6 +28,7 @@ import java.util.Map;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.http.Body;
 
 public class RatingRepository {
     private RatingService ratingService;
@@ -110,14 +111,9 @@ public class RatingRepository {
         return result;
     }
 
-    public LiveData<Resource<String>> addStoreRating(String storeId, List<String> dishes, float rating, String comment) {
+    public LiveData<Resource<String>> addStoreRating(String storeId, Map<String, Object> data) {
         MutableLiveData<Resource<String>> result = new MutableLiveData<>();
         result.setValue(Resource.loading(null));
-
-        Map<String, Object> data = new HashMap<>();
-        data.put("dishes", dishes);
-        data.put("ratingValue", rating);
-        data.put("comment", comment);
 
         ratingService.addStoreRating(storeId, data).enqueue(new Callback<String>() {
             @Override
@@ -183,13 +179,13 @@ public class RatingRepository {
         return result;
     }
 
-    public LiveData<Resource<Rating>> editStoreRating(String storeId, Rating rating) {
-        MutableLiveData<Resource<Rating>> result = new MutableLiveData<>();
+    public LiveData<Resource<String>> editStoreRating(String ratingId, @Body Map<String, Object> data) {
+        MutableLiveData<Resource<String>> result = new MutableLiveData<>();
         result.setValue(Resource.loading(null));
 
-        ratingService.editStoreRating(storeId, rating).enqueue(new Callback<Rating>() {
+        ratingService.editStoreRating(ratingId, data).enqueue(new Callback<String>() {
             @Override
-            public void onResponse(Call<Rating> call, Response<Rating> response) {
+            public void onResponse(Call<String> call, Response<String> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Log.d("RatingRepository", "getAllStoreRating: " + response.body());
                     result.setValue(Resource.success("Lay thong tin thành công!", response.body()));
@@ -206,7 +202,7 @@ public class RatingRepository {
             }
 
             @Override
-            public void onFailure(Call<Rating> call, Throwable t) {
+            public void onFailure(Call<String> call, Throwable t) {
                 result.setValue(Resource.error("Lỗi kết nối: " + t.getMessage(), null));
             }
         });
@@ -214,13 +210,13 @@ public class RatingRepository {
         return result;
     }
 
-    public LiveData<Resource<Rating>> deleteStoreRating(String ratingId) {
-        MutableLiveData<Resource<Rating>> result = new MutableLiveData<>();
+    public LiveData<Resource<String>> deleteStoreRating(String ratingId) {
+        MutableLiveData<Resource<String>> result = new MutableLiveData<>();
         result.setValue(Resource.loading(null));
 
-        ratingService.deleteStoreRating(ratingId).enqueue(new Callback<Rating>() {
+        ratingService.deleteStoreRating(ratingId).enqueue(new Callback<String>() {
             @Override
-            public void onResponse(Call<Rating> call, Response<Rating> response) {
+            public void onResponse(Call<String> call, Response<String> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Log.d("RatingRepository", "getAllStoreRating: " + response.body());
                     result.setValue(Resource.success("Lay thong tin thành công!", response.body()));
@@ -237,7 +233,7 @@ public class RatingRepository {
             }
 
             @Override
-            public void onFailure(Call<Rating> call, Throwable t) {
+            public void onFailure(Call<String> call, Throwable t) {
                 result.setValue(Resource.error("Lỗi kết nối: " + t.getMessage(), null));
             }
         });

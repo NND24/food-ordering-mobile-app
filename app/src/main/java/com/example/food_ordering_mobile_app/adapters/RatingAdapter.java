@@ -1,6 +1,8 @@
 package com.example.food_ordering_mobile_app.adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -14,6 +16,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -25,7 +29,10 @@ import com.example.food_ordering_mobile_app.models.foodType.FoodType;
 import com.example.food_ordering_mobile_app.models.rating.DishRating;
 import com.example.food_ordering_mobile_app.models.rating.Rating;
 import com.example.food_ordering_mobile_app.models.user.User;
+import com.example.food_ordering_mobile_app.ui.customer.rating.EditRatingActivity;
 import com.example.food_ordering_mobile_app.utils.SharedPreferencesHelper;
+import com.example.food_ordering_mobile_app.viewmodels.LocationViewModel;
+import com.example.food_ordering_mobile_app.viewmodels.RatingViewModel;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -34,11 +41,14 @@ public class RatingAdapter extends RecyclerView.Adapter<RatingAdapter.ViewHolder
     private Context context;
     private List<Rating> ratingList;
     private OnReviewClickListener onReviewClickListener;
+    private FragmentActivity activity;
+
     public interface OnReviewClickListener {
         void onRestaurantClick(Rating review);
     }
 
-    public RatingAdapter(Context context, List<Rating> ratingList) {
+    public RatingAdapter(FragmentActivity activity, Context context, List<Rating> ratingList) {
+        this.activity = activity;
         this.context = context;
         this.ratingList = ratingList;
     }
@@ -90,6 +100,12 @@ public class RatingAdapter extends RecyclerView.Adapter<RatingAdapter.ViewHolder
         } else {
             holder.btnOption.setVisibility(View.GONE);
         }
+
+        holder.btnOption.setOnClickListener(v -> {
+            if (savedUser != null && savedUser.getId().equals(rating.getUser().getId())) {
+                showOptionsDialog(rating);
+            }
+        });
 
         if (rating.getDishes() != null && !rating.getDishes().isEmpty()) {
             StringBuilder dishes = new StringBuilder();
@@ -191,6 +207,45 @@ public class RatingAdapter extends RecyclerView.Adapter<RatingAdapter.ViewHolder
                 onReviewClickListener.onRestaurantClick(rating);
             }
         });
+    }
+
+    private void showOptionsDialog(Rating rating) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Chọn hành động");
+
+        builder.setItems(new CharSequence[] {"Chỉnh sửa", "Xóa"}, (dialog, which) -> {
+            switch (which) {
+                case 0:
+                    // Tùy chọn "Chỉnh sửa"
+                    onEditRating(rating);
+                    break;
+                case 1:
+                    // Tùy chọn "Xóa"
+                    onDeleteRating(rating);
+                    break;
+            }
+        });
+
+        builder.create().show();
+    }
+
+    private void onEditRating(Rating rating) {
+        Intent intent = new Intent(context, EditRatingActivity.class);
+        intent.putExtra("", rating.getId());
+        intent.putExtra("storeId", rating.getStore().getId());
+        context.startActivity(intent);
+    }
+
+    private void onDeleteRating(Rating rating) {
+        RatingViewModel ratingViewModel = new ViewModelProvider(activity).get(RatingViewModel.class);
+        new AlertDialog.Builder(context)
+                .setTitle("Xóa đánh giá")
+                .setMessage("Bạn có chắc chắn muốn xóa đánh giá này không?")
+                .setPositiveButton("Có", (dialog, which) -> {
+                    ratingViewModel.getDetailRating(rating.getId());
+                })
+                .setNegativeButton("Không", null)
+                .show();
     }
 
     @Override

@@ -15,5 +15,5 @@ public interface NotificationService {
     Call<ListNotificationResponse> getAllNotifications();
 
     @PUT("/api/v1/notification/update-notification/{id}")
-    Call<Notification> updateNotificationStatus(@Path("id") String id);
+    Call<ListNotificationResponse> updateNotificationStatus(@Path("id") String id);
 }

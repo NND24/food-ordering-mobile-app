@@ -17,6 +17,18 @@ public class Location {
     private String contactPhonenumber;
     private String type;
 
+    public Location(String name, String address, Double lat, Double lon, String detailAddress, String contactName, String note, String contactPhonenumber, String type) {
+        this.name = name;
+        this.address = address;
+        this.lat = lat;
+        this.lon = lon;
+        this.detailAddress = detailAddress;
+        this.contactName = contactName;
+        this.note = note;
+        this.contactPhonenumber = contactPhonenumber;
+        this.type = type;
+    }
+
     public String getId() {
         return id;
     }

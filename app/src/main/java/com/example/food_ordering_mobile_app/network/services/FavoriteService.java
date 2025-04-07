@@ -14,8 +14,8 @@ import retrofit2.http.Path;
 public interface FavoriteService {
     @GET("/api/v1/favorite/")
     Call<FavoriteResponse> getUserFavorite();
-    @POST("/api/v1/favorite/add")
-    Call<Favorite> addFavorite(@Body Favorite favorite);
+    @POST("/api/v1/favorite/add/{id}")
+    Call<MessageResponse> addFavorite(@Path("id") String storeId);
     @DELETE("/api/v1/favorite/remove/{id}")
     Call<MessageResponse> removeFavorite(@Path("id") String id);
     @DELETE("/api/v1/favorite/remove-all")

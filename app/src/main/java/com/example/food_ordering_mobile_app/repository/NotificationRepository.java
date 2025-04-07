@@ -74,13 +74,13 @@ public class NotificationRepository {
         return result;
     }
 
-    public LiveData<Resource<Notification>> updateNotificationStatus(String id) {
-        MutableLiveData<Resource<Notification>> result = new MutableLiveData<>();
+    public LiveData<Resource<ListNotificationResponse>> updateNotificationStatus(String id) {
+        MutableLiveData<Resource<ListNotificationResponse>> result = new MutableLiveData<>();
         result.setValue(Resource.loading(null));
 
-        notificationService.updateNotificationStatus(id).enqueue(new Callback<Notification>() {
+        notificationService.updateNotificationStatus(id).enqueue(new Callback<ListNotificationResponse>() {
             @Override
-            public void onResponse(Call<Notification> call, Response<Notification> response) {
+            public void onResponse(Call<ListNotificationResponse> call, Response<ListNotificationResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Log.d("NotificationRepository", "updateNotificationStatus: " + response.body());
                     result.setValue(Resource.success("Lay thong tin thành công!", response.body()));
@@ -97,7 +97,7 @@ public class NotificationRepository {
             }
 
             @Override
-            public void onFailure(Call<Notification> call, Throwable t) {
+            public void onFailure(Call<ListNotificationResponse> call, Throwable t) {
                 result.setValue(Resource.error("Lỗi kết nối: " + t.getMessage(), null));
             }
         });

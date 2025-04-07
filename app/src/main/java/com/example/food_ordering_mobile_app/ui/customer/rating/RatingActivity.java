@@ -59,12 +59,35 @@ public class RatingActivity extends AppCompatActivity {
         ratingViewModel = new ViewModelProvider(this).get(RatingViewModel.class);
 
         setupRating();
+
+        ratingViewModel.getDetailRatingResponse().observe(this, new Observer<Resource<Rating>>() {
+            @Override
+            public void onChanged(Resource<Rating> resource) {
+                switch (resource.getStatus()) {
+                    case LOADING:
+                        swipeRefreshLayout.setRefreshing(true);
+                        break;
+                    case SUCCESS:
+                        swipeRefreshLayout.setRefreshing(false);
+                        Map<String, String> queryParams = new HashMap<>();
+                        queryParams.put("sort", "");
+                        queryParams.put("limit", "");
+                        queryParams.put("page", "");
+
+                        ratingViewModel.getAllStoreRating(storeId, queryParams);
+                        break;
+                    case ERROR:
+                        swipeRefreshLayout.setRefreshing(false);
+                        break;
+                }
+            }
+        });
     }
 
     private void setupRating() {
         reviewRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         ratingList = new ArrayList<>();
-        ratingAdapter = new RatingAdapter(this, ratingList);
+        ratingAdapter = new RatingAdapter(RatingActivity.this, this, ratingList);
         reviewRecyclerView.setAdapter(ratingAdapter);
 
         ratingViewModel.getAllStoreRatingResponse().observe(this, new Observer<Resource<ListRatingResponse>>() {
