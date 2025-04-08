@@ -19,32 +19,32 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.example.food_ordering_mobile_app.R;
-import com.example.food_ordering_mobile_app.models.dish.Dish;
+import com.example.food_ordering_mobile_app.models.cart.Cart;
+import com.example.food_ordering_mobile_app.models.cart.CartItem;
 import com.example.food_ordering_mobile_app.models.dish.DishStore;
 import com.example.food_ordering_mobile_app.ui.customer.dish.DishActivity;
 import com.example.food_ordering_mobile_app.viewmodels.CartViewModel;
-import com.example.food_ordering_mobile_app.viewmodels.LocationViewModel;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class DishBigAdapter extends RecyclerView.Adapter<DishBigAdapter.ViewHolder> {
+
     private Context context;
     private List<DishStore> dishList;
     private OnDishClickListener onDishClickListener;
     private FragmentActivity activity;
+    private CartViewModel cartViewModel;
+    Cart currentCart = null;
+
     public interface OnDishClickListener {
         void onDishClick(DishStore dish);
-    }
-
-    public DishBigAdapter(Context context, List<DishStore> dishList) {
-        this.context = context;
-        this.dishList = dishList;
     }
 
     public DishBigAdapter(FragmentActivity activity, Context context, List<DishStore> dishList, OnDishClickListener onDishClickListener) {
@@ -52,6 +52,12 @@ public class DishBigAdapter extends RecyclerView.Adapter<DishBigAdapter.ViewHold
         this.context = context;
         this.dishList = dishList != null ? dishList : new ArrayList<>();
         this.onDishClickListener = onDishClickListener;
+        this.cartViewModel = new ViewModelProvider(activity).get(CartViewModel.class);
+    }
+
+    public void setCurrentCart(Cart currentCart) {
+        this.currentCart = currentCart;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -61,7 +67,7 @@ public class DishBigAdapter extends RecyclerView.Adapter<DishBigAdapter.ViewHold
         return new ViewHolder(view);
     }
 
-    private void updateCart(DishStore dish, int quantity, CartViewModel cartViewModel) {
+    private void updateCart(DishStore dish, int quantity) {
         Map<String, Object> data = new HashMap<>();
         data.put("storeId", dish.getStore());
         data.put("dishId", dish.getId());
@@ -74,7 +80,8 @@ public class DishBigAdapter extends RecyclerView.Adapter<DishBigAdapter.ViewHold
         DishStore dish = dishList.get(position);
 
         holder.name.setText(dish.getName());
-        holder.price.setText(String.valueOf(dish.getPrice()));
+        NumberFormat formatter = NumberFormat.getInstance(new Locale("vi", "VN"));
+        holder.price.setText(String.valueOf(formatter.format(dish.getPrice())));
 
         String dishImageUrl = dish.getImage() != null ? dish.getImage().getUrl() : null;
         Glide.with(context)
@@ -90,25 +97,52 @@ public class DishBigAdapter extends RecyclerView.Adapter<DishBigAdapter.ViewHold
                     }
                 });
 
-        CartViewModel cartViewModel = new ViewModelProvider(activity).get(CartViewModel.class);
+        CartItem tempMatchedItem = null;
+        if (currentCart != null && currentCart.getItems() != null) {
+            for (CartItem item : currentCart.getItems()) {
+                if (item.getDish().getId().equals(dish.getId())) {
+                    tempMatchedItem = item;
+                    break;
+                }
+            }
+        }
+
+        final CartItem matchedItem = tempMatchedItem;
+
+        if (matchedItem != null) {
+            holder.btnAddToCart.setVisibility(View.GONE);
+            holder.quantityContainer.setVisibility(View.VISIBLE);
+            holder.tvQuantity.setText(String.valueOf(matchedItem.getQuantity()));
+        } else {
+            holder.btnAddToCart.setVisibility(View.VISIBLE);
+            holder.quantityContainer.setVisibility(View.GONE);
+        }
 
         boolean[] isAddToCartClicked = {false};
 
-        if(dish.getToppingGroups().isEmpty()) {
-            holder.btnAddToCart.setOnClickListener(v -> {
+        // Xử lý click cho btnAddToCart
+        holder.btnAddToCart.setOnClickListener(v -> {
+            if (dish.getToppingGroups().isEmpty()) {
                 holder.btnAddToCart.setVisibility(View.GONE);
                 holder.quantityContainer.setVisibility(View.VISIBLE);
                 holder.tvQuantity.setText("1");
-                isAddToCartClicked[0] = true;
-                int quantity = Integer.parseInt(holder.tvQuantity.getText().toString());
-                updateCart(dish, quantity, cartViewModel);
-            });
+                updateCart(dish, 1);
+            } else {
+                Intent intent = new Intent(context, DishActivity.class);
+                intent.putExtra("dishId", dish.getId());
+                intent.putExtra("matchedItem", matchedItem);
+                context.startActivity(intent);
+            }
+            isAddToCartClicked[0] = true;
+        });
 
+        // Xử lý tăng giảm số lượng (chỉ dùng nếu không có topping)
+        if (dish.getToppingGroups().isEmpty()) {
             holder.btnIncrease.setOnClickListener(v -> {
                 int quantity = Integer.parseInt(holder.tvQuantity.getText().toString());
                 quantity++;
                 holder.tvQuantity.setText(String.valueOf(quantity));
-                updateCart(dish, quantity, cartViewModel);
+                updateCart(dish, quantity);
             });
 
             holder.btnDecrease.setOnClickListener(v -> {
@@ -116,28 +150,40 @@ public class DishBigAdapter extends RecyclerView.Adapter<DishBigAdapter.ViewHold
                 if (quantity > 1) {
                     quantity--;
                     holder.tvQuantity.setText(String.valueOf(quantity));
-                    updateCart(dish, quantity, cartViewModel);
+                    updateCart(dish, quantity);
                 } else {
-                    // If quantity reaches 0, hide quantity container and show the button again
                     holder.quantityContainer.setVisibility(View.GONE);
                     holder.btnAddToCart.setVisibility(View.VISIBLE);
-                    updateCart(dish, 0, cartViewModel);
+                    updateCart(dish, 0);
                 }
             });
         } else {
-            holder.btnAddToCart.setOnClickListener(v -> {
+            holder.btnIncrease.setOnClickListener(v -> {
                 Intent intent = new Intent(context, DishActivity.class);
                 intent.putExtra("dishId", dish.getId());
+                intent.putExtra("matchedItem", matchedItem);
+                context.startActivity(intent);
+                isAddToCartClicked[0] = true;
+            });
+
+            holder.btnDecrease.setOnClickListener(v -> {
+                Intent intent = new Intent(context, DishActivity.class);
+                intent.putExtra("dishId", dish.getId());
+                intent.putExtra("matchedItem", matchedItem);
                 context.startActivity(intent);
                 isAddToCartClicked[0] = true;
             });
         }
 
+        // Xử lý click toàn bộ item
         holder.itemView.setOnClickListener(v -> {
-            if (!isAddToCartClicked[0]) {
-                if (onDishClickListener != null) {
-                    onDishClickListener.onDishClick(dish);
-                }
+            Intent intent = new Intent(context, DishActivity.class);
+            intent.putExtra("dishId", dish.getId());
+            intent.putExtra("matchedItem", matchedItem);
+            context.startActivity(intent);
+
+            if (!isAddToCartClicked[0] && onDishClickListener != null) {
+                onDishClickListener.onDishClick(dish);
             }
         });
     }
@@ -150,7 +196,7 @@ public class DishBigAdapter extends RecyclerView.Adapter<DishBigAdapter.ViewHold
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView name, price, tvQuantity;
         ImageView dishAvatar;
-        LinearLayout quantityContainer;
+        LinearLayout quantityContainer, itemDishBigContainer;
         ImageButton btnIncrease, btnDecrease, btnAddToCart;
 
         public ViewHolder(@NonNull View itemView) {
@@ -163,6 +209,7 @@ public class DishBigAdapter extends RecyclerView.Adapter<DishBigAdapter.ViewHold
             tvQuantity = itemView.findViewById(R.id.tvQuantity);
             btnIncrease = itemView.findViewById(R.id.btnIncrease);
             btnDecrease = itemView.findViewById(R.id.btnDecrease);
+            itemDishBigContainer = itemView.findViewById(R.id.itemDishBigContainer);
         }
     }
 }

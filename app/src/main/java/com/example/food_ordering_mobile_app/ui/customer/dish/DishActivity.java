@@ -1,5 +1,6 @@
 package com.example.food_ordering_mobile_app.ui.customer.dish;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,26 +28,44 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.example.food_ordering_mobile_app.R;
 import com.example.food_ordering_mobile_app.adapters.GroupToppingAdapter;
+import com.example.food_ordering_mobile_app.models.cart.Cart;
+import com.example.food_ordering_mobile_app.models.cart.CartItem;
+import com.example.food_ordering_mobile_app.models.dish.DishDetail;
 import com.example.food_ordering_mobile_app.models.dish.DishResponse;
+import com.example.food_ordering_mobile_app.models.dish.DishStore;
+import com.example.food_ordering_mobile_app.models.dish.Topping;
 import com.example.food_ordering_mobile_app.models.dish.ToppingGroup;
 import com.example.food_ordering_mobile_app.models.dish.ToppingGroupResponse;
+import com.example.food_ordering_mobile_app.ui.customer.store.StoreActivity;
 import com.example.food_ordering_mobile_app.utils.Resource;
+import com.example.food_ordering_mobile_app.viewmodels.CartViewModel;
 import com.example.food_ordering_mobile_app.viewmodels.DishViewModel;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 public class DishActivity extends AppCompatActivity {
     private SwipeRefreshLayout swipeRefreshLayout;
     private DishViewModel dishViewModel;
+    private CartViewModel cartViewModel;
     private RecyclerView toppingGroupRecyclerView;
     private GroupToppingAdapter groupToppingAdapter;
     private List<ToppingGroup> toppingGroupList;
-    private TextView tvQuantity, tvDishName, tvDishDescription, tvPrice;
+    private TextView tvQuantity, tvDishName, tvDishDescription, tvPrice, tvTotalPrice;
     private ImageView ivDishAvatar;
-    private LinearLayout quantityContainer;
+    private LinearLayout quantityContainer, btnRemoveFromCart, btnAddToCart, btnGoBackContainer;
     private ImageButton btnIncrease, btnDecrease;
     private String dishId;
+    private DishDetail dish;
+    private List<Topping> toppingList;
+    private int toppingValue = 0;
+    private int totalPrice = 0;
+    private CartItem matchedItem;
+    NumberFormat formatter = NumberFormat.getInstance(new Locale("vi", "VN"));
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,11 +83,31 @@ public class DishActivity extends AppCompatActivity {
         tvQuantity = findViewById(R.id.tvQuantity);
         btnIncrease = findViewById(R.id.btnIncrease);
         btnDecrease = findViewById(R.id.btnDecrease);
+        btnRemoveFromCart = findViewById(R.id.btnRemoveFromCart);
+        btnAddToCart = findViewById(R.id.btnAddToCart);
+        tvTotalPrice = findViewById(R.id.tvTotalPrice);
+        btnGoBackContainer = findViewById(R.id.btnGoBackContainer);
+
+        dishId = getIntent().getStringExtra("dishId");
+        matchedItem = (CartItem) getIntent().getSerializableExtra("matchedItem");
 
         btnIncrease.setOnClickListener(v -> {
             int quantity = Integer.parseInt(tvQuantity.getText().toString());
             quantity++;
             tvQuantity.setText(String.valueOf(quantity));
+
+            if(toppingList != null && !toppingList.isEmpty()) {
+                toppingValue = 0;
+                for(Topping topping : toppingList) {
+                    toppingValue += quantity * topping.getPrice();
+                }
+            }
+
+            totalPrice = quantity * dish.getPrice() + toppingValue;
+            tvTotalPrice.setText(String.valueOf(formatter.format(totalPrice)));
+
+            btnAddToCart.setVisibility(View.VISIBLE);
+            btnGoBackContainer.setVisibility(View.GONE);
         });
 
         btnDecrease.setOnClickListener(v -> {
@@ -76,17 +115,80 @@ public class DishActivity extends AppCompatActivity {
             if (quantity > 1) {
                 quantity--;
                 tvQuantity.setText(String.valueOf(quantity));
+
+                if(toppingList != null && !toppingList.isEmpty()) {
+                    toppingValue = 0;
+                    for(Topping topping : toppingList) {
+                        toppingValue += quantity * topping.getPrice();
+                    }
+                }
+
+                totalPrice = quantity * dish.getPrice() + toppingValue;
+                tvTotalPrice.setText(String.valueOf(formatter.format(totalPrice)));
+            } else {
+                quantity = 0;
+                btnAddToCart.setVisibility(View.GONE);
+                btnGoBackContainer.setVisibility(View.VISIBLE);
             }
         });
 
-        dishId = getIntent().getStringExtra("dishId");
+        dishViewModel = new ViewModelProvider(this).get(DishViewModel.class);
+        cartViewModel = new ViewModelProvider(this).get(CartViewModel.class);
 
         swipeRefreshLayout.setOnRefreshListener(this::refreshData);
 
-        dishViewModel = new ViewModelProvider(this).get(DishViewModel.class);
-
         setupDish();
         setupTopping();
+
+        btnRemoveFromCart.setOnClickListener(v -> {
+            updateCart(dish, 0);
+        });
+
+        btnAddToCart.setOnClickListener(v -> {
+            int quantity = Integer.parseInt(tvQuantity.getText().toString());
+
+            List<String> toppingIds = new ArrayList<>();
+            for (Topping topping : toppingList) {
+                toppingIds.add(topping.getId());
+            }
+
+            Map<String, Object> data = new HashMap<>();
+            data.put("storeId", dish.getStore());
+            data.put("dishId", dish.getId());
+            data.put("quantity", quantity);
+            data.put("toppings", toppingIds);
+
+            cartViewModel.updateCart(data);
+        });
+
+
+        cartViewModel.getUpdateCartResponse().observe(this, new Observer<Resource<Cart>>() {
+            @Override
+            public void onChanged(Resource<Cart> resource) {
+                switch (resource.getStatus()) {
+                    case LOADING:
+                        swipeRefreshLayout.setRefreshing(true);
+                        break;
+                    case SUCCESS:
+                        swipeRefreshLayout.setRefreshing(false);
+                        Intent intent = new Intent(DishActivity.this, StoreActivity.class);
+                        startActivity(intent);
+                        finish();
+                        break;
+                    case ERROR:
+                        swipeRefreshLayout.setRefreshing(false);
+                        break;
+                }
+            }
+        });
+    }
+
+    private void updateCart(DishDetail dish, int quantity) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("storeId", dish.getStore());
+        data.put("dishId", dish.getId());
+        data.put("quantity", quantity);
+        cartViewModel.updateCart(data);
     }
 
     private void setupDish() {
@@ -100,7 +202,23 @@ public class DishActivity extends AppCompatActivity {
                         break;
                     case SUCCESS:
                         swipeRefreshLayout.setRefreshing(false);
-                        Log.d("DishActivity", "getDishResponse: " + resource.getData().getData().toString());
+                        dish  = resource.getData().getData();
+
+                        if(matchedItem != null) {
+                            tvQuantity.setText(String.valueOf(matchedItem.getQuantity()));
+                            toppingList = matchedItem.getToppings();
+
+                            if(toppingList != null && !toppingList.isEmpty()) {
+                                toppingValue = 0;
+                                for(Topping topping : toppingList) {
+                                    toppingValue += matchedItem.getQuantity() * topping.getPrice();
+                                }
+                            }
+
+                            totalPrice = matchedItem.getQuantity() * dish.getPrice() + toppingValue;
+                            tvTotalPrice.setText(String.valueOf(formatter.format(totalPrice)));
+                        }
+
                         tvDishName.setText(resource.getData().getData().getName());
                         String description = resource.getData().getData().getDescription();
                         if (description == null || description.isEmpty()) {
@@ -110,7 +228,7 @@ public class DishActivity extends AppCompatActivity {
                             tvDishDescription.setText(description);
                         }
 
-                        tvPrice.setText(String.valueOf(resource.getData().getData().getPrice()));
+                        tvPrice.setText(String.valueOf(formatter.format(resource.getData().getData().getPrice())));
 
                         String dishAvatarUrl = resource.getData().getData().getImage() != null ? resource.getData().getData().getImage().getUrl() : null;
                         Glide.with(ivDishAvatar)
@@ -139,7 +257,17 @@ public class DishActivity extends AppCompatActivity {
     private void setupTopping() {
         toppingGroupRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         toppingGroupList = new ArrayList<>();
-        groupToppingAdapter = new GroupToppingAdapter(this, toppingGroupList);
+        groupToppingAdapter = new GroupToppingAdapter(this, toppingGroupList, matchedItem, (selectedToppings) -> {
+            toppingList = groupToppingAdapter.getSelectedTopping();
+            toppingValue = 0;
+            int quantity = Integer.parseInt(tvQuantity.getText().toString());
+            for(Topping topping : toppingList) {
+                toppingValue += quantity * topping.getPrice();
+            }
+
+            totalPrice = quantity * dish.getPrice() + toppingValue;
+            tvTotalPrice.setText(String.valueOf(formatter.format(totalPrice)));
+        });
         toppingGroupRecyclerView.setAdapter(groupToppingAdapter);
 
         dishViewModel.getToppingFromDishResponse().observe(this, new Observer<Resource<ToppingGroupResponse>>() {
@@ -165,7 +293,10 @@ public class DishActivity extends AppCompatActivity {
         dishViewModel.getToppingFromDish(dishId);
     }
 
-    private void refreshData() { }
+    private void refreshData() {
+        setupDish();
+        setupTopping();
+    }
 
     public void goBack(View view) {
         onBackPressed();

@@ -3,9 +3,12 @@ package com.example.food_ordering_mobile_app.ui.customer.store;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -79,12 +82,13 @@ public class StoreActivity extends AppCompatActivity {
     private RatingShortAdapter reviewAdapter;
     private List<Rating> reviewList;
     private List<Store> favoriteList;
+    private List<Cart> cartList;
     private ImageView ivStoreAvatar, ivStoreCover, ivStar;
     private ImageButton btnFavorite;
     private TextView tvStoreName, tvStoreFoodType, tvAvgRating, tvRatingOpen, tvAmountRating, tvRatingText, tvRatingClose, tvDescription, tvDot, tvTotalPrice, tvTotalQuantity;
     private String storeId;
     private Cart currentCart = null;
-    private LinearLayout footer;
+    private LinearLayout footer, review_container;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,23 +116,24 @@ public class StoreActivity extends AppCompatActivity {
         footer = findViewById(R.id.footer);
         tvTotalPrice = findViewById(R.id.tvTotalPrice);
         tvTotalQuantity = findViewById(R.id.tvTotalQuantity);
+        review_container = findViewById(R.id.review_container);
 
         storeId = getIntent().getStringExtra("storeId");
 
         swipeRefreshLayout.setOnRefreshListener(this::refreshData);
 
         storeViewModel = new ViewModelProvider(this).get(StoreViewModel.class);
+        cartViewModel = new ViewModelProvider(this).get(CartViewModel.class);
         dishViewModel = new ViewModelProvider(this).get(DishViewModel.class);
         ratingViewModel = new ViewModelProvider(this).get(RatingViewModel.class);
         favoriteViewModel = new ViewModelProvider(this).get(FavoriteViewModel.class);
-        cartViewModel = new ViewModelProvider(this).get(CartViewModel.class);
 
         setupStore();
         setupBigDish();
         setupDish();
+        setupUserCart();
         setupShortRating();
         setupUserFavorite();
-        setupUserCart();
 
         favoriteViewModel.getRemoveFavoriteResponse().observe(this, new Observer<Resource<MessageResponse>>() {
             @Override
@@ -165,6 +170,31 @@ public class StoreActivity extends AppCompatActivity {
                 }
             }
         });
+
+        cartViewModel.getUpdateCartResponse().observe(this, new Observer<Resource<Cart>>() {
+            @Override
+            public void onChanged(Resource<Cart> resource) {
+                switch (resource.getStatus()) {
+                    case LOADING:
+                        swipeRefreshLayout.setRefreshing(true);
+                        break;
+                    case SUCCESS:
+                        swipeRefreshLayout.setRefreshing(false);
+                        setupUserCart();
+                        break;
+                    case ERROR:
+                        swipeRefreshLayout.setRefreshing(false);
+                        break;
+                }
+            }
+        });
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                setupDish();
+            }
+        }, 100);
     }
 
     private void setupStore() {
@@ -258,9 +288,9 @@ public class StoreActivity extends AppCompatActivity {
         dishBigRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         dishBigList = new ArrayList<>();
         dishBigAdapter = new DishBigAdapter(this,this, dishBigList, dishBig -> {
-            Intent intent = new Intent(this, DishActivity.class);
-            intent.putExtra("dishId", dishBig.getId());
-            startActivity(intent);
+//            Intent intent = new Intent(this, DishActivity.class);
+//            intent.putExtra("dishId", dishBig.getId());
+//            startActivity(intent);
         });
         dishBigRecyclerView.setAdapter(dishBigAdapter);
 
@@ -275,12 +305,10 @@ public class StoreActivity extends AppCompatActivity {
                         swipeRefreshLayout.setRefreshing(false);
                         dishBigList.clear();
                         dishBigList.addAll(resource.getData().getData());
-                        Log.d("StoreActivity", "getAllBigDishResponse: " + resource.getData().getData().toString());
                         dishBigAdapter.notifyDataSetChanged();
                         break;
                     case ERROR:
                         swipeRefreshLayout.setRefreshing(false);
-                        Log.d("StoreActivity", "getAllBigDishResponse error: " + resource.getData().toString());
                         break;
                 }
             }
@@ -292,8 +320,10 @@ public class StoreActivity extends AppCompatActivity {
     private void setupDish() {
         dishRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         dishGroupByCategoryList = new ArrayList<>();
-        dishGroupByCategoryAdapter = new DishGroupByCategoryAdapter(this, dishGroupByCategoryList);
+        dishGroupByCategoryAdapter = new DishGroupByCategoryAdapter(this,this, dishGroupByCategoryList);
         dishRecyclerView.setAdapter(dishGroupByCategoryAdapter);
+
+
 
         dishViewModel.getAllDishResponse().observe(this, new Observer<Resource<ListDishResponse>>() {
             @Override
@@ -307,12 +337,10 @@ public class StoreActivity extends AppCompatActivity {
                         dishGroupByCategoryList.clear();
                         List<DishStore> dishes = resource.getData().getData();
                         dishGroupByCategoryList.addAll(Functions.groupDishesByCategory(dishes));
-                        Log.d("StoreActivity", "setupDish: " + resource.getData().toString());
                         dishGroupByCategoryAdapter.notifyDataSetChanged();
                         break;
                     case ERROR:
                         swipeRefreshLayout.setRefreshing(false);
-                        Log.d("StoreActivity", "setupDish Error: " + resource.getData().toString());
                         break;
                 }
             }
@@ -338,10 +366,18 @@ public class StoreActivity extends AppCompatActivity {
                         swipeRefreshLayout.setRefreshing(false);
                         reviewList.clear();
                         reviewList.addAll(resource.getData().getData());
+
+                        if (reviewList != null && !reviewList.isEmpty()) {
+                            review_container.setVisibility(View.VISIBLE);
+                        } else {
+                            review_container.setVisibility(View.GONE);
+                        }
+
                         reviewAdapter.notifyDataSetChanged();
                         break;
                     case ERROR:
                         swipeRefreshLayout.setRefreshing(false);
+                        review_container.setVisibility(View.GONE);
                         break;
                 }
             }
@@ -356,7 +392,7 @@ public class StoreActivity extends AppCompatActivity {
     }
 
     private void setupUserFavorite() {
-        favoriteViewModel.getUserFavorite();
+        favoriteList = new ArrayList<>();
         favoriteViewModel.getUserFavoriteResponse().observe(this, new Observer<Resource<FavoriteResponse>>() {
             @Override
             public void onChanged(Resource<FavoriteResponse> resource) {
@@ -399,14 +435,22 @@ public class StoreActivity extends AppCompatActivity {
                         break;
                     case ERROR:
                         swipeRefreshLayout.setRefreshing(false);
+                        btnFavorite.setImageResource(R.drawable.ic_favorite_white_24);
+                        btnFavorite.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                favoriteViewModel.addFavorite(storeId);
+                            }
+                        });
                         break;
                 }
             }
         });
+        favoriteViewModel.getUserFavorite();
     }
 
     private void setupUserCart() {
-        cartViewModel.getUserCart();
+        cartList = new ArrayList<>();
         cartViewModel.getUserCartResponse().observe(this, new Observer<Resource<ListCartResponse>>() {
             @Override
             public void onChanged(Resource<ListCartResponse> resource) {
@@ -416,7 +460,8 @@ public class StoreActivity extends AppCompatActivity {
                         break;
                     case SUCCESS:
                         swipeRefreshLayout.setRefreshing(false);
-                        List<Cart> cartList = resource.getData().getData();
+                        cartList.clear();
+                        cartList = resource.getData().getData();
 
                         for (Cart cart : cartList) {
                             if (cart.getStore() != null && storeId.equals(cart.getStore().getId())) {
@@ -425,10 +470,26 @@ public class StoreActivity extends AppCompatActivity {
                             }
                         }
 
+                        calculateCartPrice(currentCart);
+
+                        dishBigAdapter.setCurrentCart(currentCart);
+                        dishGroupByCategoryAdapter.setCurrentCart(currentCart);
+
                         boolean hasCart = currentCart != null;
                         footer.setVisibility(hasCart ? View.VISIBLE : View.GONE);
-                        swipeRefreshLayout.setPadding(0, 0, 0, hasCart ? 0 : 70);
 
+                        // Chuyển dp sang px
+                        int marginInDp = hasCart ? 70 : 0;
+                        int marginInPx = (int) TypedValue.applyDimension(
+                                TypedValue.COMPLEX_UNIT_DIP,
+                                marginInDp,
+                                getResources().getDisplayMetrics()
+                        );
+
+                        // Set bottom margin
+                        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) swipeRefreshLayout.getLayoutParams();
+                        params.bottomMargin = marginInPx;
+                        swipeRefreshLayout.setLayoutParams(params);
                         break;
                     case ERROR:
                         swipeRefreshLayout.setRefreshing(false);
@@ -437,6 +498,7 @@ public class StoreActivity extends AppCompatActivity {
                 }
             }
         });
+        cartViewModel.getUserCart();
     }
 
     private void calculateCartPrice(Cart currentCart) {
@@ -460,7 +522,7 @@ public class StoreActivity extends AppCompatActivity {
             }
         }
 
-        DecimalFormat formatter = new DecimalFormat("#,### đ");
+        DecimalFormat formatter = new DecimalFormat("#,###");
         tvTotalPrice.setText(formatter.format(totalPrice));
         tvTotalQuantity.setText(String.valueOf(totalQuantity));
     }

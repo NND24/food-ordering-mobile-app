@@ -41,6 +41,7 @@
     <!-- Button Colors -->
     <color name="buttonNormal">#757575</color> <!-- Màu nút mặc định -->
     <color name="buttonTextColor">#FFFFFF</color> <!-- Màu chữ trên nút -->
+    <color name="buttonDeselect">#c9c8c8</color>
     <color name="controlHighlight">#E8EAF6</color>
     <color name="controlActivated">#fff</color> <!-- Màu khi kích hoạt -->
     <color name="controlNormal">#757575</color> <!-- Màu khi bình thường, xám -->

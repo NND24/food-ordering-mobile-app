@@ -2,9 +2,10 @@ package com.example.food_ordering_mobile_app.models.cart;
 
 import com.example.food_ordering_mobile_app.models.dish.Topping;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class CartItem {
+public class CartItem implements Serializable {
     private CartDish dish;
     private List<Topping> toppings;
     private Integer quantity;

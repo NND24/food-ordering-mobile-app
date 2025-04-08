@@ -6,9 +6,10 @@ import com.example.food_ordering_mobile_app.models.dish.ToppingGroup;
 import com.example.food_ordering_mobile_app.models.store.Store;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class CartDish {
+public class CartDish implements Serializable {
     @SerializedName("_id")
     private String id;
     private String name;

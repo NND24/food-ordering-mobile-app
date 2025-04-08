@@ -7,7 +7,10 @@
     android:layout_marginTop="10dp"
     android:layout_marginRight="10dp"
     android:background="@color/backgroundColor"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:clickable="true"
+    android:focusable="true"
+    android:id="@+id/itemDishBigContainer">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -46,7 +49,7 @@
                 android:background="@android:color/transparent"
                 app:srcCompat="@drawable/ic_minus_18" />
 
-            <EditText
+            <TextView
                 android:id="@+id/tvQuantity"
                 android:layout_width="32dp"
                 android:layout_height="wrap_content"
@@ -99,7 +102,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=" đ"
+                android:text="đ"
                 android:textColor="@color/onSecondary"
                 android:textSize="16sp" />
 

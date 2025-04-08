@@ -2,6 +2,7 @@ package com.example.food_ordering_mobile_app.models.rating;
 
 import com.example.food_ordering_mobile_app.models.dish.Dish;
 import com.example.food_ordering_mobile_app.models.dish.DishImage;
+import com.example.food_ordering_mobile_app.models.order.OrderStore;
 import com.example.food_ordering_mobile_app.models.store.Store;
 import com.example.food_ordering_mobile_app.models.user.User;
 import com.google.gson.annotations.SerializedName;
@@ -13,7 +14,7 @@ public class Rating {
     @SerializedName("_id")
     private String id;
     private User user;
-    private Store store;
+    private OrderStore store;
     private List<DishRating> dishes;
     private Integer ratingValue;
     private String comment;
@@ -36,11 +37,11 @@ public class Rating {
         this.user = user;
     }
 
-    public Store getStore() {
+    public OrderStore getStore() {
         return store;
     }
 
-    public void setStore(Store store) {
+    public void setStore(OrderStore store) {
         this.store = store;
     }
 

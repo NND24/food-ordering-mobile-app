@@ -38,17 +38,6 @@
             android:background="@color/transparentBgColor"
             android:src="@drawable/ic_favorite_white_24" />
 
-        <Space
-            android:layout_width="20dp"
-            android:layout_height="wrap_content" />
-
-        <ImageButton
-            android:id="@+id/imageButton8"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/transparentBgColor"
-            android:src="@drawable/ic_notification_white_24" />
-
     </LinearLayout>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -204,7 +193,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
-                    android:padding="20dp">
+                    android:paddingVertical="20dp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="10dp">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -238,7 +229,8 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:background="@color/reviewBgColor"
-                    android:padding="20dp">
+                    android:padding="20dp"
+                    android:visibility="gone">
 
                     <LinearLayout
                         android:layout_width="match_parent"

@@ -1,6 +1,8 @@
 package com.example.food_ordering_mobile_app.models.dish;
 
-public class DishImage {
+import java.io.Serializable;
+
+public class DishImage implements Serializable {
     private String filePath;
     private String url;
 

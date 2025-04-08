@@ -65,14 +65,17 @@ public class RatingRepository {
                         JSONObject jsonObject = new JSONObject(errorMessage);
                         String message = jsonObject.getString("message");
                         result.setValue(Resource.error(message, null));
+                        Log.d("RatingRepository", "getAllStoreRating Error: " + errorMessage);
                     } catch (Exception e) {
                         result.setValue(Resource.error("Lỗi không xác định!", null));
+                        Log.d("RatingRepository", "getAllStoreRating Error: " +e);
                     }
                 }
             }
 
             @Override
             public void onFailure(Call<ListRatingResponse> call, Throwable t) {
+                Log.d("RatingRepository", "getAllStoreRating Error: " + t.getMessage());
                 result.setValue(Resource.error("Lỗi kết nối: " + t.getMessage(), null));
             }
         });

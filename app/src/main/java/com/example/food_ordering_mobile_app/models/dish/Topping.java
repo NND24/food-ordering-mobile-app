@@ -2,7 +2,9 @@ package com.example.food_ordering_mobile_app.models.dish;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Topping {
+import java.io.Serializable;
+
+public class Topping implements Serializable {
     @SerializedName("_id")
     private String id;
     private String name;
