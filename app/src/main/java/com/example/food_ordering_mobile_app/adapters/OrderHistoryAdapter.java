@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +28,7 @@ import com.example.food_ordering_mobile_app.models.order.Order;
 import com.example.food_ordering_mobile_app.models.order.OrderItem;
 import com.example.food_ordering_mobile_app.ui.customer.rating.AddRatingActivity;
 import com.example.food_ordering_mobile_app.ui.customer.rating.RatingActivity;
+import com.example.food_ordering_mobile_app.ui.customer.store.StoreActivity;
 import com.example.food_ordering_mobile_app.viewmodels.CartViewModel;
 import com.example.food_ordering_mobile_app.viewmodels.FavoriteViewModel;
 import com.example.food_ordering_mobile_app.viewmodels.OrderViewModel;
@@ -113,6 +115,11 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
             }
         });
 
+        holder.storeInfoContainer.setOnClickListener(v -> {
+            Intent intent = new Intent(context, StoreActivity.class);
+            intent.putExtra("storeId", order.getStore().getId());
+            context.startActivity(intent);
+        });
     }
 
     @Override
@@ -124,6 +131,7 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
         TextView tvStoreName, tvQuantity, tvAddress, tvDescription;
         ImageView imStoreAvatar;
         Button btnReOrder, btnRating;
+        LinearLayout storeInfoContainer;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -134,6 +142,7 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
             btnReOrder = itemView.findViewById(R.id.btnReOrder);
             btnRating = itemView.findViewById(R.id.btnRating);
             tvDescription = itemView.findViewById(R.id.tvDescription);
+            storeInfoContainer = itemView.findViewById(R.id.storeInfoContainer);
         }
     }
 }

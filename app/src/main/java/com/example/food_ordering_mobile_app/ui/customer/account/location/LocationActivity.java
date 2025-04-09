@@ -25,6 +25,7 @@ import com.example.food_ordering_mobile_app.adapters.LocationAdapter;
 import com.example.food_ordering_mobile_app.models.location.Location;
 import com.example.food_ordering_mobile_app.ui.common.CustomHeaderView;
 import com.example.food_ordering_mobile_app.ui.customer.cart.CartActivity;
+import com.example.food_ordering_mobile_app.ui.customer.cart.CartDetailActivity;
 import com.example.food_ordering_mobile_app.utils.Resource;
 import com.example.food_ordering_mobile_app.viewmodels.LocationViewModel;
 
@@ -40,8 +41,12 @@ public class LocationActivity extends AppCompatActivity {
     private LinearLayout btnAddHomeAddress, btnCurrentHomeAddress, btnAddCompanyAddress, btnCurrentCompanyAddress, btnAddNewAddress;
     private TextView tvHomeLocationAddress, tvCompanyLocationAddress;
     private ImageView btnHomeEdit, btnHomeRemove, btnCompanyEdit, btnCompanyRemove;
-    private String homeLocationId = "", companyLocationId = "";
+    private String homeLocationId = "", companyLocationId = "", storeId;
     private CustomHeaderView customHeaderView;
+    private List<Location> familiarLocations;
+    private List<Location> homeLocations;
+    private List<Location> companyLocations;
+    private boolean isFromCartDetailActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +69,9 @@ public class LocationActivity extends AppCompatActivity {
         btnCompanyRemove =findViewById(R.id.btnCompanyRemove);
         customHeaderView = findViewById(R.id.customHeaderView);
 
+        storeId = getIntent().getStringExtra("storeId") != null ? getIntent().getStringExtra("storeId") : "";
+        isFromCartDetailActivity = getIntent().getBooleanExtra("isFromCartDetailActivity", false);
+
         customHeaderView.setLifecycleOwner(this);
         customHeaderView.setText("Địa chỉ");
 
@@ -85,6 +93,39 @@ public class LocationActivity extends AppCompatActivity {
             intent.putExtra("type", "home");
             this.startActivity(intent);
         });
+
+        if(isFromCartDetailActivity) {
+            btnCurrentHomeAddress.setOnClickListener(v -> {
+                Intent resultIntent  = new Intent(this, CartDetailActivity.class);
+                resultIntent.putExtra("storeId", storeId);
+                resultIntent.putExtra("locationName", homeLocations.get(0).getName());
+                resultIntent.putExtra("deliveryAddress", homeLocations.get(0).getAddress());
+                resultIntent.putExtra("customerName", homeLocations.get(0).getContactName());
+                resultIntent.putExtra("customerPhonenumber", homeLocations.get(0).getContactPhonenumber());
+                resultIntent.putExtra("detailAddress", homeLocations.get(0).getDetailAddress());
+                resultIntent.putExtra("note", homeLocations.get(0).getNote());
+                resultIntent.putExtra("lat", homeLocations.get(0).getLat());
+                resultIntent.putExtra("lon", homeLocations.get(0).getLon());
+                setResult(RESULT_OK, resultIntent);
+                finish();
+            });
+
+            btnCurrentCompanyAddress.setOnClickListener(v -> {
+                Intent resultIntent = new Intent(this, CartDetailActivity.class);
+                resultIntent.putExtra("storeId", storeId);
+                resultIntent.putExtra("locationName", companyLocations.get(0).getName());
+                resultIntent.putExtra("deliveryAddress", companyLocations.get(0).getAddress());
+                resultIntent.putExtra("customerName", companyLocations.get(0).getContactName());
+                resultIntent.putExtra("customerPhonenumber", companyLocations.get(0).getContactPhonenumber());
+                resultIntent.putExtra("detailAddress", companyLocations.get(0).getDetailAddress());
+                resultIntent.putExtra("note", companyLocations.get(0).getNote());
+                resultIntent.putExtra("lat", companyLocations.get(0).getLat());
+                resultIntent.putExtra("lon", companyLocations.get(0).getLon());
+                setResult(RESULT_OK, resultIntent);
+                finish();
+            });
+        }
+
 
         btnAddCompanyAddress.setOnClickListener(v -> {
             Intent intent = new Intent(this, AddLocationActivity.class);
@@ -177,7 +218,22 @@ public class LocationActivity extends AppCompatActivity {
     private void setupLocation() {
         locationRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         locationList = new ArrayList<>();
-        locationAdapter = new LocationAdapter(LocationActivity.this,this, locationList);
+        locationAdapter = new LocationAdapter(LocationActivity.this,this, locationList, (location) -> {
+            if(isFromCartDetailActivity) {
+                Intent resultIntent = new Intent(this, CartDetailActivity.class);
+                resultIntent.putExtra("storeId", storeId);
+                resultIntent.putExtra("locationName", location.getName());
+                resultIntent.putExtra("deliveryAddress", location.getAddress());
+                resultIntent.putExtra("customerName", location.getContactName());
+                resultIntent.putExtra("customerPhonenumber", location.getContactPhonenumber());
+                resultIntent.putExtra("detailAddress", location.getDetailAddress());
+                resultIntent.putExtra("note", location.getNote());
+                resultIntent.putExtra("lat", location.getLat());
+                resultIntent.putExtra("lon", location.getLon());
+                setResult(RESULT_OK, resultIntent);
+                finish();
+            }
+        });
         locationRecyclerView.setAdapter(locationAdapter);
 
         locationViewModel.getUserLocationsResponse().observe(this, new Observer<Resource<List<Location>>>() {
@@ -192,9 +248,9 @@ public class LocationActivity extends AppCompatActivity {
                         Log.d("LocationFragment", "getUserLocationsResponse: " + resource.getData().toString());
                         locationList.clear();
 
-                        List<Location> familiarLocations = new ArrayList<>();
-                        List<Location> homeLocations = new ArrayList<>();
-                        List<Location> companyLocations = new ArrayList<>();
+                        familiarLocations = new ArrayList<>();
+                        homeLocations = new ArrayList<>();
+                        companyLocations = new ArrayList<>();
 
                         for (Location location : resource.getData()) {
                             if ("familiar".equalsIgnoreCase(location.getType())) {

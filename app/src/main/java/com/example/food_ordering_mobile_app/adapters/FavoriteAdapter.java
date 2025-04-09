@@ -1,6 +1,7 @@
 package com.example.food_ordering_mobile_app.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
@@ -23,6 +24,7 @@ import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.example.food_ordering_mobile_app.R;
 import com.example.food_ordering_mobile_app.models.foodType.FoodType;
 import com.example.food_ordering_mobile_app.models.store.Store;
+import com.example.food_ordering_mobile_app.ui.customer.store.StoreActivity;
 import com.example.food_ordering_mobile_app.viewmodels.FavoriteViewModel;
 
 import java.util.List;
@@ -114,6 +116,12 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.Favori
                     })
                     .create()
                     .show();
+        });
+
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, StoreActivity.class);
+            intent.putExtra("storeId", favorite.getId());
+            context.startActivity(intent);
         });
     }
 

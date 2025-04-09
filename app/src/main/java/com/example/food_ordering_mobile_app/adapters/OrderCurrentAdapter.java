@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -22,6 +23,7 @@ import com.example.food_ordering_mobile_app.R;
 import com.example.food_ordering_mobile_app.models.order.Order;
 import com.example.food_ordering_mobile_app.models.order.OrderItem;
 import com.example.food_ordering_mobile_app.ui.customer.orders.OrderDetailActivity;
+import com.example.food_ordering_mobile_app.ui.customer.store.StoreActivity;
 
 import java.util.List;
 
@@ -79,6 +81,12 @@ public class OrderCurrentAdapter extends RecyclerView.Adapter<OrderCurrentAdapte
             intent.putExtra("orderId", order.getId());
             context.startActivity(intent);
         });
+
+        holder.storeInfoContainer.setOnClickListener(v -> {
+            Intent intent = new Intent(context, StoreActivity.class);
+            intent.putExtra("storeId", order.getStore().getId());
+            context.startActivity(intent);
+        });
     }
 
     @Override
@@ -90,6 +98,7 @@ public class OrderCurrentAdapter extends RecyclerView.Adapter<OrderCurrentAdapte
         TextView tvStoreName, tvQuantity, tvAddress, tvDescription;
         ImageView imStoreAvatar;
         Button btnTrackOrder;
+        LinearLayout storeInfoContainer;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -99,6 +108,7 @@ public class OrderCurrentAdapter extends RecyclerView.Adapter<OrderCurrentAdapte
             imStoreAvatar = itemView.findViewById(R.id.imStoreAvatar);
             btnTrackOrder = itemView.findViewById(R.id.btnTrackOrder);
             tvDescription = itemView.findViewById(R.id.tvDescription);
+            storeInfoContainer = itemView.findViewById(R.id.storeInfoContainer);
         }
     }
 }

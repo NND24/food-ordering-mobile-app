@@ -8,10 +8,12 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
+import com.example.food_ordering_mobile_app.models.MessageResponse;
 import com.example.food_ordering_mobile_app.models.dish.Dish;
 import com.example.food_ordering_mobile_app.models.dish.DishImage;
 import com.example.food_ordering_mobile_app.models.rating.ListRatingResponse;
 import com.example.food_ordering_mobile_app.models.rating.Rating;
+import com.example.food_ordering_mobile_app.models.rating.RatingDetailResponse;
 import com.example.food_ordering_mobile_app.repository.RatingRepository;
 import com.example.food_ordering_mobile_app.utils.Resource;
 
@@ -27,20 +29,20 @@ public class RatingViewModel extends AndroidViewModel {
     public LiveData<Resource<ListRatingResponse>> getAllStoreRatingResponse() {
         return allStoreRatingResponse;
     }
-    private final MutableLiveData<Resource<Rating>> detailRatingResponse = new MutableLiveData<>();
-    public LiveData<Resource<Rating>> getDetailRatingResponse() {
+    private final MutableLiveData<Resource<RatingDetailResponse>> detailRatingResponse = new MutableLiveData<>();
+    public LiveData<Resource<RatingDetailResponse>> getDetailRatingResponse() {
         return detailRatingResponse;
     }
     private final MutableLiveData<Resource<String>> addStoreRatingResponse = new MutableLiveData<>();
     public LiveData<Resource<String>> getAddStoreRatingResponse() {
         return addStoreRatingResponse;
     }
-    private final MutableLiveData<Resource<String>> editStoreRatingResponse = new MutableLiveData<>();
-    public LiveData<Resource<String>> getEditStoreRatingResponse() {
+    private final MutableLiveData<Resource<MessageResponse>> editStoreRatingResponse = new MutableLiveData<>();
+    public LiveData<Resource<MessageResponse>> getEditStoreRatingResponse() {
         return editStoreRatingResponse;
     }
-    private final MutableLiveData<Resource<String>> deleteStoreRatingResponse = new MutableLiveData<>();
-    public LiveData<Resource<String>> getDeleteStoreRatingResponse() {
+    private final MutableLiveData<Resource<MessageResponse>> deleteStoreRatingResponse = new MutableLiveData<>();
+    public LiveData<Resource<MessageResponse>> getDeleteStoreRatingResponse() {
         return deleteStoreRatingResponse;
     }
 
@@ -61,11 +63,10 @@ public class RatingViewModel extends AndroidViewModel {
     }
 
     public void getDetailRating(String ratingId) {
-        LiveData<Resource<Rating>> result = ratingRepository.getDetailRating(ratingId);
-        result.observeForever(new Observer<Resource<Rating>>() {
+        LiveData<Resource<RatingDetailResponse>> result = ratingRepository.getDetailRating(ratingId);
+        result.observeForever(new Observer<Resource<RatingDetailResponse>>() {
             @Override
-            public void onChanged(Resource<Rating> resource) {
-                Log.d("RatingViewModel", "getCurrentUser: " + resource);
+            public void onChanged(Resource<RatingDetailResponse> resource) {
                 detailRatingResponse.setValue(resource);
             }
         });
@@ -83,22 +84,20 @@ public class RatingViewModel extends AndroidViewModel {
     }
 
     public void editStoreRating(String ratingId, Map<String, Object> data) {
-        LiveData<Resource<String>> result = ratingRepository.editStoreRating(ratingId, data);
-        result.observeForever(new Observer<Resource<String>>() {
+        LiveData<Resource<MessageResponse>> result = ratingRepository.editStoreRating(ratingId, data);
+        result.observeForever(new Observer<Resource<MessageResponse>>() {
             @Override
-            public void onChanged(Resource<String> resource) {
-                Log.d("RatingViewModel", "getCurrentUser: " + resource);
+            public void onChanged(Resource<MessageResponse> resource) {
                 editStoreRatingResponse.setValue(resource);
             }
         });
     }
 
     public void deleteStoreRating(String ratingId) {
-        LiveData<Resource<String>> result = ratingRepository.deleteStoreRating(ratingId);
-        result.observeForever(new Observer<Resource<String>>() {
+        LiveData<Resource<MessageResponse>> result = ratingRepository.deleteStoreRating(ratingId);
+        result.observeForever(new Observer<Resource<MessageResponse>>() {
             @Override
-            public void onChanged(Resource<String> resource) {
-                Log.d("RatingViewModel", "getCurrentUser: " + resource);
+            public void onChanged(Resource<MessageResponse> resource) {
                 deleteStoreRatingResponse.setValue(resource);
             }
         });

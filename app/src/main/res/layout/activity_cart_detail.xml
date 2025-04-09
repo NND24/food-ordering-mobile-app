@@ -87,6 +87,7 @@
                 android:background="@color/primaryBorderColor" />
 
             <LinearLayout
+                android:id="@+id/storeInfoContainer"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
@@ -133,7 +134,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:padding="20dp">
+                android:padding="20dp"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -148,6 +150,7 @@
                     android:layout_height="10dp" />
 
                 <LinearLayout
+                    android:id="@+id/btnChooseCurrentLocation"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
@@ -169,14 +172,16 @@
                         android:layout_weight="1">
 
                         <TextView
+                            android:id="@+id/tvLocationName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="175 Nguyễn Chí Thanh"
+                            android:text="Địa chỉ hiện tại"
                             android:textSize="18dp"
                             android:textStyle="bold"
                             android:textColor="@color/onPrimary"/>
 
                         <TextView
+                            android:id="@+id/tvDeliveryAddress"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="175 Nguyễn Chí Thanh, Phường 14, Quận 10, Thành phố Hồ Chí Minh"
@@ -200,6 +205,7 @@
                     android:layout_height="10dp" />
 
                 <LinearLayout
+                    android:id="@+id/btnAddDetailAddress"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@color/reviewBgColor"
@@ -213,7 +219,6 @@
                         android:textSize="16dp"
                         android:layout_weight="1"
                         android:textColor="@color/onPrimary"/>
-
 
                     <Space
                         android:layout_width="15dp"

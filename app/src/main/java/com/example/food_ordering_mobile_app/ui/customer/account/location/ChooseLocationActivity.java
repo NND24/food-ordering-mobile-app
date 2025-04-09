@@ -243,6 +243,7 @@ public class ChooseLocationActivity extends AppCompatActivity implements MapEven
                 URL apiUrl = new URL(url);
                 HttpURLConnection connection = (HttpURLConnection) apiUrl.openConnection();
                 connection.setRequestMethod("GET");
+                connection.setRequestProperty("User-Agent", "MyApp/1.0 (contact@example.com)");
 
                 InputStream inputStream = connection.getInputStream();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));

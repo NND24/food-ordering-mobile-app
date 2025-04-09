@@ -231,7 +231,7 @@ public class RatingAdapter extends RecyclerView.Adapter<RatingAdapter.ViewHolder
 
     private void onEditRating(Rating rating) {
         Intent intent = new Intent(context, EditRatingActivity.class);
-        intent.putExtra("", rating.getId());
+        intent.putExtra("ratingId", rating.getId());
         intent.putExtra("storeId", rating.getStore().getId());
         context.startActivity(intent);
     }
@@ -242,7 +242,7 @@ public class RatingAdapter extends RecyclerView.Adapter<RatingAdapter.ViewHolder
                 .setTitle("Xóa đánh giá")
                 .setMessage("Bạn có chắc chắn muốn xóa đánh giá này không?")
                 .setPositiveButton("Có", (dialog, which) -> {
-                    ratingViewModel.getDetailRating(rating.getId());
+                    ratingViewModel.deleteStoreRating(rating.getId());
                 })
                 .setNegativeButton("Không", null)
                 .show();

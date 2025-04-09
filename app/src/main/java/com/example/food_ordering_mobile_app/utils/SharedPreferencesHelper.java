@@ -3,6 +3,7 @@ package com.example.food_ordering_mobile_app.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.example.food_ordering_mobile_app.models.dish.DishStore;
 import com.example.food_ordering_mobile_app.models.foodType.FoodType;
 import com.example.food_ordering_mobile_app.models.store.Store;
 import com.example.food_ordering_mobile_app.models.user.User;
@@ -21,7 +22,8 @@ public class SharedPreferencesHelper {
     private static final String KEY_USER_INFO = "user_info";
     private static final String KEY_FOOD_TYPE_LIST = "food_type_list";
     private static final String KEY_STORE_LIST = "store_list";
-
+    private static final String KEY_STORE_INFO = "store_info";
+    private static final String KEY_LIST_DISH = "list_dish";
 
     private static SharedPreferencesHelper instance;
     private SharedPreferences sharedPreferences;
@@ -79,7 +81,6 @@ public class SharedPreferencesHelper {
         return new ArrayList<>();
     }
 
-
     public void saveStores(String key, List<Store> stores) {
         Gson gson = new Gson();
         String json = gson.toJson(stores);
@@ -95,6 +96,33 @@ public class SharedPreferencesHelper {
         return new ArrayList<>();
     }
 
+    public void saveStoreInfo(Store storeInfo) {
+        String json = gson.toJson(storeInfo);
+        editor.putString(KEY_STORE_INFO, json).apply();
+    }
+
+    public Store getSavedStoreInfo() {
+        String json = sharedPreferences.getString(KEY_STORE_INFO, null);
+        if (json != null) {
+            Type type = new TypeToken<Store>() {}.getType();
+            return gson.fromJson(json, type);
+        }
+        return null;
+    }
+
+    public void saveListDish(List<DishStore> listDish) {
+        String json = gson.toJson(listDish);
+        editor.putString(KEY_LIST_DISH, json).apply();
+    }
+
+    public List<DishStore> getSavedListDish() {
+        String json = sharedPreferences.getString(KEY_LIST_DISH, null);
+        if (json != null) {
+            Type type = new TypeToken<List<DishStore>>() {}.getType();
+            return gson.fromJson(json, type);
+        }
+        return null;
+    }
 
     public void clearUserData() {
         editor.clear();

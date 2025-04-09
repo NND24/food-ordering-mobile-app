@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,10 +27,12 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.example.food_ordering_mobile_app.R;
+import com.example.food_ordering_mobile_app.models.MessageResponse;
 import com.example.food_ordering_mobile_app.models.dish.DishImage;
 import com.example.food_ordering_mobile_app.models.order.OrderResponse;
 import com.example.food_ordering_mobile_app.models.order.OrderStore;
 import com.example.food_ordering_mobile_app.models.rating.Rating;
+import com.example.food_ordering_mobile_app.models.rating.RatingDetailResponse;
 import com.example.food_ordering_mobile_app.utils.Resource;
 import com.example.food_ordering_mobile_app.viewmodels.OrderViewModel;
 import com.example.food_ordering_mobile_app.viewmodels.RatingViewModel;
@@ -59,9 +62,8 @@ public class EditRatingActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_edit_rating);
 
-        Intent intent = getIntent();
-        storeId = intent.getStringExtra("storeId");
-        ratingId = intent.getStringExtra("ratingId");
+        storeId = getIntent().getStringExtra("storeId");
+        ratingId = getIntent().getStringExtra("ratingId");
 
         ratingBar = findViewById(R.id.ratingBar);
         editText = findViewById(R.id.editText);
@@ -76,22 +78,26 @@ public class EditRatingActivity extends AppCompatActivity {
 
         setupGetRating();
 
-        btnChooseImage.setOnClickListener(view -> openImagePicker());
+        btnChooseImage.setOnClickListener(view ->
+        {
+            selectedImageUris.clear();
+            imagePreviewContainer.removeAllViews();
+            openImagePicker();
+        });
 
         submitButton.setOnClickListener(view -> uploadImagesAndSubmitRating());
 
-        ratingViewModel.getEditStoreRatingResponse().observe(this, new Observer<Resource<String>>() {
+        ratingViewModel.getEditStoreRatingResponse().observe(this, new Observer<Resource<MessageResponse>>() {
             @Override
-            public void onChanged(Resource<String> resource) {
+            public void onChanged(Resource<MessageResponse> resource) {
                 switch (resource.getStatus()) {
                     case LOADING:
-                        // Hiển thị loading nếu cần
                         break;
                     case SUCCESS:
                         Intent intent = new Intent(EditRatingActivity.this, RatingActivity.class);
                         intent.putExtra("storeId", storeId);
                         startActivity(intent);
-
+                        finish();
                         Toast.makeText(EditRatingActivity.this, "Sửa đánh giá thành công!", Toast.LENGTH_SHORT).show();
                         break;
                     case ERROR:
@@ -112,7 +118,7 @@ public class EditRatingActivity extends AppCompatActivity {
                     Uri uri = data.getClipData().getItemAt(i).getUri();
                     if (!selectedImageUris.contains(uri)) {
                         selectedImageUris.add(uri); // Thêm ảnh mới vào danh sách
-                        addImagePreview(uri); // Thêm ảnh vào giao diện
+                        addImagePreview(uri, true); // Thêm ảnh vào giao diện
                     }
                 }
             } else if (data.getData() != null) {
@@ -120,7 +126,7 @@ public class EditRatingActivity extends AppCompatActivity {
                 Uri uri = data.getData();
                 if (!selectedImageUris.contains(uri)) {
                     selectedImageUris.add(uri); // Thêm ảnh mới vào danh sách
-                    addImagePreview(uri); // Thêm ảnh vào giao diện
+                    addImagePreview(uri, true); // Thêm ảnh vào giao diện
                 }
             }
         }
@@ -128,14 +134,14 @@ public class EditRatingActivity extends AppCompatActivity {
 
     private void setupGetRating() {
         ratingViewModel.getDetailRating(ratingId);
-        ratingViewModel.getDetailRatingResponse().observe(this, new Observer<Resource<Rating>>() {
+        ratingViewModel.getDetailRatingResponse().observe(this, new Observer<Resource<RatingDetailResponse>>() {
             @Override
-            public void onChanged(Resource<Rating> resource) {
+            public void onChanged(Resource<RatingDetailResponse> resource) {
                 switch (resource.getStatus()) {
                     case LOADING:
                         break;
                     case SUCCESS:
-                        Rating rating = resource.getData();
+                        RatingDetailResponse rating = resource.getData();
                         tvStoreName.setText(rating.getStore().getName());
 
                         String storeAvatarUrl = rating.getStore().getAvatar() != null ? rating.getStore().getAvatar().getUrl() : null;
@@ -163,8 +169,8 @@ public class EditRatingActivity extends AppCompatActivity {
                         if (rating.getImages() != null && !rating.getImages().isEmpty()) {
                             for (DishImage dishImage : rating.getImages()) {
                                 Uri imageUri = Uri.parse(dishImage.getUrl());
-                                selectedImageUris.add(imageUri);  // Thêm vào danh sách ảnh đã chọn
-                                addImagePreview(imageUri);  // Thêm ảnh vào giao diện
+                                selectedImageUris.add(imageUri);
+                                addImagePreview(imageUri, false);
                             }
                         }
                         break;
@@ -175,17 +181,12 @@ public class EditRatingActivity extends AppCompatActivity {
         });
     }
 
-    private void addImagePreview(Uri uri) {
-        // Tạo layout cha chứa ảnh và nút xoá
+    private void addImagePreview(Uri uri, boolean canDelete) {
         FrameLayout container = new FrameLayout(this);
-        LinearLayout.LayoutParams containerParams = new LinearLayout.LayoutParams(
-                200,
-                200
-        );
-        containerParams.setMargins(16, 0, 16, 0); // margin giữa các ảnh
+        LinearLayout.LayoutParams containerParams = new LinearLayout.LayoutParams(200, 200);
+        containerParams.setMargins(16, 0, 16, 0);
         container.setLayoutParams(containerParams);
 
-        // Tạo ảnh
         ImageView imageView = new ImageView(this);
         FrameLayout.LayoutParams imageParams = new FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT,
@@ -193,43 +194,39 @@ public class EditRatingActivity extends AppCompatActivity {
         );
         imageView.setLayoutParams(imageParams);
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        imageView.setImageURI(uri);
 
         Glide.with(this)
                 .load(uri)
                 .transform(new RoundedCorners(30))
                 .into(imageView);
 
-        // Tạo nút xoá
-        ImageView deleteButton = new ImageView(this);
-        FrameLayout.LayoutParams deleteParams = new FrameLayout.LayoutParams(
-                60,
-                60
-        );
-        deleteParams.setMargins(0, 0, 5, 5);  // Thêm margin cách viền 5dp
-        deleteParams.gravity = android.view.Gravity.END | android.view.Gravity.TOP;
-
-        // Đặt kích thước cho nút xóa
-        deleteParams.width = getResources().getDimensionPixelSize(R.dimen.delete_button_size);  // Kích thước tùy chỉnh (thường là 24dp)
-        deleteParams.height = getResources().getDimensionPixelSize(R.dimen.delete_button_size);  // Kích thước tùy chỉnh (thường là 24dp)
-
-        deleteButton.setLayoutParams(deleteParams);
-        deleteButton.setImageResource(R.drawable.ic_close_white); // Đảm bảo có icon trong drawable
-        deleteButton.setBackgroundResource(R.drawable.circle_orange); // Tạo hình tròn cho nút xoá
-        deleteButton.setPadding(10, 10, 10, 10); // Có thể giảm padding để icon nhỏ hơn
-
-        deleteButton.setOnClickListener(v -> {
-            selectedImageUris.remove(uri);
-            imagePreviewContainer.removeView(container);
-        });
-
-        // Gắn ảnh và nút xoá vào FrameLayout
         container.addView(imageView);
-        container.addView(deleteButton);
 
-        // Thêm vào container chính
+        if (canDelete) {
+            ImageView deleteButton = new ImageView(this);
+            FrameLayout.LayoutParams deleteParams = new FrameLayout.LayoutParams(
+                    getResources().getDimensionPixelSize(R.dimen.delete_button_size),
+                    getResources().getDimensionPixelSize(R.dimen.delete_button_size)
+            );
+            deleteParams.setMargins(0, 0, 5, 5);
+            deleteParams.gravity = Gravity.END | Gravity.TOP;
+
+            deleteButton.setLayoutParams(deleteParams);
+            deleteButton.setImageResource(R.drawable.ic_close_white);
+            deleteButton.setBackgroundResource(R.drawable.circle_orange);
+            deleteButton.setPadding(10, 10, 10, 10);
+
+            deleteButton.setOnClickListener(v -> {
+                selectedImageUris.remove(uri);
+                imagePreviewContainer.removeView(container);
+            });
+
+            container.addView(deleteButton);
+        }
+
         imagePreviewContainer.addView(container);
     }
+
 
     private boolean isValidRatingAndComment(float rating, String comment) {
         if (rating == 0) {
@@ -251,7 +248,13 @@ public class EditRatingActivity extends AppCompatActivity {
             return; // Dừng nếu không hợp lệ
         }
 
-        if (selectedImageUris.isEmpty()) {
+        boolean allAreHttpUrls = selectedImageUris.isEmpty() ||
+                selectedImageUris.stream().allMatch(uri -> {
+                    String scheme = uri.getScheme();
+                    return scheme != null && (scheme.equals("http") || scheme.equals("https"));
+                });
+
+        if (selectedImageUris.isEmpty() || allAreHttpUrls) {
             Log.d("RatingDebug", "No images selected.");
             // Không có ảnh, gửi đánh giá bình thường
             Map<String, Object> data = new HashMap<>();

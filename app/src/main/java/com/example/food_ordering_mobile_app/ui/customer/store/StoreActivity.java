@@ -53,6 +53,7 @@ import com.example.food_ordering_mobile_app.ui.customer.dish.DishActivity;
 import com.example.food_ordering_mobile_app.ui.customer.rating.RatingActivity;
 import com.example.food_ordering_mobile_app.utils.Functions;
 import com.example.food_ordering_mobile_app.utils.Resource;
+import com.example.food_ordering_mobile_app.utils.SharedPreferencesHelper;
 import com.example.food_ordering_mobile_app.viewmodels.CartViewModel;
 import com.example.food_ordering_mobile_app.viewmodels.DishViewModel;
 import com.example.food_ordering_mobile_app.viewmodels.FavoriteViewModel;
@@ -198,6 +199,11 @@ public class StoreActivity extends AppCompatActivity {
     }
 
     private void setupStore() {
+        Store storeInfo = SharedPreferencesHelper.getInstance(getApplicationContext()).getSavedStoreInfo();
+        if (storeInfo != null) {
+            displayStoreInfo(storeInfo);
+        }
+
         storeViewModel.getStoreInformation(storeId);
         storeViewModel.getStoreInformationResponse().observe(this, new Observer<Resource<StoreResponse>>() {
             @Override
@@ -208,73 +214,9 @@ public class StoreActivity extends AppCompatActivity {
                         break;
                     case SUCCESS:
                         swipeRefreshLayout.setRefreshing(false);
-                        tvStoreName.setText(resource.getData().getData().getName());
-                        tvDescription.setText(resource.getData().getData().getDescription());
-                        if (resource.getData().getData().getAmountRating() != null && resource.getData().getData().getAmountRating() > 0) {
-                            tvAvgRating.setText(String.format("%.2f", resource.getData().getData().getAvgRating()));
-                            tvAmountRating.setText(String.valueOf(resource.getData().getData().getAmountRating()));
-                            tvAvgRating.setVisibility(View.VISIBLE);
-                            tvAmountRating.setVisibility(View.VISIBLE);
-                            ivStar.setVisibility(View.VISIBLE);
-                            tvRatingOpen.setVisibility(View.VISIBLE);
-                            tvRatingText.setVisibility(View.VISIBLE);
-                            tvRatingClose.setVisibility(View.VISIBLE);
-                            tvDot.setVisibility(View.VISIBLE);
-                        } else {
-                            tvAvgRating.setVisibility(View.GONE);
-                            tvAmountRating.setVisibility(View.GONE);
-                            ivStar.setVisibility(View.GONE);
-                            tvRatingOpen.setVisibility(View.GONE);
-                            tvRatingText.setVisibility(View.GONE);
-                            tvRatingClose.setVisibility(View.GONE);
-                            tvDot.setVisibility(View.GONE);
-                        }
-
-                        if (resource.getData().getData().getStoreCategory() != null && !resource.getData().getData().getStoreCategory().isEmpty()) {
-                            SpannableStringBuilder categories = new SpannableStringBuilder();
-                            for (int i = 0; i < resource.getData().getData().getStoreCategory().size(); i++) {
-                                FoodType type = resource.getData().getData().getStoreCategory().get(i);
-                                categories.append(type.getName());
-
-                                if (i < resource.getData().getData().getStoreCategory().size() - 1) {
-                                    categories.append(" • ");
-                                }
-                            }
-                            tvStoreFoodType.setText(categories);
-                        } else {
-                            tvStoreFoodType.setText("");
-                        }
-
-                        String storeAvatarUrl = resource.getData().getData().getAvatar() != null ? resource.getData().getData().getAvatar().getUrl() : null;
-                        Glide.with(ivStoreAvatar)
-                                .asBitmap()
-                                .load(storeAvatarUrl)
-                                .override(95, 95)
-                                .centerCrop()
-                                .into(new BitmapImageViewTarget(ivStoreAvatar) {
-                                    @Override
-                                    protected void setResource(Bitmap resource) {
-                                        RoundedBitmapDrawable roundedDrawable =
-                                                RoundedBitmapDrawableFactory.create(ivStoreAvatar.getResources(), resource);
-                                        roundedDrawable.setCornerRadius(6);
-                                        ivStoreAvatar.setImageDrawable(roundedDrawable);
-                                    }
-                                });
-
-                        String storeCoverUrl = resource.getData().getData().getCover() != null ? resource.getData().getData().getCover().getUrl() : null;
-                        Glide.with(ivStoreCover)
-                                .asBitmap()
-                                .load(storeCoverUrl)
-                                .into(new BitmapImageViewTarget(ivStoreCover) {
-                                    @Override
-                                    protected void setResource(Bitmap resource) {
-                                        RoundedBitmapDrawable roundedDrawable =
-                                                RoundedBitmapDrawableFactory.create(ivStoreCover.getResources(), resource);
-                                        roundedDrawable.setCornerRadius(0);
-                                        ivStoreCover.setImageDrawable(roundedDrawable);
-                                    }
-                                });
-
+                        Store newStoreInfo = resource.getData().getData();
+                        SharedPreferencesHelper.getInstance(getApplicationContext()).saveStoreInfo(newStoreInfo);
+                        displayStoreInfo(newStoreInfo);
                         break;
                     case ERROR:
                         swipeRefreshLayout.setRefreshing(false);
@@ -284,13 +226,80 @@ public class StoreActivity extends AppCompatActivity {
         });
     }
 
+    private void displayStoreInfo(Store store) {
+        tvStoreName.setText(store.getName());
+        tvDescription.setText(store.getDescription());
+
+        if (store.getAmountRating() != null && store.getAmountRating() > 0) {
+            tvAvgRating.setText(String.format("%.2f", store.getAvgRating()));
+            tvAmountRating.setText(String.valueOf(store.getAmountRating()));
+            tvAvgRating.setVisibility(View.VISIBLE);
+            tvAmountRating.setVisibility(View.VISIBLE);
+            ivStar.setVisibility(View.VISIBLE);
+            tvRatingOpen.setVisibility(View.VISIBLE);
+            tvRatingText.setVisibility(View.VISIBLE);
+            tvRatingClose.setVisibility(View.VISIBLE);
+            tvDot.setVisibility(View.VISIBLE);
+        } else {
+            tvAvgRating.setVisibility(View.GONE);
+            tvAmountRating.setVisibility(View.GONE);
+            ivStar.setVisibility(View.GONE);
+            tvRatingOpen.setVisibility(View.GONE);
+            tvRatingText.setVisibility(View.GONE);
+            tvRatingClose.setVisibility(View.GONE);
+            tvDot.setVisibility(View.GONE);
+        }
+
+        if (store.getStoreCategory() != null && !store.getStoreCategory().isEmpty()) {
+            SpannableStringBuilder categories = new SpannableStringBuilder();
+            for (int i = 0; i < store.getStoreCategory().size(); i++) {
+                categories.append(store.getStoreCategory().get(i).getName());
+                if (i < store.getStoreCategory().size() - 1) {
+                    categories.append(" • ");
+                }
+            }
+            tvStoreFoodType.setText(categories);
+        } else {
+            tvStoreFoodType.setText("");
+        }
+
+        // Load avatar
+        String storeAvatarUrl = store.getAvatar() != null ? store.getAvatar().getUrl() : null;
+        Glide.with(ivStoreAvatar)
+                .asBitmap()
+                .load(storeAvatarUrl)
+                .override(95, 95)
+                .centerCrop()
+                .into(new BitmapImageViewTarget(ivStoreAvatar) {
+                    @Override
+                    protected void setResource(Bitmap resource) {
+                        RoundedBitmapDrawable roundedDrawable =
+                                RoundedBitmapDrawableFactory.create(ivStoreAvatar.getResources(), resource);
+                        roundedDrawable.setCornerRadius(6);
+                        ivStoreAvatar.setImageDrawable(roundedDrawable);
+                    }
+                });
+
+        // Load cover
+        String storeCoverUrl = store.getCover() != null ? store.getCover().getUrl() : null;
+        Glide.with(ivStoreCover)
+                .asBitmap()
+                .load(storeCoverUrl)
+                .into(new BitmapImageViewTarget(ivStoreCover) {
+                    @Override
+                    protected void setResource(Bitmap resource) {
+                        RoundedBitmapDrawable roundedDrawable =
+                                RoundedBitmapDrawableFactory.create(ivStoreCover.getResources(), resource);
+                        roundedDrawable.setCornerRadius(0);
+                        ivStoreCover.setImageDrawable(roundedDrawable);
+                    }
+                });
+    }
+
     private void setupBigDish() {
         dishBigRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         dishBigList = new ArrayList<>();
         dishBigAdapter = new DishBigAdapter(this,this, dishBigList, dishBig -> {
-//            Intent intent = new Intent(this, DishActivity.class);
-//            intent.putExtra("dishId", dishBig.getId());
-//            startActivity(intent);
         });
         dishBigRecyclerView.setAdapter(dishBigAdapter);
 
@@ -305,6 +314,7 @@ public class StoreActivity extends AppCompatActivity {
                         swipeRefreshLayout.setRefreshing(false);
                         dishBigList.clear();
                         dishBigList.addAll(resource.getData().getData());
+                        SharedPreferencesHelper.getInstance(getApplicationContext()).saveListDish(resource.getData().getData());
                         dishBigAdapter.notifyDataSetChanged();
                         break;
                     case ERROR:
@@ -313,6 +323,13 @@ public class StoreActivity extends AppCompatActivity {
                 }
             }
         });
+
+        List<DishStore> savedListDish = SharedPreferencesHelper.getInstance(getApplicationContext()).getSavedListDish();
+        if (savedListDish != null && !savedListDish.isEmpty()) {
+            dishBigList.clear();
+            dishBigList.addAll(savedListDish);
+            dishBigAdapter.notifyDataSetChanged();
+        }
 
         dishViewModel.getAllBigDish(storeId);
     }

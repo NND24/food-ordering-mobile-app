@@ -23,6 +23,7 @@ import com.example.food_ordering_mobile_app.R;
 import com.example.food_ordering_mobile_app.models.location.Location;
 import com.example.food_ordering_mobile_app.models.order.Order;
 import com.example.food_ordering_mobile_app.models.order.OrderItem;
+import com.example.food_ordering_mobile_app.models.store.Store;
 import com.example.food_ordering_mobile_app.ui.customer.account.location.EditLocationActivity;
 import com.example.food_ordering_mobile_app.ui.customer.orders.OrderDetailActivity;
 import com.example.food_ordering_mobile_app.viewmodels.CartViewModel;
@@ -34,11 +35,16 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
     private Context context;
     private List<Location> locationList;
     private FragmentActivity activity;
+    private OnLocationClickListener onLocationClickListener;
+    public interface OnLocationClickListener {
+        void onLocationClick(Location location);
+    }
 
-    public LocationAdapter(FragmentActivity activity, Context context, List<Location> locationList) {
+    public LocationAdapter(FragmentActivity activity, Context context, List<Location> locationList, OnLocationClickListener onLocationClickListener) {
         this.activity = activity;
         this.context = context;
         this.locationList = locationList;
+        this.onLocationClickListener = onLocationClickListener;
     }
 
     @NonNull
@@ -77,6 +83,12 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
                     })
                     .create()
                     .show();
+        });
+
+        holder.itemView.setOnClickListener(v -> {
+            if (onLocationClickListener != null) {
+                onLocationClickListener.onLocationClick(location);
+            }
         });
     }
 

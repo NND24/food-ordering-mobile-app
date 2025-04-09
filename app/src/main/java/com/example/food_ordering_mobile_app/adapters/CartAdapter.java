@@ -1,6 +1,7 @@
 package com.example.food_ordering_mobile_app.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
@@ -26,6 +27,7 @@ import com.example.food_ordering_mobile_app.models.cart.Cart;
 import com.example.food_ordering_mobile_app.models.cart.CartItem;
 import com.example.food_ordering_mobile_app.models.foodType.FoodType;
 import com.example.food_ordering_mobile_app.models.order.OrderItem;
+import com.example.food_ordering_mobile_app.ui.customer.store.StoreActivity;
 import com.example.food_ordering_mobile_app.viewmodels.CartViewModel;
 import com.example.food_ordering_mobile_app.viewmodels.FavoriteViewModel;
 
@@ -134,6 +136,12 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                     })
                     .create()
                     .show();
+        });
+
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, StoreActivity.class);
+            intent.putExtra("storeId", cart.getStore().getId());
+            context.startActivity(intent);
         });
     }
 

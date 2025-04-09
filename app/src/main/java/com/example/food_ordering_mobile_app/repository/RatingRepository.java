@@ -6,10 +6,12 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.food_ordering_mobile_app.models.MessageResponse;
 import com.example.food_ordering_mobile_app.models.dish.Dish;
 import com.example.food_ordering_mobile_app.models.dish.DishImage;
 import com.example.food_ordering_mobile_app.models.rating.ListRatingResponse;
 import com.example.food_ordering_mobile_app.models.rating.Rating;
+import com.example.food_ordering_mobile_app.models.rating.RatingDetailResponse;
 import com.example.food_ordering_mobile_app.network.RetrofitClient;
 import com.example.food_ordering_mobile_app.network.services.RatingService;
 import com.example.food_ordering_mobile_app.utils.PersistentCookieStore;
@@ -83,15 +85,15 @@ public class RatingRepository {
         return result;
     }
 
-    public LiveData<Resource<Rating>> getDetailRating(String ratingId) {
-        MutableLiveData<Resource<Rating>> result = new MutableLiveData<>();
+    public LiveData<Resource<RatingDetailResponse>> getDetailRating(String ratingId) {
+        MutableLiveData<Resource<RatingDetailResponse>> result = new MutableLiveData<>();
         result.setValue(Resource.loading(null));
 
-        ratingService.getDetailRating(ratingId).enqueue(new Callback<Rating>() {
+        ratingService.getDetailRating(ratingId).enqueue(new Callback<RatingDetailResponse>() {
             @Override
-            public void onResponse(Call<Rating> call, Response<Rating> response) {
+            public void onResponse(Call<RatingDetailResponse> call, Response<RatingDetailResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    Log.d("RatingRepository", "getAllStoreRating: " + response.body());
+                    Log.d("RatingRepository", "getDetailRating: " + response.body());
                     result.setValue(Resource.success("Lay thong tin thành công!", response.body()));
                 } else {
                     try {
@@ -99,6 +101,7 @@ public class RatingRepository {
                         JSONObject jsonObject = new JSONObject(errorMessage);
                         String message = jsonObject.getString("message");
                         result.setValue(Resource.error(message, null));
+                        Log.d("RatingRepository", "getDetailRating Error: " + errorMessage);
                     } catch (Exception e) {
                         result.setValue(Resource.error("Lỗi không xác định!", null));
                     }
@@ -106,7 +109,8 @@ public class RatingRepository {
             }
 
             @Override
-            public void onFailure(Call<Rating> call, Throwable t) {
+            public void onFailure(Call<RatingDetailResponse> call, Throwable t) {
+                Log.d("RatingRepository", "getDetailRating Error: " + t.getMessage());
                 result.setValue(Resource.error("Lỗi kết nối: " + t.getMessage(), null));
             }
         });
@@ -182,13 +186,13 @@ public class RatingRepository {
         return result;
     }
 
-    public LiveData<Resource<String>> editStoreRating(String ratingId, @Body Map<String, Object> data) {
-        MutableLiveData<Resource<String>> result = new MutableLiveData<>();
+    public LiveData<Resource<MessageResponse>> editStoreRating(String ratingId, @Body Map<String, Object> data) {
+        MutableLiveData<Resource<MessageResponse>> result = new MutableLiveData<>();
         result.setValue(Resource.loading(null));
 
-        ratingService.editStoreRating(ratingId, data).enqueue(new Callback<String>() {
+        ratingService.editStoreRating(ratingId, data).enqueue(new Callback<MessageResponse>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
+            public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Log.d("RatingRepository", "getAllStoreRating: " + response.body());
                     result.setValue(Resource.success("Lay thong tin thành công!", response.body()));
@@ -205,7 +209,7 @@ public class RatingRepository {
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(Call<MessageResponse> call, Throwable t) {
                 result.setValue(Resource.error("Lỗi kết nối: " + t.getMessage(), null));
             }
         });
@@ -213,13 +217,13 @@ public class RatingRepository {
         return result;
     }
 
-    public LiveData<Resource<String>> deleteStoreRating(String ratingId) {
-        MutableLiveData<Resource<String>> result = new MutableLiveData<>();
+    public LiveData<Resource<MessageResponse>> deleteStoreRating(String ratingId) {
+        MutableLiveData<Resource<MessageResponse>> result = new MutableLiveData<>();
         result.setValue(Resource.loading(null));
 
-        ratingService.deleteStoreRating(ratingId).enqueue(new Callback<String>() {
+        ratingService.deleteStoreRating(ratingId).enqueue(new Callback<MessageResponse>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
+            public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Log.d("RatingRepository", "getAllStoreRating: " + response.body());
                     result.setValue(Resource.success("Lay thong tin thành công!", response.body()));
@@ -236,7 +240,7 @@ public class RatingRepository {
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(Call<MessageResponse> call, Throwable t) {
                 result.setValue(Resource.error("Lỗi kết nối: " + t.getMessage(), null));
             }
         });

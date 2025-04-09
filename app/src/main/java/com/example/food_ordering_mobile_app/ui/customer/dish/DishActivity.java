@@ -61,7 +61,7 @@ public class DishActivity extends AppCompatActivity {
     private ImageButton btnIncrease, btnDecrease;
     private String dishId;
     private DishDetail dish;
-    private List<Topping> toppingList;
+    private List<Topping> toppingList = new ArrayList<>();
     private int toppingValue = 0;
     private int totalPrice = 0;
     private CartItem matchedItem;
@@ -148,8 +148,10 @@ public class DishActivity extends AppCompatActivity {
             int quantity = Integer.parseInt(tvQuantity.getText().toString());
 
             List<String> toppingIds = new ArrayList<>();
-            for (Topping topping : toppingList) {
-                toppingIds.add(topping.getId());
+            if (toppingList != null) {
+                for (Topping topping : toppingList) {
+                    toppingIds.add(topping.getId());
+                }
             }
 
             Map<String, Object> data = new HashMap<>();
@@ -172,8 +174,8 @@ public class DishActivity extends AppCompatActivity {
                     case SUCCESS:
                         swipeRefreshLayout.setRefreshing(false);
                         Intent intent = new Intent(DishActivity.this, StoreActivity.class);
+                        intent.putExtra("storeId", dish.getStore());
                         startActivity(intent);
-                        finish();
                         break;
                     case ERROR:
                         swipeRefreshLayout.setRefreshing(false);
@@ -202,7 +204,7 @@ public class DishActivity extends AppCompatActivity {
                         break;
                     case SUCCESS:
                         swipeRefreshLayout.setRefreshing(false);
-                        dish  = resource.getData().getData();
+                        dish = resource.getData().getData();
 
                         if(matchedItem != null) {
                             tvQuantity.setText(String.valueOf(matchedItem.getQuantity()));
@@ -217,10 +219,12 @@ public class DishActivity extends AppCompatActivity {
 
                             totalPrice = matchedItem.getQuantity() * dish.getPrice() + toppingValue;
                             tvTotalPrice.setText(String.valueOf(formatter.format(totalPrice)));
+                        } else {
+                            tvTotalPrice.setText(String.valueOf(formatter.format(dish.getPrice())));
                         }
 
-                        tvDishName.setText(resource.getData().getData().getName());
-                        String description = resource.getData().getData().getDescription();
+                        tvDishName.setText(dish.getName());
+                        String description = dish.getDescription();
                         if (description == null || description.isEmpty()) {
                             tvDishDescription.setVisibility(View.GONE);
                         } else {
@@ -228,9 +232,10 @@ public class DishActivity extends AppCompatActivity {
                             tvDishDescription.setText(description);
                         }
 
-                        tvPrice.setText(String.valueOf(formatter.format(resource.getData().getData().getPrice())));
+                        tvPrice.setText(String.valueOf(formatter.format(dish.getPrice())));
 
-                        String dishAvatarUrl = resource.getData().getData().getImage() != null ? resource.getData().getData().getImage().getUrl() : null;
+
+                        String dishAvatarUrl = dish.getImage() != null ? dish.getImage().getUrl() : null;
                         Glide.with(ivDishAvatar)
                                 .asBitmap()
                                 .load(dishAvatarUrl)

@@ -93,27 +93,22 @@
                 android:textSize="24dp"
                 android:textStyle="bold" />
 
-            <LinearLayout
+            <TextView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content"
+                android:text="Bạn thấy món ăn hoặc thức uống từ"
+                android:textAlignment="center"
+                android:textColor="@color/onPrimary"
+                android:textSize="16dp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Bạn thấy món ăn hoặc thức uống từ "
-                    android:textColor="@color/onPrimary"
-                    android:textSize="16dp" />
-
-                <TextView
-                    android:id="@+id/tvStoreName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Phở Gà BMT"
-                    android:textAlignment="center"
-                    android:textColor="@color/onPrimary"
-                    android:textSize="16dp" />
-            </LinearLayout>
+            <TextView
+                android:id="@+id/tvStoreName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Phở Gà BMT"
+                android:textAlignment="center"
+                android:textColor="@color/onPrimary"
+                android:textSize="16dp" />
 
             <TextView
                 android:layout_width="match_parent"

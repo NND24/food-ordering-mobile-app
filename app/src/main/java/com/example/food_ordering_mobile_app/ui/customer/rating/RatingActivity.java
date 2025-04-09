@@ -19,6 +19,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.food_ordering_mobile_app.R;
 import com.example.food_ordering_mobile_app.adapters.RatingAdapter;
+import com.example.food_ordering_mobile_app.models.MessageResponse;
 import com.example.food_ordering_mobile_app.models.rating.ListRatingResponse;
 import com.example.food_ordering_mobile_app.models.rating.Rating;
 import com.example.food_ordering_mobile_app.utils.Resource;
@@ -58,23 +59,20 @@ public class RatingActivity extends AppCompatActivity {
 
         ratingViewModel = new ViewModelProvider(this).get(RatingViewModel.class);
 
+        swipeRefreshLayout.setOnRefreshListener(this::refreshData);
+
         setupRating();
 
-        ratingViewModel.getDetailRatingResponse().observe(this, new Observer<Resource<Rating>>() {
+        ratingViewModel.getDeleteStoreRatingResponse().observe(this, new Observer<Resource<MessageResponse>>() {
             @Override
-            public void onChanged(Resource<Rating> resource) {
+            public void onChanged(Resource<MessageResponse> resource) {
                 switch (resource.getStatus()) {
                     case LOADING:
                         swipeRefreshLayout.setRefreshing(true);
                         break;
                     case SUCCESS:
                         swipeRefreshLayout.setRefreshing(false);
-                        Map<String, String> queryParams = new HashMap<>();
-                        queryParams.put("sort", "");
-                        queryParams.put("limit", "");
-                        queryParams.put("page", "");
-
-                        ratingViewModel.getAllStoreRating(storeId, queryParams);
+                        setupRating();
                         break;
                     case ERROR:
                         swipeRefreshLayout.setRefreshing(false);
@@ -168,6 +166,10 @@ public class RatingActivity extends AppCompatActivity {
 
             layoutRatingBar.addView(ratingRow);
         }
+    }
+
+    private void refreshData() {
+        setupRating();
     }
 
     public void goBack(View view) {
