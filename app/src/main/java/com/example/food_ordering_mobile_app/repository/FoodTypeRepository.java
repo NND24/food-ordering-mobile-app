@@ -9,15 +9,11 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.food_ordering_mobile_app.models.foodType.FoodType;
 import com.example.food_ordering_mobile_app.network.RetrofitClient;
 import com.example.food_ordering_mobile_app.network.services.FoodTypeService;
-import com.example.food_ordering_mobile_app.utils.PersistentCookieStore;
 import com.example.food_ordering_mobile_app.utils.Resource;
 import com.example.food_ordering_mobile_app.utils.SharedPreferencesHelper;
 
 import org.json.JSONObject;
 
-import java.net.CookieHandler;
-import java.net.CookieManager;
-import java.net.CookiePolicy;
 import java.util.List;
 
 import retrofit2.Call;
@@ -31,16 +27,6 @@ public class FoodTypeRepository {
     public FoodTypeRepository(Context context) {
         foodTypeService = RetrofitClient.getClient(context).create(FoodTypeService.class);
         sharedPreferencesHelper = new SharedPreferencesHelper(context);
-
-        CookieManager cookieManager = (CookieManager) CookieHandler.getDefault();
-
-        if (!(cookieManager.getCookieStore() instanceof PersistentCookieStore)) {
-            Log.e("FoodTypeRepository", "CookieStore chưa đúng, thiết lập lại...");
-            cookieManager = new CookieManager(new PersistentCookieStore(context), CookiePolicy.ACCEPT_ALL);
-            CookieHandler.setDefault(cookieManager);
-        } else {
-            Log.d("FoodTypeRepository", "PersistentCookieStore đã được thiết lập!");
-        }
     }
 
     public LiveData<Resource<List<FoodType>>> getAllFoodTypes() {

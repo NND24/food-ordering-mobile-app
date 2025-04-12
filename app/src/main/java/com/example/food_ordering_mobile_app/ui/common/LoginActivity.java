@@ -37,7 +37,7 @@ public class LoginActivity extends AppCompatActivity {
     private AuthViewModel authViewModel;
     private EditText edtEmail, edtPassword;
     private ImageButton btnShowPassword;
-    private Button btnLogin, btnLoginFacebook;
+    private Button btnLogin;
     private boolean isPasswordVisible = true;
     private GoogleSignInButton btnLoginGoogle;
     private GoogleSignInOptions gOptions;
@@ -54,7 +54,6 @@ public class LoginActivity extends AppCompatActivity {
         edtPassword = findViewById(R.id.edtPassword);
         btnShowPassword = findViewById(R.id.btnShowPassword);
         btnLogin = findViewById(R.id.btnLogin);
-        btnLoginFacebook = findViewById(R.id.btnLoginFacebook);
         btnLoginGoogle = findViewById(R.id.btnLoginGoogle);
 
         // Toggle mật khẩu

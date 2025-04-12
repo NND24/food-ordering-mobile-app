@@ -18,6 +18,7 @@ import com.google.gson.reflect.TypeToken;
 public class SharedPreferencesHelper {
     private static final String PREF_NAME = "user_prefs";
     private static final String KEY_ACCESS_TOKEN = "access_token";
+    private static final String KEY_REFRESH_TOKEN = "refresh_token";
     private static final String KEY_USER_ID = "user_id";
     private static final String KEY_USER_INFO = "user_info";
     private static final String KEY_FOOD_TYPE_LIST = "food_type_list";
@@ -42,14 +43,23 @@ public class SharedPreferencesHelper {
         return instance;
     }
 
-    public void saveUserData(String accessToken, String userId) {
+    public void saveUserData(String accessToken, String refreshToken, String userId) {
         editor.putString(KEY_ACCESS_TOKEN, accessToken);
+        editor.putString(KEY_REFRESH_TOKEN, refreshToken);
         editor.putString(KEY_USER_ID, userId);
         editor.apply();
     }
 
     public String getAccessToken() {
         return sharedPreferences.getString(KEY_ACCESS_TOKEN, null);
+    }
+    public void saveAccessToken(String accessToken) {
+        editor.putString(KEY_ACCESS_TOKEN, accessToken);
+        editor.apply();
+    }
+
+    public String getRefreshToken() {
+        return sharedPreferences.getString(KEY_REFRESH_TOKEN, null);
     }
 
     public String getUserId() {
@@ -127,5 +137,9 @@ public class SharedPreferencesHelper {
     public void clearUserData() {
         editor.clear();
         editor.apply();
+    }
+
+    public void clearAll() {
+        editor.clear().apply();
     }
 }

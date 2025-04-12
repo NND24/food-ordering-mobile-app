@@ -9,15 +9,10 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.food_ordering_mobile_app.models.user.User;
 import com.example.food_ordering_mobile_app.network.RetrofitClient;
 import com.example.food_ordering_mobile_app.network.services.UserService;
-import com.example.food_ordering_mobile_app.utils.PersistentCookieStore;
 import com.example.food_ordering_mobile_app.utils.Resource;
 import com.example.food_ordering_mobile_app.utils.SharedPreferencesHelper;
 
 import org.json.JSONObject;
-
-import java.net.CookieHandler;
-import java.net.CookieManager;
-import java.net.CookiePolicy;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -30,16 +25,6 @@ public class UserRepository {
     public UserRepository(Context context) {
         userService = RetrofitClient.getClient(context).create(UserService.class);
         sharedPreferencesHelper = new SharedPreferencesHelper(context);
-
-        CookieManager cookieManager = (CookieManager) CookieHandler.getDefault();
-
-        if (!(cookieManager.getCookieStore() instanceof PersistentCookieStore)) {
-            Log.e("UserRepository", "CookieStore chưa đúng, thiết lập lại...");
-            cookieManager = new CookieManager(new PersistentCookieStore(context), CookiePolicy.ACCEPT_ALL);
-            CookieHandler.setDefault(cookieManager);
-        } else {
-            Log.d("UserRepository", "PersistentCookieStore đã được thiết lập!");
-        }
     }
 
     public LiveData<Resource<User>> getCurrentUser() {

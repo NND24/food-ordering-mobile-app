@@ -7,20 +7,15 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.food_ordering_mobile_app.models.ApiResponse;
-import com.example.food_ordering_mobile_app.models.cart.Cart;
 import com.example.food_ordering_mobile_app.models.dish.Dish;
 import com.example.food_ordering_mobile_app.models.dish.ToppingGroup;
 import com.example.food_ordering_mobile_app.network.RetrofitClient;
 import com.example.food_ordering_mobile_app.network.services.DishService;
-import com.example.food_ordering_mobile_app.utils.PersistentCookieStore;
 import com.example.food_ordering_mobile_app.utils.Resource;
 import com.example.food_ordering_mobile_app.utils.SharedPreferencesHelper;
 
 import org.json.JSONObject;
 
-import java.net.CookieHandler;
-import java.net.CookieManager;
-import java.net.CookiePolicy;
 import java.util.List;
 
 import retrofit2.Call;
@@ -34,13 +29,6 @@ public class DishRepository {
     public DishRepository(Context context) {
         dishService = RetrofitClient.getClient(context).create(DishService.class);
         sharedPreferencesHelper = new SharedPreferencesHelper(context);
-
-        CookieManager cookieManager = (CookieManager) CookieHandler.getDefault();
-
-        if (!(cookieManager.getCookieStore() instanceof PersistentCookieStore)) {
-            cookieManager = new CookieManager(new PersistentCookieStore(context), CookiePolicy.ACCEPT_ALL);
-            CookieHandler.setDefault(cookieManager);
-        }
     }
 
     public LiveData<Resource<ApiResponse<List<Dish>>>> getAllDish(String storeId) {

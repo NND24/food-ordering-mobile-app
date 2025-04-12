@@ -10,15 +10,11 @@ import com.example.food_ordering_mobile_app.models.ApiResponse;
 import com.example.food_ordering_mobile_app.models.notification.Notification;
 import com.example.food_ordering_mobile_app.network.RetrofitClient;
 import com.example.food_ordering_mobile_app.network.services.NotificationService;
-import com.example.food_ordering_mobile_app.utils.PersistentCookieStore;
 import com.example.food_ordering_mobile_app.utils.Resource;
 import com.example.food_ordering_mobile_app.utils.SharedPreferencesHelper;
 
 import org.json.JSONObject;
 
-import java.net.CookieHandler;
-import java.net.CookieManager;
-import java.net.CookiePolicy;
 import java.util.List;
 
 import retrofit2.Call;
@@ -32,16 +28,6 @@ public class NotificationRepository {
     public NotificationRepository(Context context) {
         notificationService = RetrofitClient.getClient(context).create(NotificationService.class);
         sharedPreferencesHelper = new SharedPreferencesHelper(context);
-
-        CookieManager cookieManager = (CookieManager) CookieHandler.getDefault();
-
-        if (!(cookieManager.getCookieStore() instanceof PersistentCookieStore)) {
-            Log.e("NotificationRepository", "CookieStore chưa đúng, thiết lập lại...");
-            cookieManager = new CookieManager(new PersistentCookieStore(context), CookiePolicy.ACCEPT_ALL);
-            CookieHandler.setDefault(cookieManager);
-        } else {
-            Log.d("NotificationRepository", "PersistentCookieStore đã được thiết lập!");
-        }
     }
 
     public LiveData<Resource<ApiResponse<List<Notification>>>> getAllNotifications() {

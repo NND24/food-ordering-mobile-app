@@ -18,6 +18,7 @@ public class BaseUser implements Serializable {
     protected Image avatar;
     @SerializedName("token")
     protected String accessToken;
+    protected String refreshToken;
     protected boolean isGoogleLogin;
 
     public BaseUser() {
@@ -115,6 +116,14 @@ public class BaseUser implements Serializable {
 
     public void setAccessToken(String accessToken) {
         this.accessToken = accessToken;
+    }
+
+    public String getRefreshToken() {
+        return refreshToken;
+    }
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 
     public boolean isGoogleLogin() {

@@ -3,21 +3,12 @@ package com.example.food_ordering_mobile_app.ui.common;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.food_ordering_mobile_app.R;
-import com.example.food_ordering_mobile_app.utils.PersistentCookieStore;
 import com.example.food_ordering_mobile_app.utils.SharedPreferencesHelper;
 import com.example.food_ordering_mobile_app.ui.customer.MainCustomerActivity;
-
-import java.net.CookieHandler;
-import java.net.CookieManager;
-import java.net.CookiePolicy;
-import java.net.CookieStore;
-import java.net.HttpCookie;
-import java.util.List;
 
 public class SplashActivity extends AppCompatActivity {
     private static final String PREFS_NAME = "AppPrefs";
@@ -31,12 +22,6 @@ public class SplashActivity extends AppCompatActivity {
         SharedPreferencesHelper sharedPreferencesHelper = new SharedPreferencesHelper(this);
         boolean isFirstLaunch = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
                 .getBoolean(KEY_FIRST_LAUNCH, true);
-
-        CookieManager cookieManager = new CookieManager(new PersistentCookieStore(this), CookiePolicy.ACCEPT_ALL);
-        CookieHandler.setDefault(cookieManager);
-
-        CookieStore cookieStore = cookieManager.getCookieStore();
-        List<HttpCookie> cookies = cookieStore.getCookies();
 
         new Handler().postDelayed(() -> {
             if (isFirstLaunch) {
@@ -52,8 +37,9 @@ public class SplashActivity extends AppCompatActivity {
                 // Check if the user is logged in
                 String userId = sharedPreferencesHelper.getUserId();
                 String accessToken = sharedPreferencesHelper.getAccessToken();
+                String refreshToken = sharedPreferencesHelper.getRefreshToken();
 
-                if (hasRefreshToken() && userId != null && accessToken != null) {
+                if (refreshToken != null && userId != null && accessToken != null) {
                     // If logged in -> Navigate to MainCustomerActivity
                     startActivity(new Intent(SplashActivity.this, MainCustomerActivity.class));
                 } else {
@@ -63,20 +49,5 @@ public class SplashActivity extends AppCompatActivity {
             }
             finish();
         }, 2000);
-    }
-
-    private boolean hasRefreshToken() {
-        CookieManager cookieManager = new CookieManager(new PersistentCookieStore(this), CookiePolicy.ACCEPT_ALL);
-        CookieHandler.setDefault(cookieManager);
-        if (cookieManager != null) {
-            List<HttpCookie> cookies = cookieManager.getCookieStore().getCookies();
-            for (HttpCookie cookie : cookies) {
-                Log.d("Cookie Splash Activity", "Cookie Name: " + cookie.getName() + ", Value: " + cookie.getValue());
-                if (cookie.getName().equals("refreshToken")) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 }

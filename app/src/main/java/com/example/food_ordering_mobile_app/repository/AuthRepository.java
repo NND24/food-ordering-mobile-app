@@ -9,19 +9,12 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.food_ordering_mobile_app.models.user.User;
 import com.example.food_ordering_mobile_app.network.services.AuthService;
 import com.example.food_ordering_mobile_app.network.RetrofitClient;
-import com.example.food_ordering_mobile_app.utils.PersistentCookieStore;
 import com.example.food_ordering_mobile_app.utils.Resource;
 import com.example.food_ordering_mobile_app.utils.SharedPreferencesHelper;
 
 import org.json.JSONObject;
 
-import java.net.CookieHandler;
-import java.net.CookieManager;
-import java.net.CookiePolicy;
-import java.net.HttpCookie;
-import java.net.URI;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -35,69 +28,23 @@ public class AuthRepository {
     public AuthRepository(Context context) {
         authService = RetrofitClient.getClient(context).create(AuthService.class);
         sharedPreferencesHelper = new SharedPreferencesHelper(context);
-
-        CookieManager cookieManager = (CookieManager) CookieHandler.getDefault();
-
-        if (!(cookieManager.getCookieStore() instanceof PersistentCookieStore)) {
-            Log.e("AuthRepository", "CookieStore chưa đúng, thiết lập lại...");
-            cookieManager = new CookieManager(new PersistentCookieStore(context), CookiePolicy.ACCEPT_ALL);
-            CookieHandler.setDefault(cookieManager);
-        } else {
-            Log.d("AuthRepository", "PersistentCookieStore đã được thiết lập!");
-        }
     }
 
-    private void saveCookies(Response<User> response) {
-        CookieManager cookieManager = (CookieManager) CookieHandler.getDefault();
-        if (!(cookieManager.getCookieStore() instanceof PersistentCookieStore)) {
-            return;
-        }
-
-        List<String> cookies = response.headers().values("Set-Cookie");
-        if (cookies == null || cookies.isEmpty()) {
-            return;
-        }
-
-        PersistentCookieStore cookieStore = (PersistentCookieStore) cookieManager.getCookieStore();
-
-        for (String cookie : cookies) {
-            try {
-                List<HttpCookie> parsedCookies = HttpCookie.parse(cookie);
-                for (HttpCookie httpCookie : parsedCookies) {
-                    URI uri = new URI("http://192.168.0.57:5000/"); // Có thể cần sửa theo domain thực tế của cookie
-                    cookieStore.add(uri, httpCookie);
-                    Log.d("SaveCookies", "Saved Cookie: " + httpCookie.toString());
-                }
-            } catch (Exception e) {
-                Log.e("SaveCookies", "Lỗi khi parse cookie!", e);
-            }
-        }
-    }
-
-    private void clearCookies(Context context) {
-        CookieManager cookieManager = (CookieManager) CookieHandler.getDefault();
-        if (cookieManager != null) {
-            cookieManager.getCookieStore().removeAll();
-            Log.d("ClearCookies", "Tất cả cookie đã bị xóa!");
-        }
-    }
-
-    public LiveData<Resource<User>> login(String email, String password) {
+    public LiveData<Resource<User>> loginMobile(String email, String password) {
         MutableLiveData<Resource<User>> loginLiveData  = new MutableLiveData<>();
         loginLiveData.setValue(Resource.loading(null)); // Trạng thái Loading
 
         User request = new User(email, password);
-        authService.login(request).enqueue(new Callback<User>() {
+        authService.loginMobile(request).enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     String accessToken = response.body().getAccessToken();
+                    String refreshToken = response.body().getRefreshToken();
                     String userId = response.body().getId();
 
                     // Lưu vào SharedPreferences
-                    sharedPreferencesHelper.saveUserData(accessToken, userId);
-
-                    saveCookies(response);
+                    sharedPreferencesHelper.saveUserData(accessToken, refreshToken, userId);
 
                     loginLiveData.setValue(Resource.success("Đăng nhập thành công!", response.body()));
                 } else {
@@ -135,12 +82,11 @@ public class AuthRepository {
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     String accessToken = response.body().getAccessToken();
+                    String refreshToken = response.body().getRefreshToken();
                     String userId = response.body().getId();
 
                     // Lưu vào SharedPreferences
-                    sharedPreferencesHelper.saveUserData(accessToken, userId);
-
-                    saveCookies(response);
+                    sharedPreferencesHelper.saveUserData(accessToken, refreshToken, userId);
 
                     googleLoginLiveData.setValue(Resource.success("Đăng nhập thành công!", response.body()));
                 } else {
@@ -155,6 +101,42 @@ public class AuthRepository {
         });
 
         return googleLoginLiveData;
+    }
+
+    public LiveData<Resource<User>> refreshTokenMobile(String refreshToken) {
+        MutableLiveData<Resource<User>> refreshTokenLiveData  = new MutableLiveData<>();
+        refreshTokenLiveData.setValue(Resource.loading(null)); // Trạng thái Loading
+
+        authService.refreshTokenMobile(refreshToken).enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    String accessToken = response.body().getAccessToken();
+
+                    // Lưu vào SharedPreferences
+                    sharedPreferencesHelper.saveAccessToken(accessToken);
+
+                    refreshTokenLiveData.setValue(Resource.success("Refresh Token Success!", response.body()));
+                } else {
+                    try {
+                        String errorMessage = response.errorBody().string();
+                        JSONObject jsonObject = new JSONObject(errorMessage);
+                        String message = jsonObject.getString("message");
+
+                        refreshTokenLiveData.setValue(Resource.error(message, null));
+                    } catch (Exception e) {
+                        refreshTokenLiveData.setValue(Resource.error("Lỗi không xác định!", null));
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                refreshTokenLiveData.setValue(Resource.error("Lỗi kết nối", null));
+            }
+        });
+
+        return refreshTokenLiveData ;
     }
 
     public LiveData<Resource<User>> register(String name, String email, String phonenumber, String gender, String password) {
@@ -334,11 +316,6 @@ public class AuthRepository {
                     Log.d("Logout", "Logout successful, clearing data...");
 
                     sharedPreferencesHelper.clearUserData();
-
-                    // Xóa tất cả cookie
-                    clearCookies(context);
-                    CookieManager cookieManager = (CookieManager) CookieHandler.getDefault();
-                    cookieManager.getCookieStore().removeAll();
 
                     result.setValue(Resource.success("Logout thành công!", null));
                 } else {

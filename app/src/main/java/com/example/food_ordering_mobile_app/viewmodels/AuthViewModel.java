@@ -44,13 +44,18 @@ public class AuthViewModel extends AndroidViewModel {
         return logoutResponse;
     }
 
+    private final MutableLiveData<Resource<User>> refreshTokenMobileResponse = new MutableLiveData<>();
+    public LiveData<Resource<User>> getRefreshTokenMobileResponse() {
+        return refreshTokenMobileResponse;
+    }
+
     public AuthViewModel(Application application) {
         super(application);
         authRepository = new AuthRepository(application);
     }
 
     public void login(String email, String password) {
-        LiveData<Resource<User>> result = authRepository.login(email, password);
+        LiveData<Resource<User>> result = authRepository.loginMobile(email, password);
         result.observeForever(new Observer<Resource<User>>() {
             @Override
             public void onChanged(Resource<User> resource) {
@@ -65,6 +70,16 @@ public class AuthViewModel extends AndroidViewModel {
             @Override
             public void onChanged(Resource<User> resource) {
                 loginResponse.setValue(resource);
+            }
+        });
+    }
+
+    public void refreshTokenMobile(String refreshToken) {
+        LiveData<Resource<User>> result = authRepository.refreshTokenMobile(refreshToken);
+        result.observeForever(new Observer<Resource<User>>() {
+            @Override
+            public void onChanged(Resource<User> resource) {
+                refreshTokenMobileResponse.setValue(resource);
             }
         });
     }

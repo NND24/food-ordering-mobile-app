@@ -145,17 +145,6 @@
         android:layout_width="match_parent"
         android:layout_height="25dp"/>
 
-    <Button
-        android:id="@+id/btnLoginFacebook"
-        style="@style/facebook_button_style"
-        android:layout_width="match_parent"
-        android:drawableLeft="@drawable/ic_facebook"
-        android:text="@string/loginWithFacebook" />
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="15dp"/>
-
     <com.developer.gbuttons.GoogleSignInButton
         android:id="@+id/btnLoginGoogle"
         android:layout_width="match_parent"
