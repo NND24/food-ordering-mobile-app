@@ -466,6 +466,6 @@ public class ChooseLocationActivity extends AppCompatActivity implements MapEven
 
 
     public void goBack(View view) {
-        onBackPressed();
+        finish();
     }
 }

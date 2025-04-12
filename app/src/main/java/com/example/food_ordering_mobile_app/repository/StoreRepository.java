@@ -6,9 +6,8 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.food_ordering_mobile_app.models.ApiResponse;
 import com.example.food_ordering_mobile_app.models.store.Store;
-import com.example.food_ordering_mobile_app.models.store.ListStoreResponse;
-import com.example.food_ordering_mobile_app.models.store.StoreResponse;
 import com.example.food_ordering_mobile_app.network.RetrofitClient;
 import com.example.food_ordering_mobile_app.network.services.StoreService;
 import com.example.food_ordering_mobile_app.utils.PersistentCookieStore;
@@ -20,6 +19,7 @@ import org.json.JSONObject;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
+import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -45,13 +45,13 @@ public class StoreRepository {
         }
     }
 
-    public LiveData<Resource<ListStoreResponse>> getAllStore(Map<String, String> queryParams) {
-        MutableLiveData<Resource<ListStoreResponse>> result = new MutableLiveData<>();
+    public LiveData<Resource<ApiResponse<List<Store>>>> getAllStore(Map<String, String> queryParams) {
+        MutableLiveData<Resource<ApiResponse<List<Store>>>> result = new MutableLiveData<>();
         result.setValue(Resource.loading(null));
 
-        storeService.getAllStore(queryParams).enqueue(new Callback<ListStoreResponse>() {
+        storeService.getAllStore(queryParams).enqueue(new Callback<ApiResponse<List<Store>>>() {
             @Override
-            public void onResponse(Call<ListStoreResponse> call, Response<ListStoreResponse> response) {
+            public void onResponse(Call<ApiResponse<List<Store>>> call, Response<ApiResponse<List<Store>>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Log.d("StoreRepository", "getAllStore: " + response.body().toString());
                     result.setValue(Resource.success("Lay thong tin thành công!", response.body()));
@@ -68,7 +68,7 @@ public class StoreRepository {
             }
 
             @Override
-            public void onFailure(Call<ListStoreResponse> call, Throwable t) {
+            public void onFailure(Call<ApiResponse<List<Store>>> call, Throwable t) {
                 result.setValue(Resource.error("Lỗi kết nối: " + t.getMessage(), null));
             }
         });
@@ -76,13 +76,13 @@ public class StoreRepository {
         return result;
     }
 
-    public LiveData<Resource<StoreResponse>> getStoreInformation(String storeId) {
-        MutableLiveData<Resource<StoreResponse>> result = new MutableLiveData<>();
+    public LiveData<Resource<ApiResponse<Store>>> getStoreInformation(String storeId) {
+        MutableLiveData<Resource<ApiResponse<Store>>> result = new MutableLiveData<>();
         result.setValue(Resource.loading(null));
 
-        storeService.getStoreInformation(storeId).enqueue(new Callback<StoreResponse>() {
+        storeService.getStoreInformation(storeId).enqueue(new Callback<ApiResponse<Store>>() {
             @Override
-            public void onResponse(Call<StoreResponse> call, Response<StoreResponse> response) {
+            public void onResponse(Call<ApiResponse<Store>> call, Response<ApiResponse<Store>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Log.d("StoreRepository", "getStoreInformation: " + response.body().toString());
                     result.setValue(Resource.success("Lay thong tin thành công!", response.body()));
@@ -99,7 +99,7 @@ public class StoreRepository {
             }
 
             @Override
-            public void onFailure(Call<StoreResponse> call, Throwable t) {
+            public void onFailure(Call<ApiResponse<Store>> call, Throwable t) {
                 result.setValue(Resource.error("Lỗi kết nối: " + t.getMessage(), null));
             }
         });

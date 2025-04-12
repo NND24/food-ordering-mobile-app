@@ -1,11 +1,13 @@
 package com.example.food_ordering_mobile_app.models.store;
 
+import com.example.food_ordering_mobile_app.models.Image;
 import com.example.food_ordering_mobile_app.models.foodType.FoodType;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Store {
+public class Store implements Serializable {
     @SerializedName("_id")
     private String id;
     private String name;
@@ -13,8 +15,8 @@ public class Store {
     private String description;
     private StoreAddress address;
     private List<FoodType> storeCategory;
-    private StoreImage avatar;
-    private StoreImage cover;
+    private Image avatar;
+    private Image cover;
     private PaperWork paperWork;
     private Double avgRating;
     private Integer amountRating;
@@ -67,19 +69,19 @@ public class Store {
         this.storeCategory = storeCategory;
     }
 
-    public StoreImage getAvatar() {
+    public Image getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(StoreImage avatar) {
+    public void setAvatar(Image avatar) {
         this.avatar = avatar;
     }
 
-    public StoreImage getCover() {
+    public Image getCover() {
         return cover;
     }
 
-    public void setCover(StoreImage cover) {
+    public void setCover(Image cover) {
         this.cover = cover;
     }
 

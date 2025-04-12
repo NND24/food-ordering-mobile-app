@@ -1,20 +1,21 @@
 package com.example.food_ordering_mobile_app.models.cart;
 
+import com.example.food_ordering_mobile_app.models.dish.Dish;
 import com.example.food_ordering_mobile_app.models.dish.Topping;
 
 import java.io.Serializable;
 import java.util.List;
 
 public class CartItem implements Serializable {
-    private CartDish dish;
+    private Dish dish;
     private List<Topping> toppings;
     private Integer quantity;
 
-    public CartDish getDish() {
+    public Dish getDish() {
         return dish;
     }
 
-    public void setDish(CartDish dish) {
+    public void setDish(Dish dish) {
         this.dish = dish;
     }
 

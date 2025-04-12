@@ -8,35 +8,35 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
+import com.example.food_ordering_mobile_app.models.ApiResponse;
 import com.example.food_ordering_mobile_app.models.store.Store;
-import com.example.food_ordering_mobile_app.models.store.ListStoreResponse;
-import com.example.food_ordering_mobile_app.models.store.StoreResponse;
 import com.example.food_ordering_mobile_app.repository.StoreRepository;
 import com.example.food_ordering_mobile_app.utils.Resource;
 
+import java.util.List;
 import java.util.Map;
 
 public class StoreViewModel extends AndroidViewModel {
     private final StoreRepository storeRepository;
 
-    private final MutableLiveData<Resource<ListStoreResponse>> allStoreResponse = new MutableLiveData<>();
-    public LiveData<Resource<ListStoreResponse>> getAllStoreResponse() {
+    private final MutableLiveData<Resource<ApiResponse<List<Store>>>> allStoreResponse = new MutableLiveData<>();
+    public LiveData<Resource<ApiResponse<List<Store>>>> getAllStoreResponse() {
         return allStoreResponse;
     }
-    private final MutableLiveData<Resource<ListStoreResponse>> ratingStoreResponse = new MutableLiveData<>();
-    public LiveData<Resource<ListStoreResponse>> getRatingStoreResponse() {
+    private final MutableLiveData<Resource<ApiResponse<List<Store>>>> ratingStoreResponse = new MutableLiveData<>();
+    public LiveData<Resource<ApiResponse<List<Store>>>> getRatingStoreResponse() {
         return ratingStoreResponse;
     }
-    private final MutableLiveData<Resource<ListStoreResponse>> standoutStoreResponse = new MutableLiveData<>();
-    public LiveData<Resource<ListStoreResponse>> getStandoutStoreResponse() {
+    private final MutableLiveData<Resource<ApiResponse<List<Store>>>> standoutStoreResponse = new MutableLiveData<>();
+    public LiveData<Resource<ApiResponse<List<Store>>>> getStandoutStoreResponse() {
         return standoutStoreResponse;
     }
-    private final MutableLiveData<Resource<ListStoreResponse>> searchStoreResponse = new MutableLiveData<>();
-    public LiveData<Resource<ListStoreResponse>> getSearchStoreResponse() {
+    private final MutableLiveData<Resource<ApiResponse<List<Store>>>> searchStoreResponse = new MutableLiveData<>();
+    public LiveData<Resource<ApiResponse<List<Store>>>> getSearchStoreResponse() {
         return searchStoreResponse;
     }
-    private final MutableLiveData<Resource<StoreResponse>> storeInformationResponse = new MutableLiveData<>();
-    public LiveData<Resource<StoreResponse>> getStoreInformationResponse() {
+    private final MutableLiveData<Resource<ApiResponse<Store>>> storeInformationResponse = new MutableLiveData<>();
+    public LiveData<Resource<ApiResponse<Store>>> getStoreInformationResponse() {
         return storeInformationResponse;
     }
 
@@ -46,50 +46,50 @@ public class StoreViewModel extends AndroidViewModel {
     }
 
     public void getAllStore(Map<String, String> queryParams) {
-        LiveData<Resource<ListStoreResponse>> result = storeRepository.getAllStore(queryParams);
-        result.observeForever(new Observer<Resource<ListStoreResponse>>() {
+        LiveData<Resource<ApiResponse<List<Store>>>> result = storeRepository.getAllStore(queryParams);
+        result.observeForever(new Observer<Resource<ApiResponse<List<Store>>>>() {
             @Override
-            public void onChanged(Resource<ListStoreResponse> resource) {
+            public void onChanged(Resource<ApiResponse<List<Store>>> resource) {
                 allStoreResponse.setValue(resource);
             }
         });
     }
 
     public void getStandoutStore(Map<String, String> queryParams) {
-        LiveData<Resource<ListStoreResponse>> result = storeRepository.getAllStore(queryParams);
-        result.observeForever(new Observer<Resource<ListStoreResponse>>() {
+        LiveData<Resource<ApiResponse<List<Store>>>> result = storeRepository.getAllStore(queryParams);
+        result.observeForever(new Observer<Resource<ApiResponse<List<Store>>>>() {
             @Override
-            public void onChanged(Resource<ListStoreResponse> resource) {
+            public void onChanged(Resource<ApiResponse<List<Store>>> resource) {
                 standoutStoreResponse.setValue(resource);
             }
         });
     }
 
     public void getRatingStore(Map<String, String> queryParams) {
-        LiveData<Resource<ListStoreResponse>> result = storeRepository.getAllStore(queryParams);
-        result.observeForever(new Observer<Resource<ListStoreResponse>>() {
+        LiveData<Resource<ApiResponse<List<Store>>>> result = storeRepository.getAllStore(queryParams);
+        result.observeForever(new Observer<Resource<ApiResponse<List<Store>>>>() {
             @Override
-            public void onChanged(Resource<ListStoreResponse> resource) {
+            public void onChanged(Resource<ApiResponse<List<Store>>> resource) {
                 ratingStoreResponse.setValue(resource);
             }
         });
     }
 
     public void getSearchStore(Map<String, String> queryParams) {
-        LiveData<Resource<ListStoreResponse>> result = storeRepository.getAllStore(queryParams);
-        result.observeForever(new Observer<Resource<ListStoreResponse>>() {
+        LiveData<Resource<ApiResponse<List<Store>>>> result = storeRepository.getAllStore(queryParams);
+        result.observeForever(new Observer<Resource<ApiResponse<List<Store>>>>() {
             @Override
-            public void onChanged(Resource<ListStoreResponse> resource) {
+            public void onChanged(Resource<ApiResponse<List<Store>>> resource) {
                 searchStoreResponse.setValue(resource);
             }
         });
     }
 
     public void getStoreInformation(String storeId) {
-        LiveData<Resource<StoreResponse>> result = storeRepository.getStoreInformation(storeId);
-        result.observeForever(new Observer<Resource<StoreResponse>>() {
+        LiveData<Resource<ApiResponse<Store>>> result = storeRepository.getStoreInformation(storeId);
+        result.observeForever(new Observer<Resource<ApiResponse<Store>>>() {
             @Override
-            public void onChanged(Resource<StoreResponse> resource) {
+            public void onChanged(Resource<ApiResponse<Store>> resource) {
                 Log.d("StoreViewModel", "getCurrentUser: " + resource);
                 storeInformationResponse.setValue(resource);
             }

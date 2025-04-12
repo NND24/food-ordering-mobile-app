@@ -6,9 +6,8 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.food_ordering_mobile_app.models.MessageResponse;
+import com.example.food_ordering_mobile_app.models.ApiResponse;
 import com.example.food_ordering_mobile_app.models.favorite.Favorite;
-import com.example.food_ordering_mobile_app.models.favorite.FavoriteResponse;
 import com.example.food_ordering_mobile_app.network.RetrofitClient;
 import com.example.food_ordering_mobile_app.network.services.FavoriteService;
 import com.example.food_ordering_mobile_app.utils.PersistentCookieStore;
@@ -44,13 +43,13 @@ public class FavoriteRepository {
         }
     }
 
-    public LiveData<Resource<FavoriteResponse>> getUserFavorite() {
-        MutableLiveData<Resource<FavoriteResponse>> result = new MutableLiveData<>();
+    public LiveData<Resource<ApiResponse<Favorite>>> getUserFavorite() {
+        MutableLiveData<Resource<ApiResponse<Favorite>>> result = new MutableLiveData<>();
         result.setValue(Resource.loading(null));
 
-        favoriteService.getUserFavorite().enqueue(new Callback<FavoriteResponse>() {
+        favoriteService.getUserFavorite().enqueue(new Callback<ApiResponse<Favorite>>() {
             @Override
-            public void onResponse(Call<FavoriteResponse> call, Response<FavoriteResponse> response) {
+            public void onResponse(Call<ApiResponse<Favorite>> call, Response<ApiResponse<Favorite>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Log.d("FavoriteRepository", "Success getCurrentUser: " + response.body());
                     result.setValue(Resource.success("Lay thong tin thành công!", response.body()));
@@ -68,7 +67,7 @@ public class FavoriteRepository {
             }
 
             @Override
-            public void onFailure(Call<FavoriteResponse> call, Throwable t) {
+            public void onFailure(Call<ApiResponse<Favorite>> call, Throwable t) {
                 result.setValue(Resource.error("Lỗi kết nối: " + t.getMessage(), null));
             }
         });
@@ -76,13 +75,13 @@ public class FavoriteRepository {
         return result;
     }
 
-    public LiveData<Resource<MessageResponse>> addFavorite(String storeId) {
-        MutableLiveData<Resource<MessageResponse>> result = new MutableLiveData<>();
+    public LiveData<Resource<ApiResponse<String>>> addFavorite(String storeId) {
+        MutableLiveData<Resource<ApiResponse<String>>> result = new MutableLiveData<>();
         result.setValue(Resource.loading(null));
 
-        favoriteService.addFavorite(storeId).enqueue(new Callback<MessageResponse>() {
+        favoriteService.addFavorite(storeId).enqueue(new Callback<ApiResponse<String>>() {
             @Override
-            public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {
+            public void onResponse(Call<ApiResponse<String>> call, Response<ApiResponse<String>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Log.d("FavoriteRepository", "Success getCurrentUser: " + response.body());
                     result.setValue(Resource.success("Lay thong tin thành công!", response.body()));
@@ -99,7 +98,7 @@ public class FavoriteRepository {
             }
 
             @Override
-            public void onFailure(Call<MessageResponse> call, Throwable t) {
+            public void onFailure(Call<ApiResponse<String>> call, Throwable t) {
                 result.setValue(Resource.error("Lỗi kết nối: " + t.getMessage(), null));
             }
         });
@@ -107,13 +106,13 @@ public class FavoriteRepository {
         return result;
     }
 
-    public LiveData<Resource<MessageResponse>> removeFavorite(String id) {
-        MutableLiveData<Resource<MessageResponse>> result = new MutableLiveData<>();
+    public LiveData<Resource<ApiResponse<String>>> removeFavorite(String id) {
+        MutableLiveData<Resource<ApiResponse<String>>> result = new MutableLiveData<>();
         result.setValue(Resource.loading(null));
 
-        favoriteService.removeFavorite(id).enqueue(new Callback<MessageResponse>() {
+        favoriteService.removeFavorite(id).enqueue(new Callback<ApiResponse<String>>() {
             @Override
-            public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {
+            public void onResponse(Call<ApiResponse<String>> call, Response<ApiResponse<String>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Log.d("FavoriteRepository", "Success getCurrentUser: " + response.body());
                     result.setValue(Resource.success("Lay thong tin thành công!", response.body()));
@@ -130,7 +129,7 @@ public class FavoriteRepository {
             }
 
             @Override
-            public void onFailure(Call<MessageResponse> call, Throwable t) {
+            public void onFailure(Call<ApiResponse<String>> call, Throwable t) {
                 result.setValue(Resource.error("Lỗi kết nối: " + t.getMessage(), null));
             }
         });
@@ -138,13 +137,13 @@ public class FavoriteRepository {
         return result;
     }
 
-    public LiveData<Resource<MessageResponse>> removeAllFavorite() {
-        MutableLiveData<Resource<MessageResponse>> result = new MutableLiveData<>();
+    public LiveData<Resource<ApiResponse<String>>> removeAllFavorite() {
+        MutableLiveData<Resource<ApiResponse<String>>> result = new MutableLiveData<>();
         result.setValue(Resource.loading(null));
 
-        favoriteService.removeAllFavorite().enqueue(new Callback<MessageResponse>() {
+        favoriteService.removeAllFavorite().enqueue(new Callback<ApiResponse<String>>() {
             @Override
-            public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {
+            public void onResponse(Call<ApiResponse<String>> call, Response<ApiResponse<String>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Log.d("FavoriteRepository", "Success getCurrentUser: " + response.body());
                     result.setValue(Resource.success("Lay thong tin thành công!", response.body()));
@@ -161,7 +160,7 @@ public class FavoriteRepository {
             }
 
             @Override
-            public void onFailure(Call<MessageResponse> call, Throwable t) {
+            public void onFailure(Call<ApiResponse<String>> call, Throwable t) {
                 result.setValue(Resource.error("Lỗi kết nối: " + t.getMessage(), null));
             }
         });

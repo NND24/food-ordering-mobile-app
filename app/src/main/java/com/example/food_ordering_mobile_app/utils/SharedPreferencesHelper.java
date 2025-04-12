@@ -3,7 +3,7 @@ package com.example.food_ordering_mobile_app.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.example.food_ordering_mobile_app.models.dish.DishStore;
+import com.example.food_ordering_mobile_app.models.dish.Dish;
 import com.example.food_ordering_mobile_app.models.foodType.FoodType;
 import com.example.food_ordering_mobile_app.models.store.Store;
 import com.example.food_ordering_mobile_app.models.user.User;
@@ -110,15 +110,15 @@ public class SharedPreferencesHelper {
         return null;
     }
 
-    public void saveListDish(List<DishStore> listDish) {
+    public void saveListDish(List<Dish> listDish) {
         String json = gson.toJson(listDish);
         editor.putString(KEY_LIST_DISH, json).apply();
     }
 
-    public List<DishStore> getSavedListDish() {
+    public List<Dish> getSavedListDish() {
         String json = sharedPreferences.getString(KEY_LIST_DISH, null);
         if (json != null) {
-            Type type = new TypeToken<List<DishStore>>() {}.getType();
+            Type type = new TypeToken<List<Dish>>() {}.getType();
             return gson.fromJson(json, type);
         }
         return null;

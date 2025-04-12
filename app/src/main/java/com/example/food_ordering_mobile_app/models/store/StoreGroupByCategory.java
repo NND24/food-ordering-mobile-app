@@ -2,9 +2,10 @@ package com.example.food_ordering_mobile_app.models.store;
 
 import com.example.food_ordering_mobile_app.models.foodType.FoodType;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class StoreGroupByCategory {
+public class StoreGroupByCategory implements Serializable {
     private FoodType category;
     private List<Store> stores;
 

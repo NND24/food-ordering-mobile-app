@@ -1,42 +1,45 @@
 package com.example.food_ordering_mobile_app.models.store;
 
-import java.util.Arrays;
+import com.example.food_ordering_mobile_app.models.Image;
 
-public class PaperWork {
-    private StoreImage IC_front;
-    private StoreImage IC_back;
-    private StoreImage businessLicense;
-    private StoreImage[] storePicture;
+import java.io.Serializable;
+import java.util.List;
 
-    public StoreImage getIC_front() {
+public class PaperWork implements Serializable {
+    private Image IC_front;
+    private Image IC_back;
+    private Image businessLicense;
+    private List<Image> storePicture;
+
+    public Image getIC_front() {
         return IC_front;
     }
 
-    public void setIC_front(StoreImage IC_front) {
+    public void setIC_front(Image IC_front) {
         this.IC_front = IC_front;
     }
 
-    public StoreImage getIC_back() {
+    public Image getIC_back() {
         return IC_back;
     }
 
-    public void setIC_back(StoreImage IC_back) {
+    public void setIC_back(Image IC_back) {
         this.IC_back = IC_back;
     }
 
-    public StoreImage getBusinessLicense() {
+    public Image getBusinessLicense() {
         return businessLicense;
     }
 
-    public void setBusinessLicense(StoreImage businessLicense) {
+    public void setBusinessLicense(Image businessLicense) {
         this.businessLicense = businessLicense;
     }
 
-    public StoreImage[] getStorePicture() {
+    public List<Image> getStorePicture() {
         return storePicture;
     }
 
-    public void setStorePicture(StoreImage[] storePicture) {
+    public void setStorePicture(List<Image> storePicture) {
         this.storePicture = storePicture;
     }
 
@@ -46,7 +49,7 @@ public class PaperWork {
                 "IC_front=" + IC_front +
                 ", IC_back=" + IC_back +
                 ", businessLicense=" + businessLicense +
-                ", storePicture=" + Arrays.toString(storePicture) +
+                ", storePicture=" + storePicture +
                 '}';
     }
 }

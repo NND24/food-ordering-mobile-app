@@ -1,11 +1,10 @@
 package com.example.food_ordering_mobile_app.models.dish;
 
-import com.example.food_ordering_mobile_app.models.store.Store;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
+import java.io.Serializable;
 
-public class FoodCategory {
+public class FoodCategory implements Serializable {
     @SerializedName("_id")
     private String id;
     private String name;

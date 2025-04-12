@@ -1,16 +1,20 @@
 package com.example.food_ordering_mobile_app.adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -18,6 +22,9 @@ import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.example.food_ordering_mobile_app.R;
 import com.example.food_ordering_mobile_app.models.chat.Chat;
 import com.example.food_ordering_mobile_app.models.chat.Message;
+import com.example.food_ordering_mobile_app.models.rating.Rating;
+import com.example.food_ordering_mobile_app.viewmodels.ChatViewModel;
+import com.example.food_ordering_mobile_app.viewmodels.RatingViewModel;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -30,6 +37,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
     private Context context;
     private List<Chat> chatList;
     private OnChatClickListener onChatClickListener;
+    private FragmentActivity fragment;
     public interface OnChatClickListener {
         void onChatClick(Chat chat);
     }
@@ -39,7 +47,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
         this.chatList = chatList;
     }
 
-    public ChatAdapter(Context context, List<Chat> chatList, OnChatClickListener onChatClickListener) {
+    public ChatAdapter(FragmentActivity fragment, Context context, List<Chat> chatList, OnChatClickListener onChatClickListener) {
+        this.fragment = fragment;
         this.context = context;
         this.chatList = chatList;
         this.onChatClickListener = onChatClickListener;
@@ -58,7 +67,11 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
         Chat chat = chatList.get(position);
 
         holder.tvUserName.setText(chat.getUsers().get(1).getName());
-        holder.tvLatestMessage.setText(chat.getLatestMessage().getContent());
+        if (chat.getLatestMessage() != null && chat.getLatestMessage().getContent() != null && !chat.getLatestMessage().getContent().isEmpty()) {
+            holder.tvLatestMessage.setText(chat.getLatestMessage().getContent());
+        } else {
+            holder.tvLatestMessage.setText("");
+        }
 
         Timestamp timestamp = chat.getUpdatedAt();
         Date date = new Date(timestamp.getTime());
@@ -79,7 +92,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
         }
 
         holder.tvCreatedTime.setText(formattedDate);
-
 
         String userAvatarUrl = chat.getUsers().get(1).getAvatar() != null ? chat.getUsers().get(1).getAvatar().getUrl() : null;
         Glide.with(context)
@@ -102,6 +114,38 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
                 onChatClickListener.onChatClick(chat);
             }
         });
+
+        holder.btnOption.setOnClickListener(v -> {
+            showOptionsDialog(chat);
+        });
+    }
+
+    private void showOptionsDialog(Chat chat) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Chọn hành động");
+
+        builder.setItems(new CharSequence[] {"Xóa"}, (dialog, which) -> {
+            switch (which) {
+                case 0:
+                    // Tùy chọn "Xóa"
+                    onDeleteChat(chat);
+                    break;
+            }
+        });
+
+        builder.create().show();
+    }
+
+    private void onDeleteChat(Chat chat) {
+        ChatViewModel chatViewModel = new ViewModelProvider(fragment).get(ChatViewModel.class);
+        new AlertDialog.Builder(context)
+                .setTitle("Xóa tin nhắn")
+                .setMessage("Bạn có chắc chắn muốn xóa tin nhắn này không?")
+                .setPositiveButton("Có", (dialog, which) -> {
+                    chatViewModel.deleteChat(chat.getId());
+                })
+                .setNegativeButton("Không", null)
+                .show();
     }
 
     @Override
@@ -112,6 +156,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
     public static class ChatViewHolder extends RecyclerView.ViewHolder {
         TextView tvUserName, tvLatestMessage, tvCreatedTime;
         ImageView ivUserAvatar;
+        ImageButton btnOption;
 
         public ChatViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -119,6 +164,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
             tvLatestMessage = itemView.findViewById(R.id.tvLatestMessage);
             tvCreatedTime = itemView.findViewById(R.id.tvCreatedTime);
             ivUserAvatar = itemView.findViewById(R.id.ivUserAvatar);
+            btnOption = itemView.findViewById(R.id.btnOption);
         }
     }
 }

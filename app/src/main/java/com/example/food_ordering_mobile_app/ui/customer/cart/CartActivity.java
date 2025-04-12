@@ -14,9 +14,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.food_ordering_mobile_app.R;
 import com.example.food_ordering_mobile_app.adapters.CartAdapter;
-import com.example.food_ordering_mobile_app.models.MessageResponse;
+import com.example.food_ordering_mobile_app.models.ApiResponse;
 import com.example.food_ordering_mobile_app.models.cart.Cart;
-import com.example.food_ordering_mobile_app.models.cart.ListCartResponse;
 import com.example.food_ordering_mobile_app.utils.Resource;
 import com.example.food_ordering_mobile_app.viewmodels.CartViewModel;
 
@@ -48,9 +47,9 @@ public class CartActivity extends AppCompatActivity {
 
         btnRemoveAllCart.setOnClickListener(this::handleRemoveAllCart);
 
-        cartViewModel.getClearCartResponse().observe(this, new Observer<Resource<MessageResponse>>() {
+        cartViewModel.getClearCartResponse().observe(this, new Observer<Resource<ApiResponse<String>>>() {
             @Override
-            public void onChanged(Resource<MessageResponse> resource) {
+            public void onChanged(Resource<ApiResponse<String>> resource) {
                 switch (resource.getStatus()) {
                     case LOADING:
                         swipeRefreshLayout.setRefreshing(true);
@@ -66,9 +65,9 @@ public class CartActivity extends AppCompatActivity {
             }
         });
 
-        cartViewModel.getClearCartItemResponse().observe(this, new Observer<Resource<MessageResponse>>() {
+        cartViewModel.getClearCartItemResponse().observe(this, new Observer<Resource<ApiResponse<String>>>() {
             @Override
-            public void onChanged(Resource<MessageResponse> resource) {
+            public void onChanged(Resource<ApiResponse<String>> resource) {
                 switch (resource.getStatus()) {
                     case LOADING:
                         swipeRefreshLayout.setRefreshing(true);
@@ -105,9 +104,9 @@ public class CartActivity extends AppCompatActivity {
         cartAdapter = new CartAdapter(CartActivity.this, this, cartList);
         cartRecyclerView.setAdapter(cartAdapter);
 
-        cartViewModel.getUserCartResponse().observe(this, new Observer<Resource<ListCartResponse>>() {
+        cartViewModel.getUserCartResponse().observe(this, new Observer<Resource<ApiResponse<List<Cart>>>>() {
             @Override
-            public void onChanged(Resource<ListCartResponse> resource) {
+            public void onChanged(Resource<ApiResponse<List<Cart>>> resource) {
                 switch (resource.getStatus()) {
                     case LOADING:
                         swipeRefreshLayout.setRefreshing(true);

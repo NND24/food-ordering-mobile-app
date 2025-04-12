@@ -1,6 +1,8 @@
 package com.example.food_ordering_mobile_app.models.order;
 
-public class ShipLocation {
+import java.io.Serializable;
+
+public class ShipLocation implements Serializable {
     private String type;
     private Double[] coordinates;
     private String address;

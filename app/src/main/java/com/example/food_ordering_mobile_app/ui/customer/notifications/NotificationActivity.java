@@ -14,7 +14,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.food_ordering_mobile_app.R;
 import com.example.food_ordering_mobile_app.adapters.NotificationAdapter;
-import com.example.food_ordering_mobile_app.models.notification.ListNotificationResponse;
+import com.example.food_ordering_mobile_app.models.ApiResponse;
 import com.example.food_ordering_mobile_app.models.notification.Notification;
 import com.example.food_ordering_mobile_app.network.SocketManager;
 import com.example.food_ordering_mobile_app.utils.Resource;
@@ -45,9 +45,9 @@ public class NotificationActivity extends AppCompatActivity {
 
         setupUserNotification();
 
-        notificationViewModel.getUpdateNotificationStatusResponse().observe(this, new Observer<Resource<ListNotificationResponse>>() {
+        notificationViewModel.getUpdateNotificationStatusResponse().observe(this, new Observer<Resource<ApiResponse<List<Notification>>>>() {
             @Override
-            public void onChanged(Resource<ListNotificationResponse> resource) {
+            public void onChanged(Resource<ApiResponse<List<Notification>>> resource) {
                 switch (resource.getStatus()) {
                     case LOADING:
                         swipeRefreshLayout.setRefreshing(true);
@@ -98,6 +98,6 @@ public class NotificationActivity extends AppCompatActivity {
     }
 
     public void goBack(View view) {
-        onBackPressed();
+        finish();
     }
 }

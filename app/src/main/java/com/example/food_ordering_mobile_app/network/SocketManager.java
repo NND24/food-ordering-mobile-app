@@ -24,6 +24,8 @@ import java.util.Locale;
 public class SocketManager {
     private static Socket mSocket;
     private static SharedPreferencesHelper sharedPreferencesHelper;
+    private static Emitter.Listener messageListener;
+    private static Emitter.Listener messageDeletedListener;
 
     public static void connectSocket(Context context, NotificationViewModel notificationViewModel) {
         try {
@@ -135,8 +137,6 @@ public class SocketManager {
         }
     }
 
-    // 🛑 Bỏ các `Emitter.Listener` thừa vì chúng không được gọi trong connectSocket()
-
     // Gửi thông báo
     public static void sendNotification(String userId, String title, String message, String type) {
         JSONObject notification = new JSONObject();
@@ -151,6 +151,55 @@ public class SocketManager {
             e.printStackTrace();
         }
     }
+
+    // Tham gia phòng chat
+    public static void joinChat(String chatId) {
+        if (mSocket != null && mSocket.connected()) {
+            mSocket.emit("joinChat", chatId);
+            Log.d("SocketManager", "Đã tham gia phòng chat: " + chatId);
+        }
+    }
+
+    // Rời phòng chat
+    public static void leaveChat(String chatId) {
+        if (mSocket != null && mSocket.connected()) {
+            mSocket.emit("leaveChat", chatId);
+            Log.d("SocketManager", "Đã rời phòng chat: " + chatId);
+        }
+    }
+
+    // Gửi tin nhắn
+    public static void sendMessage(JSONObject message) {
+        if (mSocket != null && mSocket.connected()) {
+            mSocket.emit("sendMessage", message);
+            Log.d("SocketManager", "Đã gửi tin nhắn: " + message.toString());
+        }
+    }
+
+    // Lắng nghe tin nhắn đến
+    public static void setOnMessageReceivedListener(Emitter.Listener listener) {
+        messageListener = listener;
+        if (mSocket != null) {
+            mSocket.on("messageReceived", listener);
+        }
+    }
+
+    // Lắng nghe xóa tin nhắn
+    public static void setOnMessageDeletedListener(Emitter.Listener listener) {
+        messageDeletedListener = listener;
+        if (mSocket != null) {
+            mSocket.on("messageDeleted", listener);
+        }
+    }
+
+    // Xoá tin nhắn (emit id)
+    public static void deleteMessage(String chatId) {
+        if (mSocket != null && mSocket.connected()) {
+            mSocket.emit("deleteMessage", chatId);
+            Log.d("SocketManager", "Đã gửi yêu cầu xoá tin nhắn cho phòng: " + chatId);
+        }
+    }
+
 
     // Đóng kết nối
     public static void disconnectSocket() {

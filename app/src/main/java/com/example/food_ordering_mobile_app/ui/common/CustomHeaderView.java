@@ -3,7 +3,6 @@ package com.example.food_ordering_mobile_app.ui.common;
 import android.content.Context;
 import android.content.Intent;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -16,8 +15,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 
 import com.example.food_ordering_mobile_app.R;
+import com.example.food_ordering_mobile_app.models.ApiResponse;
 import com.example.food_ordering_mobile_app.models.cart.Cart;
-import com.example.food_ordering_mobile_app.models.cart.ListCartResponse;
 import com.example.food_ordering_mobile_app.models.notification.Notification;
 import com.example.food_ordering_mobile_app.network.SocketManager;
 import com.example.food_ordering_mobile_app.ui.customer.notifications.NotificationActivity;
@@ -89,9 +88,9 @@ public class CustomHeaderView extends LinearLayout {
         if (isCartObserverSet) return;
 
         cartViewModel.getUserCart();
-        cartViewModel.getUserCartResponse().observe(lifecycleOwner, new Observer<Resource<ListCartResponse>>() {
+        cartViewModel.getUserCartResponse().observe(lifecycleOwner, new Observer<Resource<ApiResponse<List<Cart>>>>() {
             @Override
-            public void onChanged(Resource<ListCartResponse> resource) {
+            public void onChanged(Resource<ApiResponse<List<Cart>>> resource) {
                 switch (resource.getStatus()) {
                     case LOADING:
                         break;

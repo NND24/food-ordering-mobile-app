@@ -139,6 +139,6 @@ public class AddLocationActivity extends AppCompatActivity {
     }
 
     public void goBack(View view) {
-        onBackPressed();
+        finish();
     }
 }

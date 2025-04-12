@@ -8,25 +8,26 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
+import com.example.food_ordering_mobile_app.models.ApiResponse;
 import com.example.food_ordering_mobile_app.models.order.Order;
-import com.example.food_ordering_mobile_app.models.order.ListOrderResponse;
-import com.example.food_ordering_mobile_app.models.order.OrderResponse;
 import com.example.food_ordering_mobile_app.repository.OrderRepository;
 import com.example.food_ordering_mobile_app.utils.Resource;
+
+import java.util.List;
 
 public class OrderViewModel extends AndroidViewModel {
     private final OrderRepository orderRepository;
 
-    private final MutableLiveData<Resource<ListOrderResponse>> currentOrderResponse = new MutableLiveData<>();
-    public LiveData<Resource<ListOrderResponse>> getCurrentOrderResponse() {
+    private final MutableLiveData<Resource<ApiResponse<List<Order>>>> currentOrderResponse = new MutableLiveData<>();
+    public LiveData<Resource<ApiResponse<List<Order>>>> getCurrentOrderResponse() {
         return currentOrderResponse;
     }
-    private final MutableLiveData<Resource<ListOrderResponse>> historyOrderResponse = new MutableLiveData<>();
-    public LiveData<Resource<ListOrderResponse>> getHistoryOrderResponse() {
+    private final MutableLiveData<Resource<ApiResponse<List<Order>>>> historyOrderResponse = new MutableLiveData<>();
+    public LiveData<Resource<ApiResponse<List<Order>>>> getHistoryOrderResponse() {
         return historyOrderResponse;
     }
-    private final MutableLiveData<Resource<OrderResponse>> orderDetailResponse = new MutableLiveData<>();
-    public LiveData<Resource<OrderResponse>> getOrderDetailResponse() {
+    private final MutableLiveData<Resource<ApiResponse<Order>>> orderDetailResponse = new MutableLiveData<>();
+    public LiveData<Resource<ApiResponse<Order>>> getOrderDetailResponse() {
         return orderDetailResponse;
     }
 
@@ -36,30 +37,30 @@ public class OrderViewModel extends AndroidViewModel {
     }
 
     public void getCurrentOrder() {
-        LiveData<Resource<ListOrderResponse>> result = orderRepository.getUserOrder();
-        result.observeForever(new Observer<Resource<ListOrderResponse>>() {
+        LiveData<Resource<ApiResponse<List<Order>>>> result = orderRepository.getUserOrder();
+        result.observeForever(new Observer<Resource<ApiResponse<List<Order>>>>() {
             @Override
-            public void onChanged(Resource<ListOrderResponse> resource) {
+            public void onChanged(Resource<ApiResponse<List<Order>>> resource) {
                 currentOrderResponse.setValue(resource);
             }
         });
     }
 
     public void getHistoryOrder() {
-        LiveData<Resource<ListOrderResponse>> result = orderRepository.getUserOrder();
-        result.observeForever(new Observer<Resource<ListOrderResponse>>() {
+        LiveData<Resource<ApiResponse<List<Order>>>> result = orderRepository.getUserOrder();
+        result.observeForever(new Observer<Resource<ApiResponse<List<Order>>>>() {
             @Override
-            public void onChanged(Resource<ListOrderResponse> resource) {
+            public void onChanged(Resource<ApiResponse<List<Order>>> resource) {
                 historyOrderResponse.setValue(resource);
             }
         });
     }
 
     public void getOrderDetail(String orderId) {
-        LiveData<Resource<OrderResponse>> result = orderRepository.getOrderDetail(orderId);
-        result.observeForever(new Observer<Resource<OrderResponse>>() {
+        LiveData<Resource<ApiResponse<Order>>> result = orderRepository.getOrderDetail(orderId);
+        result.observeForever(new Observer<Resource<ApiResponse<Order>>>() {
             @Override
-            public void onChanged(Resource<OrderResponse> resource) {
+            public void onChanged(Resource<ApiResponse<Order>> resource) {
                 Log.d("OrderViewModel", "getOrderDetail: " + resource);
                 orderDetailResponse.setValue(resource);
             }

@@ -34,7 +34,6 @@ public class UserViewModel extends AndroidViewModel {
         result.observeForever(new Observer<Resource<User>>() {
             @Override
             public void onChanged(Resource<User> resource) {
-                Log.d("UserViewModel", "getCurrentUser: " + resource);
                 currentUserResponse.setValue(resource);
             }
         });
@@ -45,7 +44,6 @@ public class UserViewModel extends AndroidViewModel {
         result.observeForever(new Observer<Resource<User>>() {
             @Override
             public void onChanged(Resource<User> resource) {
-                Log.d("UserViewModel", "updateUser: " + resource);
                 updateUserResponse.setValue(resource);
             }
         });

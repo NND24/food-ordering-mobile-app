@@ -1,21 +1,45 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:padding="8dp"
     android:layout_marginVertical="5dp"
     android:gravity="end">
 
-    <TextView
-        android:id="@+id/tvMessage"
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="12dp"
-        android:paddingVertical="8dp"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
         android:layout_marginLeft="80dp"
-        android:background="@drawable/bg_chat_right"
-        android:text="Hi there!"
-        android:textColor="@color/onPrimary"
-        android:textSize="14sp" />
+        android:gravity="center">
+
+        <ImageButton
+            android:id="@+id/btnOption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/whiteColor"
+            app:srcCompat="@drawable/ic_dots_horizontal" />
+
+        <TextView
+            android:id="@+id/tvMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_chat_right"
+            android:layout_marginLeft="15dp"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="8dp"
+            android:text="Hi there!"
+            android:textColor="@color/onPrimary"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/imgMessage"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
+            android:adjustViewBounds="true"
+            android:visibility="gone"/>
+    </LinearLayout>
+
 </LinearLayout>

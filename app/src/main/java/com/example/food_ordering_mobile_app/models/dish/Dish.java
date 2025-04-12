@@ -1,18 +1,20 @@
 package com.example.food_ordering_mobile_app.models.dish;
 
+import com.example.food_ordering_mobile_app.models.Image;
 import com.example.food_ordering_mobile_app.models.store.Store;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Dish {
+public class Dish implements Serializable {
     @SerializedName("_id")
     private String id;
     private String name;
     private Integer price;
     private FoodCategory category;
     private Store store;
-    private DishImage image;
+    private Image image;
     private List<ToppingGroup> toppingGroups;
     private String description;
 
@@ -56,11 +58,11 @@ public class Dish {
         this.store = store;
     }
 
-    public DishImage getImage() {
+    public Image getImage() {
         return image;
     }
 
-    public void setImage(DishImage image) {
+    public void setImage(Image image) {
         this.image = image;
     }
 

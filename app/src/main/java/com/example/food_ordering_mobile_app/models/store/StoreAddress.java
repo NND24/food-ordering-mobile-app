@@ -1,6 +1,8 @@
 package com.example.food_ordering_mobile_app.models.store;
 
-public class StoreAddress {
+import java.io.Serializable;
+
+public class StoreAddress implements Serializable {
     private String full_name;
     private Double lat;
     private Double lon;

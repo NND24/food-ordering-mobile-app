@@ -17,6 +17,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.food_ordering_mobile_app.R;
 import com.example.food_ordering_mobile_app.adapters.ChatAdapter;
+import com.example.food_ordering_mobile_app.models.ApiResponse;
 import com.example.food_ordering_mobile_app.models.chat.Chat;
 import com.example.food_ordering_mobile_app.ui.common.CustomHeaderView;
 import com.example.food_ordering_mobile_app.utils.Resource;
@@ -47,15 +48,33 @@ public class ChatFragment extends Fragment {
         chatViewModel = new ViewModelProvider(requireActivity()).get(ChatViewModel.class);
 
         swipeRefreshLayout.setOnRefreshListener(this::refreshData);
-        setupUserFavorite();
+        setupUserChat();
+
+        chatViewModel.getDeleteChatResponse().observe(getViewLifecycleOwner(), new Observer<Resource<ApiResponse<String>>>() {
+            @Override
+            public void onChanged(Resource<ApiResponse<String>> resource) {
+                switch (resource.getStatus()) {
+                    case LOADING:
+                        swipeRefreshLayout.setRefreshing(true);
+                        break;
+                    case SUCCESS:
+                        swipeRefreshLayout.setRefreshing(false);
+                        setupUserChat();
+                        break;
+                    case ERROR:
+                        swipeRefreshLayout.setRefreshing(false);
+                        break;
+                }
+            }
+        });
 
         return view;
     }
 
-    private void setupUserFavorite() {
+    private void setupUserChat() {
         chatRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         chatList = new ArrayList<>();
-        chatAdapter = new ChatAdapter(getContext(), chatList, chat -> {
+        chatAdapter = new ChatAdapter(requireActivity(),getContext(), chatList, chat -> {
             Intent intent = new Intent(requireContext(), DetailMessageActivity.class);
             intent.putExtra("chatId", chat.getId());
             startActivity(intent);
@@ -74,11 +93,9 @@ public class ChatFragment extends Fragment {
                         chatList.clear();
                         chatList.addAll(resource.getData());
                         chatAdapter.notifyDataSetChanged();
-                        Log.d("ChatFragment", "getAllChats: " + resource.getData().toString());
                         break;
                     case ERROR:
                         swipeRefreshLayout.setRefreshing(false);
-                        Log.d("ChatFragment", "getAllChats Error: " + resource.getMessage());
                         break;
                 }
             }

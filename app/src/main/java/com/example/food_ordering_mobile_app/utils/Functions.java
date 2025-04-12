@@ -1,6 +1,6 @@
 package com.example.food_ordering_mobile_app.utils;
+import com.example.food_ordering_mobile_app.models.dish.Dish;
 import com.example.food_ordering_mobile_app.models.dish.DishGroupByCategory;
-import com.example.food_ordering_mobile_app.models.dish.DishStore;
 import com.example.food_ordering_mobile_app.models.dish.FoodCategory;
 import com.example.food_ordering_mobile_app.models.foodType.FoodType;
 import com.example.food_ordering_mobile_app.models.store.StoreGroupByCategory;
@@ -33,10 +33,10 @@ public class Functions {
         return new ArrayList<>(groupedStores.values());
     }
 
-    public static List<DishGroupByCategory> groupDishesByCategory(List<DishStore> dishes) {
+    public static List<DishGroupByCategory> groupDishesByCategory(List<Dish> dishes) {
         Map<String, DishGroupByCategory> groupedDishes = new HashMap<>();
 
-        for (DishStore dish : dishes) {
+        for (Dish dish : dishes) {
             FoodCategory category = dish.getCategory(); // Lấy đối tượng category
 
             if (category != null) {
@@ -73,4 +73,9 @@ public class Functions {
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         return EARTH_RADIUS * c; // Đơn vị km
     }
+
+    private String fixNonStandardJson(String rawJson) {
+        return rawJson.replaceAll("new ObjectId\\(\"(.*?)\"\\)", "\"$1\"");
+    }
+
 }

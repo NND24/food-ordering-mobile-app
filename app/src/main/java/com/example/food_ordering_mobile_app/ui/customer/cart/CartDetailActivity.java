@@ -31,10 +31,11 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.example.food_ordering_mobile_app.R;
 import com.example.food_ordering_mobile_app.adapters.CartSummaryAdapter;
-import com.example.food_ordering_mobile_app.models.MessageResponse;
+import com.example.food_ordering_mobile_app.models.ApiResponse;
+import com.example.food_ordering_mobile_app.models.cart.Cart;
 import com.example.food_ordering_mobile_app.models.cart.CartItem;
-import com.example.food_ordering_mobile_app.models.cart.CartResponse;
 import com.example.food_ordering_mobile_app.models.dish.Topping;
+import com.example.food_ordering_mobile_app.models.dish.ToppingGroup;
 import com.example.food_ordering_mobile_app.models.user.User;
 import com.example.food_ordering_mobile_app.ui.customer.account.location.EditCurrentLocationActivity;
 import com.example.food_ordering_mobile_app.ui.customer.account.location.LocationActivity;
@@ -147,9 +148,9 @@ public class CartDetailActivity extends AppCompatActivity {
 
         btnCompleteCart.setOnClickListener(v -> handleCompleteCart());
 
-        cartViewModel.getCompleteCartResponse().observe(this, new Observer<Resource<MessageResponse>>() {
+        cartViewModel.getCompleteCartResponse().observe(this, new Observer<Resource<ApiResponse<String>>>() {
             @Override
-            public void onChanged(Resource<MessageResponse> resource) {
+            public void onChanged(Resource<ApiResponse<String>> resource) {
                 switch (resource.getStatus()) {
                     case LOADING:
                         swipeRefreshLayout.setRefreshing(true);
@@ -199,9 +200,9 @@ public class CartDetailActivity extends AppCompatActivity {
         cartSummaryAdapter = new CartSummaryAdapter(this, cartItemList);
         orderSummaryRecyclerView.setAdapter(cartSummaryAdapter);
 
-        cartViewModel.getUserCartInStoreResponse().observe(this, new Observer<Resource<CartResponse>>() {
+        cartViewModel.getUserCartInStoreResponse().observe(this, new Observer<Resource<ApiResponse<Cart>>>() {
             @Override
-            public void onChanged(Resource<CartResponse> resource) {
+            public void onChanged(Resource<ApiResponse<Cart>> resource) {
                 switch (resource.getStatus()) {
                     case LOADING:
                         swipeRefreshLayout.setRefreshing(true);
@@ -378,7 +379,7 @@ public class CartDetailActivity extends AppCompatActivity {
     }
 
     public void goBack(View view) {
-        onBackPressed();
+        finish();
     }
 
     public void goToOrderDetail(View view) {

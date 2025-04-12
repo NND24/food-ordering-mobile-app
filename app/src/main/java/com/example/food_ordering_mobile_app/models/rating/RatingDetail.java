@@ -1,22 +1,22 @@
 package com.example.food_ordering_mobile_app.models.rating;
 
-import com.example.food_ordering_mobile_app.models.dish.DishImage;
-import com.example.food_ordering_mobile_app.models.order.OrderStore;
-import com.example.food_ordering_mobile_app.models.user.User;
+import com.example.food_ordering_mobile_app.models.Image;
+import com.example.food_ordering_mobile_app.models.store.Store;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
 
-public class RatingDetailResponse {
+public class RatingDetail implements Serializable {
     @SerializedName("_id")
     private String id;
     private String user;
-    private OrderStore store;
+    private Store store;
     private List<String> dishes;
     private Integer ratingValue;
     private String comment;
-    private List<DishImage> images;
+    private List<Image> images;
     private Timestamp updatedAt;
 
     public String getId() {
@@ -35,11 +35,11 @@ public class RatingDetailResponse {
         this.user = user;
     }
 
-    public OrderStore getStore() {
+    public Store getStore() {
         return store;
     }
 
-    public void setStore(OrderStore store) {
+    public void setStore(Store store) {
         this.store = store;
     }
 
@@ -67,11 +67,11 @@ public class RatingDetailResponse {
         this.comment = comment;
     }
 
-    public List<DishImage> getImages() {
+    public List<Image> getImages() {
         return images;
     }
 
-    public void setImages(List<DishImage> images) {
+    public void setImages(List<Image> images) {
         this.images = images;
     }
 

@@ -27,12 +27,11 @@ import com.example.food_ordering_mobile_app.adapters.StoreGroupByCategoryAdapter
 import com.example.food_ordering_mobile_app.adapters.StoreBigCardAdapter;
 import com.example.food_ordering_mobile_app.adapters.FoodTypeAdapter;
 import com.example.food_ordering_mobile_app.adapters.StoreStandoutAdapter;
+import com.example.food_ordering_mobile_app.models.ApiResponse;
 import com.example.food_ordering_mobile_app.models.foodType.FoodType;
 import com.example.food_ordering_mobile_app.models.store.StoreGroupByCategory;
 import com.example.food_ordering_mobile_app.models.store.Store;
-import com.example.food_ordering_mobile_app.models.store.ListStoreResponse;
 import com.example.food_ordering_mobile_app.models.user.User;
-import com.example.food_ordering_mobile_app.network.SocketManager;
 import com.example.food_ordering_mobile_app.ui.common.CustomHeaderView;
 import com.example.food_ordering_mobile_app.ui.customer.store.StoreActivity;
 import com.example.food_ordering_mobile_app.ui.customer.search.SearchActivity;
@@ -248,9 +247,9 @@ public class HomeFragment extends Fragment {
         });
         ratingStoreRecyclerView.setAdapter(storeBigCardAdapter);
 
-        storeViewModel.getRatingStoreResponse().observe(getViewLifecycleOwner(), new Observer<Resource<ListStoreResponse>>() {
+        storeViewModel.getRatingStoreResponse().observe(getViewLifecycleOwner(), new Observer<Resource<ApiResponse<List<Store>>>>() {
             @Override
-            public void onChanged(Resource<ListStoreResponse> resource) {
+            public void onChanged(Resource<ApiResponse<List<Store>>> resource) {
                 switch (resource.getStatus()) {
                     case LOADING:
                         swipeRefreshLayout.setRefreshing(true);
@@ -299,9 +298,9 @@ public class HomeFragment extends Fragment {
         SnapHelper snapHelper = new LinearSnapHelper();
         snapHelper.attachToRecyclerView(standoutStoreRecyclerView);
 
-        storeViewModel.getStandoutStoreResponse().observe(getViewLifecycleOwner(), new Observer<Resource<ListStoreResponse>>() {
+        storeViewModel.getStandoutStoreResponse().observe(getViewLifecycleOwner(), new Observer<Resource<ApiResponse<List<Store>>>>() {
             @Override
-            public void onChanged(Resource<ListStoreResponse> resource) {
+            public void onChanged(Resource<ApiResponse<List<Store>>> resource) {
                 switch (resource.getStatus()) {
                     case LOADING:
                         swipeRefreshLayout.setRefreshing(true);
@@ -343,9 +342,9 @@ public class HomeFragment extends Fragment {
         storeGroupByCategoryAdapter = new StoreGroupByCategoryAdapter(getContext(), storeGroupByCategoryList);
         categoryRecyclerView.setAdapter(storeGroupByCategoryAdapter);
 
-        storeViewModel.getAllStoreResponse().observe(getViewLifecycleOwner(), new Observer<Resource<ListStoreResponse>>() {
+        storeViewModel.getAllStoreResponse().observe(getViewLifecycleOwner(), new Observer<Resource<ApiResponse<List<Store>>>>() {
             @Override
-            public void onChanged(Resource<ListStoreResponse> resource) {
+            public void onChanged(Resource<ApiResponse<List<Store>>> resource) {
                 switch (resource.getStatus()) {
                     case LOADING:
                         swipeRefreshLayout.setRefreshing(true);
@@ -376,36 +375,19 @@ public class HomeFragment extends Fragment {
 
     private void refreshData() {
         userViewModel.getCurrentUser();
+        setupFoodTypes();
 
-        // Làm mới danh sách loại món ăn
-        foodTypeViewModel.getAllFoodTypes();
+        Map<String, String> queryParams = new HashMap<>();
+        queryParams.put("name", "");
+        queryParams.put("category", "");
+        queryParams.put("sort", "standout");
+        queryParams.put("limit", "5");
+        queryParams.put("page", "1");
 
-        // Làm mới danh sách nhà hàng theo rating
-        Map<String, String> ratingQueryParams = new HashMap<>();
-        ratingQueryParams.put("name", "");
-        ratingQueryParams.put("category", "");
-        ratingQueryParams.put("sort", "rating");
-        ratingQueryParams.put("limit", "3");
-        ratingQueryParams.put("page", "1");
-        storeViewModel.getAllStore(ratingQueryParams);
+        storeViewModel.getStandoutStore(queryParams);
 
-        // Làm mới danh sách nhà hàng nổi bật
-        Map<String, String> standoutQueryParams = new HashMap<>();
-        standoutQueryParams.put("name", "");
-        standoutQueryParams.put("category", "");
-        standoutQueryParams.put("sort", "standout");
-        standoutQueryParams.put("limit", "5");
-        standoutQueryParams.put("page", "1");
-        storeViewModel.getAllStore(standoutQueryParams);
-
-        // Làm mới danh sách nhà hàng theo danh mục
-        Map<String, String> categoryQueryParams = new HashMap<>();
-        categoryQueryParams.put("name", "");
-        categoryQueryParams.put("category", "");
-        categoryQueryParams.put("sort", "");
-        categoryQueryParams.put("limit", "");
-        categoryQueryParams.put("page", "");
-        storeViewModel.getAllStore(categoryQueryParams);
+        setupRatingStores();
+        setupStores();
     }
 
 

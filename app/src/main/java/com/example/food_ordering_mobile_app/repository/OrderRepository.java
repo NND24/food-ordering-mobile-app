@@ -6,9 +6,9 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.food_ordering_mobile_app.models.ApiResponse;
+import com.example.food_ordering_mobile_app.models.notification.Notification;
 import com.example.food_ordering_mobile_app.models.order.Order;
-import com.example.food_ordering_mobile_app.models.order.ListOrderResponse;
-import com.example.food_ordering_mobile_app.models.order.OrderResponse;
 import com.example.food_ordering_mobile_app.network.RetrofitClient;
 import com.example.food_ordering_mobile_app.network.services.OrderService;
 import com.example.food_ordering_mobile_app.utils.PersistentCookieStore;
@@ -20,6 +20,7 @@ import org.json.JSONObject;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -44,13 +45,13 @@ public class OrderRepository {
         }
     }
 
-    public LiveData<Resource<ListOrderResponse>> getUserOrder() {
-        MutableLiveData<Resource<ListOrderResponse>> result = new MutableLiveData<>();
+    public LiveData<Resource<ApiResponse<List<Order>>>> getUserOrder() {
+        MutableLiveData<Resource<ApiResponse<List<Order>>>> result = new MutableLiveData<>();
         result.setValue(Resource.loading(null));
 
-        orderService.getUserOrder().enqueue(new Callback<ListOrderResponse>() {
+        orderService.getUserOrder().enqueue(new Callback<ApiResponse<List<Order>>>() {
             @Override
-            public void onResponse(Call<ListOrderResponse> call, Response<ListOrderResponse> response) {
+            public void onResponse(Call<ApiResponse<List<Order>>> call, Response<ApiResponse<List<Order>>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Log.d("OrderRepository", "getCurrentUser: " + response.body());
                     result.setValue(Resource.success("Lay thong tin thành công!", response.body()));
@@ -67,7 +68,7 @@ public class OrderRepository {
             }
 
             @Override
-            public void onFailure(Call<ListOrderResponse> call, Throwable t) {
+            public void onFailure(Call<ApiResponse<List<Order>>> call, Throwable t) {
                 result.setValue(Resource.error("Lỗi kết nối: " + t.getMessage(), null));
             }
         });
@@ -75,13 +76,13 @@ public class OrderRepository {
         return result;
     }
 
-    public LiveData<Resource<OrderResponse>> getOrderDetail(String orderId) {
-        MutableLiveData<Resource<OrderResponse>> result = new MutableLiveData<>();
+    public LiveData<Resource<ApiResponse<Order>>> getOrderDetail(String orderId) {
+        MutableLiveData<Resource<ApiResponse<Order>>> result = new MutableLiveData<>();
         result.setValue(Resource.loading(null));
 
-        orderService.getOrderDetail(orderId).enqueue(new Callback<OrderResponse>() {
+        orderService.getOrderDetail(orderId).enqueue(new Callback<ApiResponse<Order>>() {
             @Override
-            public void onResponse(Call<OrderResponse> call, Response<OrderResponse> response) {
+            public void onResponse(Call<ApiResponse<Order>> call, Response<ApiResponse<Order>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Log.d("OrderRepository", "getOrderDetail: " + response.body());
                     result.setValue(Resource.success("Lay thong tin thành công!", response.body()));
@@ -98,7 +99,7 @@ public class OrderRepository {
             }
 
             @Override
-            public void onFailure(Call<OrderResponse> call, Throwable t) {
+            public void onFailure(Call<ApiResponse<Order>> call, Throwable t) {
                 result.setValue(Resource.error("Lỗi kết nối: " + t.getMessage(), null));
             }
         });

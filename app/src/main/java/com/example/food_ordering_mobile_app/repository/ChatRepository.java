@@ -6,6 +6,7 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.food_ordering_mobile_app.models.ApiResponse;
 import com.example.food_ordering_mobile_app.models.chat.Chat;
 import com.example.food_ordering_mobile_app.models.chat.Message;
 import com.example.food_ordering_mobile_app.models.chat.MessageResponse;
@@ -21,6 +22,7 @@ import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -76,13 +78,13 @@ public class ChatRepository {
         return result;
     }
 
-    public LiveData<Resource<Message>> sendMessage(String id, Message message) {
-        MutableLiveData<Resource<Message>> result = new MutableLiveData<>();
+    public LiveData<Resource<ApiResponse<Message>>> sendMessage(String chatId, Map<String, Object> data) {
+        MutableLiveData<Resource<ApiResponse<Message>>> result = new MutableLiveData<>();
         result.setValue(Resource.loading(null));
-
-        chatService.sendMessage(id, message).enqueue(new Callback<Message>() {
+        Log.d("ChatRepository", "chatId = " + chatId + ", content = " + data);
+        chatService.sendMessage(chatId, data).enqueue(new Callback<ApiResponse<Message>>() {
             @Override
-            public void onResponse(Call<Message> call, Response<Message> response) {
+            public void onResponse(Call<ApiResponse<Message>> call, Response<ApiResponse<Message>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Log.d("ChatRepository", "sendMessage: " + response.body());
                     result.setValue(Resource.success("Lay thong tin thành công!", response.body()));
@@ -92,6 +94,7 @@ public class ChatRepository {
                         JSONObject jsonObject = new JSONObject(errorMessage);
                         String message = jsonObject.getString("message");
                         result.setValue(Resource.error(message, null));
+                        Log.d("ChatRepository", "sendMessage error: " + errorMessage);
                     } catch (Exception e) {
                         result.setValue(Resource.error("Lỗi không xác định!", null));
                     }
@@ -99,8 +102,9 @@ public class ChatRepository {
             }
 
             @Override
-            public void onFailure(Call<Message> call, Throwable t) {
+            public void onFailure(Call<ApiResponse<Message>> call, Throwable t) {
                 result.setValue(Resource.error("Lỗi kết nối: " + t.getMessage(), null));
+                Log.d("ChatRepository", "sendMessage error: " + t.getMessage());
             }
         });
 
@@ -169,13 +173,13 @@ public class ChatRepository {
         return result;
     }
 
-    public LiveData<Resource<Chat>> deleteChat(String id) {
-        MutableLiveData<Resource<Chat>> result = new MutableLiveData<>();
+    public LiveData<Resource<ApiResponse<String>>> deleteChat(String id) {
+        MutableLiveData<Resource<ApiResponse<String>>> result = new MutableLiveData<>();
         result.setValue(Resource.loading(null));
 
-        chatService.deleteChat(id).enqueue(new Callback<Chat>() {
+        chatService.deleteChat(id).enqueue(new Callback<ApiResponse<String>>() {
             @Override
-            public void onResponse(Call<Chat> call, Response<Chat> response) {
+            public void onResponse(Call<ApiResponse<String>> call, Response<ApiResponse<String>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Log.d("ChatRepository", "createChat: " + response.body());
                     result.setValue(Resource.success("Lay thong tin thành công!", response.body()));
@@ -192,7 +196,7 @@ public class ChatRepository {
             }
 
             @Override
-            public void onFailure(Call<Chat> call, Throwable t) {
+            public void onFailure(Call<ApiResponse<String>> call, Throwable t) {
                 result.setValue(Resource.error("Lỗi kết nối: " + t.getMessage(), null));
             }
         });
@@ -200,13 +204,13 @@ public class ChatRepository {
         return result;
     }
 
-    public LiveData<Resource<Message>> deleteMessage(String id) {
-        MutableLiveData<Resource<Message>> result = new MutableLiveData<>();
+    public LiveData<Resource<ApiResponse<String>>> deleteMessage(String id) {
+        MutableLiveData<Resource<ApiResponse<String>>> result = new MutableLiveData<>();
         result.setValue(Resource.loading(null));
 
-        chatService.deleteMessage(id).enqueue(new Callback<Message>() {
+        chatService.deleteMessage(id).enqueue(new Callback<ApiResponse<String>>() {
             @Override
-            public void onResponse(Call<Message> call, Response<Message> response) {
+            public void onResponse(Call<ApiResponse<String>> call, Response<ApiResponse<String>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Log.d("ChatRepository", "sendMessage: " + response.body());
                     result.setValue(Resource.success("Lay thong tin thành công!", response.body()));
@@ -223,7 +227,7 @@ public class ChatRepository {
             }
 
             @Override
-            public void onFailure(Call<Message> call, Throwable t) {
+            public void onFailure(Call<ApiResponse<String>> call, Throwable t) {
                 result.setValue(Resource.error("Lỗi kết nối: " + t.getMessage(), null));
             }
         });

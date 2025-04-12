@@ -23,15 +23,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.example.food_ordering_mobile_app.R;
+import com.example.food_ordering_mobile_app.models.Image;
 import com.example.food_ordering_mobile_app.models.dish.Dish;
-import com.example.food_ordering_mobile_app.models.dish.DishImage;
-import com.example.food_ordering_mobile_app.models.foodType.FoodType;
-import com.example.food_ordering_mobile_app.models.rating.DishRating;
 import com.example.food_ordering_mobile_app.models.rating.Rating;
 import com.example.food_ordering_mobile_app.models.user.User;
 import com.example.food_ordering_mobile_app.ui.customer.rating.EditRatingActivity;
 import com.example.food_ordering_mobile_app.utils.SharedPreferencesHelper;
-import com.example.food_ordering_mobile_app.viewmodels.LocationViewModel;
 import com.example.food_ordering_mobile_app.viewmodels.RatingViewModel;
 
 import java.util.List;
@@ -109,7 +106,7 @@ public class RatingAdapter extends RecyclerView.Adapter<RatingAdapter.ViewHolder
 
         if (rating.getDishes() != null && !rating.getDishes().isEmpty()) {
             StringBuilder dishes = new StringBuilder();
-            for (DishRating dish : rating.getDishes()) {
+            for (Dish dish : rating.getDishes()) {
                 dishes.append(dish.getName()).append(", ");
             }
             // Xóa dấu phẩy cuối cùng
@@ -144,9 +141,9 @@ public class RatingAdapter extends RecyclerView.Adapter<RatingAdapter.ViewHolder
             int sizeInDp = (int) TypedValue.applyDimension(
                     TypedValue.COMPLEX_UNIT_DIP, 200, context.getResources().getDisplayMetrics());
 
-            List<DishImage> images = rating.getImages();
+            List<Image> images = rating.getImages();
             for (int i = 0; i < images.size(); i++) {
-                DishImage image = images.get(i);
+                Image image = images.get(i);
                 ImageView imageView = new ImageView(context);
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(sizeInDp, sizeInDp);
 

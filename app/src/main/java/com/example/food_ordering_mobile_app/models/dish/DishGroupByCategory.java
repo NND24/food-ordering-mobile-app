@@ -3,11 +3,12 @@ package com.example.food_ordering_mobile_app.models.dish;
 import com.example.food_ordering_mobile_app.models.foodType.FoodType;
 import com.example.food_ordering_mobile_app.models.store.Store;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class DishGroupByCategory {
+public class DishGroupByCategory implements Serializable {
     private FoodCategory category;
-    private List<DishStore> dishes;
+    private List<Dish> dishes;
 
     public FoodCategory getCategory() {
         return category;
@@ -17,11 +18,11 @@ public class DishGroupByCategory {
         this.category = category;
     }
 
-    public List<DishStore> getDishes() {
+    public List<Dish> getDishes() {
         return dishes;
     }
 
-    public void setDishes(List<DishStore> dishes) {
+    public void setDishes(List<Dish> dishes) {
         this.dishes = dishes;
     }
 }

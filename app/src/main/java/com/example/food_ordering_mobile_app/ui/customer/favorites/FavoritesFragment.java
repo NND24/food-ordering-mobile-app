@@ -16,8 +16,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.food_ordering_mobile_app.R;
 import com.example.food_ordering_mobile_app.adapters.FavoriteAdapter;
-import com.example.food_ordering_mobile_app.models.MessageResponse;
-import com.example.food_ordering_mobile_app.models.favorite.FavoriteResponse;
+import com.example.food_ordering_mobile_app.models.ApiResponse;
+import com.example.food_ordering_mobile_app.models.favorite.Favorite;
 import com.example.food_ordering_mobile_app.models.store.Store;
 import com.example.food_ordering_mobile_app.utils.Resource;
 import com.example.food_ordering_mobile_app.viewmodels.FavoriteViewModel;
@@ -48,9 +48,9 @@ public class FavoritesFragment extends Fragment {
 
         btnRemoveAllFavorite.setOnClickListener(this::handleRemoveAllFavorite);
 
-        favoriteViewModel.getRemoveAllFavoriteResponse().observe(getViewLifecycleOwner(), new Observer<Resource<MessageResponse>>() {
+        favoriteViewModel.getRemoveAllFavoriteResponse().observe(getViewLifecycleOwner(), new Observer<Resource<ApiResponse<String>>>() {
             @Override
-            public void onChanged(Resource<MessageResponse> resource) {
+            public void onChanged(Resource<ApiResponse<String>> resource) {
                 switch (resource.getStatus()) {
                     case LOADING:
                         swipeRefreshLayout.setRefreshing(true);
@@ -66,9 +66,9 @@ public class FavoritesFragment extends Fragment {
             }
         });
 
-        favoriteViewModel.getRemoveFavoriteResponse().observe(getViewLifecycleOwner(), new Observer<Resource<MessageResponse>>() {
+        favoriteViewModel.getRemoveFavoriteResponse().observe(getViewLifecycleOwner(), new Observer<Resource<ApiResponse<String>>>() {
             @Override
-            public void onChanged(Resource<MessageResponse> resource) {
+            public void onChanged(Resource<ApiResponse<String>> resource) {
                 switch (resource.getStatus()) {
                     case LOADING:
                         swipeRefreshLayout.setRefreshing(true);
@@ -107,9 +107,9 @@ public class FavoritesFragment extends Fragment {
         favoriteAdapter = new FavoriteAdapter(requireActivity(), getContext(), favoriteList);
         favoriteRecyclerView.setAdapter(favoriteAdapter);
 
-        favoriteViewModel.getUserFavoriteResponse().observe(getViewLifecycleOwner(), new Observer<Resource<FavoriteResponse>>() {
+        favoriteViewModel.getUserFavoriteResponse().observe(getViewLifecycleOwner(), new Observer<Resource<ApiResponse<Favorite>>>() {
             @Override
-            public void onChanged(Resource<FavoriteResponse> resource) {
+            public void onChanged(Resource<ApiResponse<Favorite>> resource) {
                 switch (resource.getStatus()) {
                     case LOADING:
                         swipeRefreshLayout.setRefreshing(true);

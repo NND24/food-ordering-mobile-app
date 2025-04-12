@@ -1,6 +1,6 @@
 package com.example.food_ordering_mobile_app.network.services;
 
-import com.example.food_ordering_mobile_app.models.dish.DishImage;
+import com.example.food_ordering_mobile_app.models.Image;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ public interface UploadService {
     Call<ResponseBody> uploadAvatar(@Part MultipartBody.Part file);
     @Multipart
     @POST("/api/v1/upload/images")
-    Call<List<DishImage>> uploadImages(@Part List<MultipartBody.Part> files);
+    Call<List<Image>> uploadImages(@Part List<MultipartBody.Part> files);
 
     @DELETE("/api/v1/upload/delete-file")
     Call<ResponseBody> deleteFile();

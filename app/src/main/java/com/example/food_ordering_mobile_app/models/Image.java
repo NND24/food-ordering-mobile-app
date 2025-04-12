@@ -1,6 +1,8 @@
-package com.example.food_ordering_mobile_app.models.chat;
+package com.example.food_ordering_mobile_app.models;
 
-public class MessageImage {
+import java.io.Serializable;
+
+public class Image implements Serializable {
     private String filePath;
     private String url;
 
@@ -18,5 +20,13 @@ public class MessageImage {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    @Override
+    public String toString() {
+        return "UserAvatar{" +
+                "filePath='" + filePath + '\'' +
+                ", url='" + url + '\'' +
+                '}';
     }
 }

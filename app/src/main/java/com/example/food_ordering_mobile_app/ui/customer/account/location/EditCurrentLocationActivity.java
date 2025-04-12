@@ -167,6 +167,6 @@ public class EditCurrentLocationActivity extends AppCompatActivity {
     }
 
     public void goBack(View view) {
-        onBackPressed();
+        finish();
     }
 }

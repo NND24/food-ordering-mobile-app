@@ -19,8 +19,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.food_ordering_mobile_app.R;
 import com.example.food_ordering_mobile_app.adapters.RatingAdapter;
-import com.example.food_ordering_mobile_app.models.MessageResponse;
-import com.example.food_ordering_mobile_app.models.rating.ListRatingResponse;
+import com.example.food_ordering_mobile_app.models.ApiResponse;
 import com.example.food_ordering_mobile_app.models.rating.Rating;
 import com.example.food_ordering_mobile_app.utils.Resource;
 import com.example.food_ordering_mobile_app.viewmodels.RatingViewModel;
@@ -63,9 +62,9 @@ public class RatingActivity extends AppCompatActivity {
 
         setupRating();
 
-        ratingViewModel.getDeleteStoreRatingResponse().observe(this, new Observer<Resource<MessageResponse>>() {
+        ratingViewModel.getDeleteStoreRatingResponse().observe(this, new Observer<Resource<ApiResponse<String>>>() {
             @Override
-            public void onChanged(Resource<MessageResponse> resource) {
+            public void onChanged(Resource<ApiResponse<String>> resource) {
                 switch (resource.getStatus()) {
                     case LOADING:
                         swipeRefreshLayout.setRefreshing(true);
@@ -88,9 +87,9 @@ public class RatingActivity extends AppCompatActivity {
         ratingAdapter = new RatingAdapter(RatingActivity.this, this, ratingList);
         reviewRecyclerView.setAdapter(ratingAdapter);
 
-        ratingViewModel.getAllStoreRatingResponse().observe(this, new Observer<Resource<ListRatingResponse>>() {
+        ratingViewModel.getAllStoreRatingResponse().observe(this, new Observer<Resource<ApiResponse<List<Rating>>>>() {
             @Override
-            public void onChanged(Resource<ListRatingResponse> resource) {
+            public void onChanged(Resource<ApiResponse<List<Rating>>> resource) {
                 switch (resource.getStatus()) {
                     case LOADING:
                         swipeRefreshLayout.setRefreshing(true);
@@ -173,6 +172,6 @@ public class RatingActivity extends AppCompatActivity {
     }
 
     public void goBack(View view) {
-        onBackPressed();
+        finish();
     }
 }

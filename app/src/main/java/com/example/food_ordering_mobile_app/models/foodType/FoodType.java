@@ -1,12 +1,15 @@
 package com.example.food_ordering_mobile_app.models.foodType;
 
+import com.example.food_ordering_mobile_app.models.Image;
 import com.google.gson.annotations.SerializedName;
 
-public class FoodType {
+import java.io.Serializable;
+
+public class FoodType implements Serializable {
     @SerializedName("_id")
     private String id;
     private String name;
-    private FoodTypeImage image;
+    private Image image;
 
     public String getId() {
         return id;
@@ -23,11 +26,11 @@ public class FoodType {
     public void setName(String name) {
         this.name = name;
     }
-    public FoodTypeImage getImage() {
+    public Image getImage() {
         return image;
     }
 
-    public void setImage(FoodTypeImage image) {
+    public void setImage(Image image) {
         this.image = image;
     }
 

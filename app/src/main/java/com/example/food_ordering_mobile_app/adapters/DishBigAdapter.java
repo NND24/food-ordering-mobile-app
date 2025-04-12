@@ -23,7 +23,7 @@ import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.example.food_ordering_mobile_app.R;
 import com.example.food_ordering_mobile_app.models.cart.Cart;
 import com.example.food_ordering_mobile_app.models.cart.CartItem;
-import com.example.food_ordering_mobile_app.models.dish.DishStore;
+import com.example.food_ordering_mobile_app.models.dish.Dish;
 import com.example.food_ordering_mobile_app.ui.customer.dish.DishActivity;
 import com.example.food_ordering_mobile_app.viewmodels.CartViewModel;
 
@@ -37,17 +37,17 @@ import java.util.Map;
 public class DishBigAdapter extends RecyclerView.Adapter<DishBigAdapter.ViewHolder> {
 
     private Context context;
-    private List<DishStore> dishList;
+    private List<Dish> dishList;
     private OnDishClickListener onDishClickListener;
     private FragmentActivity activity;
     private CartViewModel cartViewModel;
     Cart currentCart = null;
 
     public interface OnDishClickListener {
-        void onDishClick(DishStore dish);
+        void onDishClick(Dish dish);
     }
 
-    public DishBigAdapter(FragmentActivity activity, Context context, List<DishStore> dishList, OnDishClickListener onDishClickListener) {
+    public DishBigAdapter(FragmentActivity activity, Context context, List<Dish> dishList, OnDishClickListener onDishClickListener) {
         this.activity = activity;
         this.context = context;
         this.dishList = dishList != null ? dishList : new ArrayList<>();
@@ -67,7 +67,7 @@ public class DishBigAdapter extends RecyclerView.Adapter<DishBigAdapter.ViewHold
         return new ViewHolder(view);
     }
 
-    private void updateCart(DishStore dish, int quantity) {
+    private void updateCart(Dish dish, int quantity) {
         Map<String, Object> data = new HashMap<>();
         data.put("storeId", dish.getStore());
         data.put("dishId", dish.getId());
@@ -77,7 +77,7 @@ public class DishBigAdapter extends RecyclerView.Adapter<DishBigAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        DishStore dish = dishList.get(position);
+        Dish dish = dishList.get(position);
 
         holder.name.setText(dish.getName());
         NumberFormat formatter = NumberFormat.getInstance(new Locale("vi", "VN"));

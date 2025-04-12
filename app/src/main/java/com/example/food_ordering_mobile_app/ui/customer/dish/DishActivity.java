@@ -28,14 +28,12 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.example.food_ordering_mobile_app.R;
 import com.example.food_ordering_mobile_app.adapters.GroupToppingAdapter;
+import com.example.food_ordering_mobile_app.models.ApiResponse;
 import com.example.food_ordering_mobile_app.models.cart.Cart;
 import com.example.food_ordering_mobile_app.models.cart.CartItem;
-import com.example.food_ordering_mobile_app.models.dish.DishDetail;
-import com.example.food_ordering_mobile_app.models.dish.DishResponse;
-import com.example.food_ordering_mobile_app.models.dish.DishStore;
+import com.example.food_ordering_mobile_app.models.dish.Dish;
 import com.example.food_ordering_mobile_app.models.dish.Topping;
 import com.example.food_ordering_mobile_app.models.dish.ToppingGroup;
-import com.example.food_ordering_mobile_app.models.dish.ToppingGroupResponse;
 import com.example.food_ordering_mobile_app.ui.customer.store.StoreActivity;
 import com.example.food_ordering_mobile_app.utils.Resource;
 import com.example.food_ordering_mobile_app.viewmodels.CartViewModel;
@@ -60,7 +58,7 @@ public class DishActivity extends AppCompatActivity {
     private LinearLayout quantityContainer, btnRemoveFromCart, btnAddToCart, btnGoBackContainer;
     private ImageButton btnIncrease, btnDecrease;
     private String dishId;
-    private DishDetail dish;
+    private Dish dish;
     private List<Topping> toppingList = new ArrayList<>();
     private int toppingValue = 0;
     private int totalPrice = 0;
@@ -155,14 +153,13 @@ public class DishActivity extends AppCompatActivity {
             }
 
             Map<String, Object> data = new HashMap<>();
-            data.put("storeId", dish.getStore());
+            data.put("storeId", dish.getStore().getId());
             data.put("dishId", dish.getId());
             data.put("quantity", quantity);
             data.put("toppings", toppingIds);
 
             cartViewModel.updateCart(data);
         });
-
 
         cartViewModel.getUpdateCartResponse().observe(this, new Observer<Resource<Cart>>() {
             @Override
@@ -174,8 +171,9 @@ public class DishActivity extends AppCompatActivity {
                     case SUCCESS:
                         swipeRefreshLayout.setRefreshing(false);
                         Intent intent = new Intent(DishActivity.this, StoreActivity.class);
-                        intent.putExtra("storeId", dish.getStore());
+                        intent.putExtra("storeId", dish.getStore().getId());
                         startActivity(intent);
+                        finish();
                         break;
                     case ERROR:
                         swipeRefreshLayout.setRefreshing(false);
@@ -185,9 +183,9 @@ public class DishActivity extends AppCompatActivity {
         });
     }
 
-    private void updateCart(DishDetail dish, int quantity) {
+    private void updateCart(Dish dish, int quantity) {
         Map<String, Object> data = new HashMap<>();
-        data.put("storeId", dish.getStore());
+        data.put("storeId", dish.getStore().getId());
         data.put("dishId", dish.getId());
         data.put("quantity", quantity);
         cartViewModel.updateCart(data);
@@ -195,9 +193,9 @@ public class DishActivity extends AppCompatActivity {
 
     private void setupDish() {
         dishViewModel.getDish(dishId);
-        dishViewModel.getDishResponse().observe(this, new Observer<Resource<DishResponse>>() {
+        dishViewModel.getDishResponse().observe(this, new Observer<Resource<ApiResponse<Dish>>>() {
             @Override
-            public void onChanged(Resource<DishResponse> resource) {
+            public void onChanged(Resource<ApiResponse<Dish>> resource) {
                 switch (resource.getStatus()) {
                     case LOADING:
                         swipeRefreshLayout.setRefreshing(true);
@@ -275,9 +273,9 @@ public class DishActivity extends AppCompatActivity {
         });
         toppingGroupRecyclerView.setAdapter(groupToppingAdapter);
 
-        dishViewModel.getToppingFromDishResponse().observe(this, new Observer<Resource<ToppingGroupResponse>>() {
+        dishViewModel.getToppingFromDishResponse().observe(this, new Observer<Resource<ApiResponse<List<ToppingGroup>>>>() {
             @Override
-            public void onChanged(Resource<ToppingGroupResponse> resource) {
+            public void onChanged(Resource<ApiResponse<List<ToppingGroup>>> resource) {
                 switch (resource.getStatus()) {
                     case LOADING:
                         swipeRefreshLayout.setRefreshing(true);
@@ -304,7 +302,7 @@ public class DishActivity extends AppCompatActivity {
     }
 
     public void goBack(View view) {
-        onBackPressed();
+        finish();
     }
 
     public void openNoteModel(View view) {

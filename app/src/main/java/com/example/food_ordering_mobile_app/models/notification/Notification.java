@@ -2,9 +2,10 @@ package com.example.food_ordering_mobile_app.models.notification;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
-public class Notification {
+public class Notification implements Serializable {
     @SerializedName("_id")
     private String id;
     private String userId;

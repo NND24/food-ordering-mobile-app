@@ -26,10 +26,10 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.example.food_ordering_mobile_app.R;
-import com.example.food_ordering_mobile_app.models.dish.DishImage;
+import com.example.food_ordering_mobile_app.models.ApiResponse;
+import com.example.food_ordering_mobile_app.models.Image;
+import com.example.food_ordering_mobile_app.models.order.Order;
 import com.example.food_ordering_mobile_app.models.order.OrderItem;
-import com.example.food_ordering_mobile_app.models.order.OrderResponse;
-import com.example.food_ordering_mobile_app.models.order.OrderStore;
 import com.example.food_ordering_mobile_app.models.store.Store;
 import com.example.food_ordering_mobile_app.utils.Resource;
 import com.example.food_ordering_mobile_app.viewmodels.OrderViewModel;
@@ -109,16 +109,16 @@ public class AddRatingActivity extends AppCompatActivity {
     private void setupOrderDetail() {
         orderItemList = new ArrayList<>();
         orderViewModel.getOrderDetail(orderId);
-        orderViewModel.getOrderDetailResponse().observe(this, new Observer<Resource<OrderResponse>>() {
+        orderViewModel.getOrderDetailResponse().observe(this, new Observer<Resource<ApiResponse<Order>>>() {
             @Override
-            public void onChanged(Resource<OrderResponse> resource) {
+            public void onChanged(Resource<ApiResponse<Order>> resource) {
                 switch (resource.getStatus()) {
                     case LOADING:
                         break;
                     case SUCCESS:
                         orderItemList.clear();
                         orderItemList.addAll(resource.getData().getData().getItems());
-                        OrderStore store = resource.getData().getData().getStore();
+                        Store store = resource.getData().getData().getStore();
                         tvStoreName.setText(store.getName());
 
                         String storeAvatarUrl = store.getAvatar() != null ? store.getAvatar().getUrl() : null;
@@ -264,12 +264,12 @@ public class AddRatingActivity extends AppCompatActivity {
             Log.d("RatingDebug", "Images selected: ");
             // Có ảnh, tải ảnh và gửi đánh giá kèm ảnh
             uploadViewModel.uploadImages(selectedImageUris, this);
-            uploadViewModel.getUploadImagesResponse().observe(this, new Observer<Resource<List<DishImage>>>() {
+            uploadViewModel.getUploadImagesResponse().observe(this, new Observer<Resource<List<Image>>>() {
                 @Override
-                public void onChanged(Resource<List<DishImage>> resource) {
+                public void onChanged(Resource<List<Image>> resource) {
                     switch (resource.getStatus()) {
                         case SUCCESS:
-                            List<DishImage> uploadedImageUrls = resource.getData();
+                            List<Image> uploadedImageUrls = resource.getData();
                             Log.d("RatingDebug", "Uploaded Image URLs: " + uploadedImageUrls);
                             submitRating(uploadedImageUrls);
                             break;
@@ -284,7 +284,7 @@ public class AddRatingActivity extends AppCompatActivity {
         }
     }
 
-    private void submitRating(List<DishImage> imageUrls) {
+    private void submitRating(List<Image> imageUrls) {
         float rating = ratingBar.getRating();
         String comment = editText.getText().toString();
 
@@ -328,6 +328,6 @@ public class AddRatingActivity extends AppCompatActivity {
     }
 
     public void goBack(View view) {
-        onBackPressed();
+        finish();
     }
 }

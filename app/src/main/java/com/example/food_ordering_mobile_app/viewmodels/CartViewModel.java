@@ -8,11 +8,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
-import com.example.food_ordering_mobile_app.models.MessageResponse;
+import com.example.food_ordering_mobile_app.models.ApiResponse;
 import com.example.food_ordering_mobile_app.models.cart.Cart;
-import com.example.food_ordering_mobile_app.models.cart.CartItem;
-import com.example.food_ordering_mobile_app.models.cart.CartResponse;
-import com.example.food_ordering_mobile_app.models.cart.ListCartResponse;
 import com.example.food_ordering_mobile_app.models.order.OrderItem;
 import com.example.food_ordering_mobile_app.repository.CartRepository;
 import com.example.food_ordering_mobile_app.utils.Resource;
@@ -23,12 +20,12 @@ import java.util.Map;
 public class CartViewModel extends AndroidViewModel {
     private final CartRepository cartRepository;
 
-    private final MutableLiveData<Resource<ListCartResponse>> userCartResponse = new MutableLiveData<>();
-    public LiveData<Resource<ListCartResponse>> getUserCartResponse() {
+    private final MutableLiveData<Resource<ApiResponse<List<Cart>>>> userCartResponse = new MutableLiveData<>();
+    public LiveData<Resource<ApiResponse<List<Cart>>>> getUserCartResponse() {
         return userCartResponse;
     }
-    private final MutableLiveData<Resource<CartResponse>> userCartInStoreResponse = new MutableLiveData<>();
-    public LiveData<Resource<CartResponse>> getUserCartInStoreResponse() {
+    private final MutableLiveData<Resource<ApiResponse<Cart>>> userCartInStoreResponse = new MutableLiveData<>();
+    public LiveData<Resource<ApiResponse<Cart>>> getUserCartInStoreResponse() {
         return userCartInStoreResponse;
     }
     private final MutableLiveData<Resource<Cart>> detailCartResponse = new MutableLiveData<>();
@@ -40,18 +37,18 @@ public class CartViewModel extends AndroidViewModel {
         return updateCartResponse;
     }
 
-    private final MutableLiveData<Resource<MessageResponse>> clearCartItemResponse = new MutableLiveData<>();
-    public LiveData<Resource<MessageResponse>> getClearCartItemResponse() {
+    private final MutableLiveData<Resource<ApiResponse<String>>> clearCartItemResponse = new MutableLiveData<>();
+    public LiveData<Resource<ApiResponse<String>>> getClearCartItemResponse() {
         return clearCartItemResponse;
     }
 
-    private final MutableLiveData<Resource<MessageResponse>> clearCartResponse = new MutableLiveData<>();
-    public LiveData<Resource<MessageResponse>> getClearCartResponse() {
+    private final MutableLiveData<Resource<ApiResponse<String>>> clearCartResponse = new MutableLiveData<>();
+    public LiveData<Resource<ApiResponse<String>>> getClearCartResponse() {
         return clearCartResponse;
     }
 
-    private final MutableLiveData<Resource<MessageResponse>> completeCartResponse = new MutableLiveData<>();
-    public LiveData<Resource<MessageResponse>> getCompleteCartResponse() {
+    private final MutableLiveData<Resource<ApiResponse<String>>> completeCartResponse = new MutableLiveData<>();
+    public LiveData<Resource<ApiResponse<String>>> getCompleteCartResponse() {
         return completeCartResponse;
     }
 
@@ -67,10 +64,10 @@ public class CartViewModel extends AndroidViewModel {
     }
 
     public void getUserCart() {
-        LiveData<Resource<ListCartResponse>> result = cartRepository.getUserCart();
-        result.observeForever(new Observer<Resource<ListCartResponse>>() {
+        LiveData<Resource<ApiResponse<List<Cart>>>> result = cartRepository.getUserCart();
+        result.observeForever(new Observer<Resource<ApiResponse<List<Cart>>>>() {
             @Override
-            public void onChanged(Resource<ListCartResponse> resource) {
+            public void onChanged(Resource<ApiResponse<List<Cart>>> resource) {
                 Log.d("CartViewModel", "getCurrentUser: " + resource);
                 userCartResponse.setValue(resource);
             }
@@ -78,10 +75,10 @@ public class CartViewModel extends AndroidViewModel {
     }
 
     public void getUserCartInStore(String storeId) {
-        LiveData<Resource<CartResponse>> result = cartRepository.getUserCartInStore(storeId);
-        result.observeForever(new Observer<Resource<CartResponse>>() {
+        LiveData<Resource<ApiResponse<Cart>>> result = cartRepository.getUserCartInStore(storeId);
+        result.observeForever(new Observer<Resource<ApiResponse<Cart>>>() {
             @Override
-            public void onChanged(Resource<CartResponse> resource) {
+            public void onChanged(Resource<ApiResponse<Cart>> resource) {
                 Log.d("CartViewModel", "getCurrentUser: " + resource);
                 userCartInStoreResponse.setValue(resource);
             }
@@ -111,10 +108,10 @@ public class CartViewModel extends AndroidViewModel {
     }
 
     public void clearCartItem(String storeId) {
-        LiveData<Resource<MessageResponse>> result = cartRepository.clearCartItem(storeId);
-        result.observeForever(new Observer<Resource<MessageResponse>>() {
+        LiveData<Resource<ApiResponse<String>>> result = cartRepository.clearCartItem(storeId);
+        result.observeForever(new Observer<Resource<ApiResponse<String>>>() {
             @Override
-            public void onChanged(Resource<MessageResponse> resource) {
+            public void onChanged(Resource<ApiResponse<String>> resource) {
                 Log.d("CartViewModel", "getCurrentUser: " + resource);
                 clearCartItemResponse.setValue(resource);
             }
@@ -122,10 +119,10 @@ public class CartViewModel extends AndroidViewModel {
     }
 
     public void clearCart() {
-        LiveData<Resource<MessageResponse>> result = cartRepository.clearCart();
-        result.observeForever(new Observer<Resource<MessageResponse>>() {
+        LiveData<Resource<ApiResponse<String>>> result = cartRepository.clearCart();
+        result.observeForever(new Observer<Resource<ApiResponse<String>>>() {
             @Override
-            public void onChanged(Resource<MessageResponse> resource) {
+            public void onChanged(Resource<ApiResponse<String>> resource) {
                 Log.d("CartViewModel", "getCurrentUser: " + resource);
                 clearCartResponse.setValue(resource);
             }
@@ -133,10 +130,10 @@ public class CartViewModel extends AndroidViewModel {
     }
 
     public void completeCart(Map<String, Object> data) {
-        LiveData<Resource<MessageResponse>> result = cartRepository.completeCart(data);
-        result.observeForever(new Observer<Resource<MessageResponse>>() {
+        LiveData<Resource<ApiResponse<String>>> result = cartRepository.completeCart(data);
+        result.observeForever(new Observer<Resource<ApiResponse<String>>>() {
             @Override
-            public void onChanged(Resource<MessageResponse> resource) {
+            public void onChanged(Resource<ApiResponse<String>> resource) {
                 Log.d("CartViewModel", "getCurrentUser: " + resource);
                 completeCartResponse.setValue(resource);
             }

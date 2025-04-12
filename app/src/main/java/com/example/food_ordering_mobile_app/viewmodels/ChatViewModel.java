@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
+import com.example.food_ordering_mobile_app.models.ApiResponse;
 import com.example.food_ordering_mobile_app.models.chat.Chat;
 import com.example.food_ordering_mobile_app.models.chat.Message;
 import com.example.food_ordering_mobile_app.models.chat.MessageResponse;
@@ -15,6 +16,7 @@ import com.example.food_ordering_mobile_app.repository.ChatRepository;
 import com.example.food_ordering_mobile_app.utils.Resource;
 
 import java.util.List;
+import java.util.Map;
 
 public class ChatViewModel extends AndroidViewModel {
     private final ChatRepository chatRepository;
@@ -23,8 +25,8 @@ public class ChatViewModel extends AndroidViewModel {
     public LiveData<Resource<Chat>> getCreateChatResponse() {
         return createChatResponse;
     }
-    private final MutableLiveData<Resource<Message>> sendMessageResponse = new MutableLiveData<>();
-    public LiveData<Resource<Message>> getSendMessageResponse() {
+    private final MutableLiveData<Resource<ApiResponse<Message>>> sendMessageResponse = new MutableLiveData<>();
+    public LiveData<Resource<ApiResponse<Message>>> getSendMessageResponse() {
         return sendMessageResponse;
     }
     private final MutableLiveData<Resource<List<Chat>>> allChatsResponse = new MutableLiveData<>();
@@ -35,12 +37,12 @@ public class ChatViewModel extends AndroidViewModel {
     public LiveData<Resource<MessageResponse>> getAllMessagesResponse() {
         return allMessagesResponse;
     }
-    private final MutableLiveData<Resource<Chat>> deleteChatResponse = new MutableLiveData<>();
-    public LiveData<Resource<Chat>> getDeleteChatResponse() {
+    private final MutableLiveData<Resource<ApiResponse<String>>> deleteChatResponse = new MutableLiveData<>();
+    public LiveData<Resource<ApiResponse<String>>> getDeleteChatResponse() {
         return deleteChatResponse;
     }
-    private final MutableLiveData<Resource<Message>> deleteMessageResponse = new MutableLiveData<>();
-    public LiveData<Resource<Message>> getDeleteMessageResponse() {
+    private final MutableLiveData<Resource<ApiResponse<String>>> deleteMessageResponse = new MutableLiveData<>();
+    public LiveData<Resource<ApiResponse<String>>> getDeleteMessageResponse() {
         return deleteMessageResponse;
     }
 
@@ -54,18 +56,16 @@ public class ChatViewModel extends AndroidViewModel {
         result.observeForever(new Observer<Resource<Chat>>() {
             @Override
             public void onChanged(Resource<Chat> resource) {
-                Log.d("ChatViewModel", "createChat: " + resource);
                 createChatResponse.setValue(resource);
             }
         });
     }
 
-    public void sendMessage(String id, Message message) {
-        LiveData<Resource<Message>> result = chatRepository.sendMessage(id,message);
-        result.observeForever(new Observer<Resource<Message>>() {
+    public void sendMessage(String chatId, Map<String, Object> data) {
+        LiveData<Resource<ApiResponse<Message>>> result = chatRepository.sendMessage(chatId, data);
+        result.observeForever(new Observer<Resource<ApiResponse<Message>>>() {
             @Override
-            public void onChanged(Resource<Message> resource) {
-                Log.d("ChatViewModel", "sendMessage: " + resource);
+            public void onChanged(Resource<ApiResponse<Message>> resource) {
                 sendMessageResponse.setValue(resource);
             }
         });
@@ -76,7 +76,6 @@ public class ChatViewModel extends AndroidViewModel {
         result.observeForever(new Observer<Resource<List<Chat>>>() {
             @Override
             public void onChanged(Resource<List<Chat>> resource) {
-                Log.d("ChatViewModel", "getAllChats: " + resource);
                 allChatsResponse.setValue(resource);
             }
         });
@@ -87,29 +86,26 @@ public class ChatViewModel extends AndroidViewModel {
         result.observeForever(new Observer<Resource<MessageResponse>>() {
             @Override
             public void onChanged(Resource<MessageResponse> resource) {
-                Log.d("ChatViewModel", "getAllMessages: " + resource);
                 allMessagesResponse.setValue(resource);
             }
         });
     }
 
     public void deleteChat(String id) {
-        LiveData<Resource<Chat>> result = chatRepository.deleteChat(id);
-        result.observeForever(new Observer<Resource<Chat>>() {
+        LiveData<Resource<ApiResponse<String>>> result = chatRepository.deleteChat(id);
+        result.observeForever(new Observer<Resource<ApiResponse<String>>>() {
             @Override
-            public void onChanged(Resource<Chat> resource) {
-                Log.d("ChatViewModel", "deleteChat: " + resource);
+            public void onChanged(Resource<ApiResponse<String>> resource) {
                 deleteChatResponse.setValue(resource);
             }
         });
     }
 
     public void deleteMessage(String id) {
-        LiveData<Resource<Message>> result = chatRepository.deleteMessage(id);
-        result.observeForever(new Observer<Resource<Message>>() {
+        LiveData<Resource<ApiResponse<String>>> result = chatRepository.deleteMessage(id);
+        result.observeForever(new Observer<Resource<ApiResponse<String>>>() {
             @Override
-            public void onChanged(Resource<Message> resource) {
-                Log.d("ChatViewModel", "deleteMessage: " + resource);
+            public void onChanged(Resource<ApiResponse<String>> resource) {
                 deleteMessageResponse.setValue(resource);
             }
         });

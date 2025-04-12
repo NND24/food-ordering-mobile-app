@@ -19,12 +19,10 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.example.food_ordering_mobile_app.R;
-import com.example.food_ordering_mobile_app.adapters.CartSummaryAdapter;
 import com.example.food_ordering_mobile_app.adapters.OrderSummaryAdapter;
-import com.example.food_ordering_mobile_app.models.cart.CartResponse;
-import com.example.food_ordering_mobile_app.models.dish.Topping;
+import com.example.food_ordering_mobile_app.models.ApiResponse;
+import com.example.food_ordering_mobile_app.models.order.Order;
 import com.example.food_ordering_mobile_app.models.order.OrderItem;
-import com.example.food_ordering_mobile_app.models.order.OrderResponse;
 import com.example.food_ordering_mobile_app.models.order.OrderTopping;
 import com.example.food_ordering_mobile_app.utils.Resource;
 import com.example.food_ordering_mobile_app.viewmodels.OrderViewModel;
@@ -74,9 +72,9 @@ public class OrderDetailActivity extends AppCompatActivity {
         orderSummaryAdapter = new OrderSummaryAdapter(this, orderItemList);
         orderSummaryRecyclerView.setAdapter(orderSummaryAdapter);
 
-        orderViewModel.getOrderDetailResponse().observe(this, new Observer<Resource<OrderResponse>>() {
+        orderViewModel.getOrderDetailResponse().observe(this, new Observer<Resource<ApiResponse<Order>>>() {
             @Override
-            public void onChanged(Resource<OrderResponse> resource) {
+            public void onChanged(Resource<ApiResponse<Order>> resource) {
                 switch (resource.getStatus()) {
                     case LOADING:
                         swipeRefreshLayout.setRefreshing(true);
@@ -145,6 +143,6 @@ public class OrderDetailActivity extends AppCompatActivity {
     }
 
     public void goBack(View view) {
-        onBackPressed();
+        finish();
     }
 }

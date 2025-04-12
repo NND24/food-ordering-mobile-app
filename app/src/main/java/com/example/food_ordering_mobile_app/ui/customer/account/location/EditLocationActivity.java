@@ -158,6 +158,6 @@ public class EditLocationActivity extends AppCompatActivity {
     }
 
     public void goBack(View view) {
-        onBackPressed();
+        finish();
     }
 }

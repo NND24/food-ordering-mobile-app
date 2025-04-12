@@ -1,23 +1,24 @@
-package com.example.food_ordering_mobile_app.models.dish;
+package com.example.food_ordering_mobile_app.models;
 
-public class DishResponse {
+import java.io.Serializable;
+
+public class ApiResponse<T> implements Serializable {
     private String success;
-    private DishDetail data;
+    private T data;
 
     public String getSuccess() {
         return success;
     }
 
-    public DishDetail getData() {
+    public T getData() {
         return data;
     }
 
     @Override
     public String toString() {
-        return "DishResponse{" +
+        return "ApiResponse{" +
                 "success='" + success + '\'' +
                 ", data=" + data +
                 '}';
     }
 }
-

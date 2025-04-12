@@ -27,14 +27,10 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.example.food_ordering_mobile_app.R;
-import com.example.food_ordering_mobile_app.models.MessageResponse;
-import com.example.food_ordering_mobile_app.models.dish.DishImage;
-import com.example.food_ordering_mobile_app.models.order.OrderResponse;
-import com.example.food_ordering_mobile_app.models.order.OrderStore;
-import com.example.food_ordering_mobile_app.models.rating.Rating;
-import com.example.food_ordering_mobile_app.models.rating.RatingDetailResponse;
+import com.example.food_ordering_mobile_app.models.ApiResponse;
+import com.example.food_ordering_mobile_app.models.Image;
+import com.example.food_ordering_mobile_app.models.rating.RatingDetail;
 import com.example.food_ordering_mobile_app.utils.Resource;
-import com.example.food_ordering_mobile_app.viewmodels.OrderViewModel;
 import com.example.food_ordering_mobile_app.viewmodels.RatingViewModel;
 import com.example.food_ordering_mobile_app.viewmodels.UploadViewModel;
 
@@ -87,9 +83,9 @@ public class EditRatingActivity extends AppCompatActivity {
 
         submitButton.setOnClickListener(view -> uploadImagesAndSubmitRating());
 
-        ratingViewModel.getEditStoreRatingResponse().observe(this, new Observer<Resource<MessageResponse>>() {
+        ratingViewModel.getEditStoreRatingResponse().observe(this, new Observer<Resource<ApiResponse<String>>>() {
             @Override
-            public void onChanged(Resource<MessageResponse> resource) {
+            public void onChanged(Resource<ApiResponse<String>> resource) {
                 switch (resource.getStatus()) {
                     case LOADING:
                         break;
@@ -134,14 +130,14 @@ public class EditRatingActivity extends AppCompatActivity {
 
     private void setupGetRating() {
         ratingViewModel.getDetailRating(ratingId);
-        ratingViewModel.getDetailRatingResponse().observe(this, new Observer<Resource<RatingDetailResponse>>() {
+        ratingViewModel.getDetailRatingResponse().observe(this, new Observer<Resource<RatingDetail>>() {
             @Override
-            public void onChanged(Resource<RatingDetailResponse> resource) {
+            public void onChanged(Resource<RatingDetail> resource) {
                 switch (resource.getStatus()) {
                     case LOADING:
                         break;
                     case SUCCESS:
-                        RatingDetailResponse rating = resource.getData();
+                        RatingDetail rating = resource.getData();
                         tvStoreName.setText(rating.getStore().getName());
 
                         String storeAvatarUrl = rating.getStore().getAvatar() != null ? rating.getStore().getAvatar().getUrl() : null;
@@ -167,7 +163,7 @@ public class EditRatingActivity extends AppCompatActivity {
 
                         // Hiển thị ảnh nếu có
                         if (rating.getImages() != null && !rating.getImages().isEmpty()) {
-                            for (DishImage dishImage : rating.getImages()) {
+                            for (Image dishImage : rating.getImages()) {
                                 Uri imageUri = Uri.parse(dishImage.getUrl());
                                 selectedImageUris.add(imageUri);
                                 addImagePreview(imageUri, false);
@@ -266,12 +262,12 @@ public class EditRatingActivity extends AppCompatActivity {
             Log.d("RatingDebug", "Images selected: ");
             // Có ảnh, tải ảnh và gửi đánh giá kèm ảnh
             uploadViewModel.uploadImages(selectedImageUris, this);
-            uploadViewModel.getUploadImagesResponse().observe(this, new Observer<Resource<List<DishImage>>>() {
+            uploadViewModel.getUploadImagesResponse().observe(this, new Observer<Resource<List<Image>>>() {
                 @Override
-                public void onChanged(Resource<List<DishImage>> resource) {
+                public void onChanged(Resource<List<Image>> resource) {
                     switch (resource.getStatus()) {
                         case SUCCESS:
-                            List<DishImage> uploadedImageUrls = resource.getData();
+                            List<Image> uploadedImageUrls = resource.getData();
                             Log.d("RatingDebug", "Uploaded Image URLs: " + uploadedImageUrls);
                             submitRating(uploadedImageUrls);
                             break;
@@ -286,7 +282,7 @@ public class EditRatingActivity extends AppCompatActivity {
         }
     }
 
-    private void submitRating(List<DishImage> imageUrls) {
+    private void submitRating(List<Image> imageUrls) {
         float rating = ratingBar.getRating();
         String comment = editText.getText().toString();
 
@@ -321,6 +317,6 @@ public class EditRatingActivity extends AppCompatActivity {
     }
 
     public void goBack(View view) {
-        onBackPressed();
+        finish();
     }
 }

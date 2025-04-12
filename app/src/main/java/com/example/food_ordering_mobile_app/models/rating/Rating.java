@@ -1,24 +1,24 @@
 package com.example.food_ordering_mobile_app.models.rating;
 
+import com.example.food_ordering_mobile_app.models.Image;
 import com.example.food_ordering_mobile_app.models.dish.Dish;
-import com.example.food_ordering_mobile_app.models.dish.DishImage;
-import com.example.food_ordering_mobile_app.models.order.OrderStore;
 import com.example.food_ordering_mobile_app.models.store.Store;
 import com.example.food_ordering_mobile_app.models.user.User;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
 
-public class Rating {
+public class Rating implements Serializable {
     @SerializedName("_id")
     private String id;
     private User user;
-    private OrderStore store;
-    private List<DishRating> dishes;
+    private Store store;
+    private List<Dish> dishes;
     private Integer ratingValue;
     private String comment;
-    private List<DishImage> images;
+    private List<Image> images;
     private Timestamp updatedAt;
 
     public String getId() {
@@ -37,19 +37,19 @@ public class Rating {
         this.user = user;
     }
 
-    public OrderStore getStore() {
+    public Store getStore() {
         return store;
     }
 
-    public void setStore(OrderStore store) {
+    public void setStore(Store store) {
         this.store = store;
     }
 
-    public List<DishRating> getDishes() {
+    public List<Dish> getDishes() {
         return dishes;
     }
 
-    public void setDishes(List<DishRating> dishes) {
+    public void setDishes(List<Dish> dishes) {
         this.dishes = dishes;
     }
 
@@ -69,11 +69,11 @@ public class Rating {
         this.comment = comment;
     }
 
-    public List<DishImage> getImages() {
+    public List<Image> getImages() {
         return images;
     }
 
-    public void setImages(List<DishImage> images) {
+    public void setImages(List<Image> images) {
         this.images = images;
     }
 

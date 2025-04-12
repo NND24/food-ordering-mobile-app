@@ -1,8 +1,9 @@
 package com.example.food_ordering_mobile_app.models.chat;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class MessageResponse {
+public class MessageResponse implements Serializable {
     private Chat chat;
     private List<Message> messages;
 

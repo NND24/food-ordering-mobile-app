@@ -1,17 +1,19 @@
 package com.example.food_ordering_mobile_app.models.chat;
 
+import com.example.food_ordering_mobile_app.models.Image;
 import com.example.food_ordering_mobile_app.models.user.User;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
 
-public class Message {
+public class Message implements Serializable {
     @SerializedName("_id")
     private String id;
     private User sender;
     private String content;
-    private MessageImage image;
+    private Image image;
     private String chat;
     private Timestamp updatedAt;
 
@@ -39,11 +41,11 @@ public class Message {
         this.content = content;
     }
 
-    public MessageImage getImage() {
+    public Image getImage() {
         return image;
     }
 
-    public void setImage(MessageImage image) {
+    public void setImage(Image image) {
         this.image = image;
     }
 

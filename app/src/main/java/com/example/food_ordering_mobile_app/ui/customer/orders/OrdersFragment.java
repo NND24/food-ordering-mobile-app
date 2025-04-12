@@ -2,7 +2,6 @@ package com.example.food_ordering_mobile_app.ui.customer.orders;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +17,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.food_ordering_mobile_app.R;
 import com.example.food_ordering_mobile_app.adapters.OrderCurrentAdapter;
 import com.example.food_ordering_mobile_app.adapters.OrderHistoryAdapter;
+import com.example.food_ordering_mobile_app.models.ApiResponse;
 import com.example.food_ordering_mobile_app.models.order.Order;
-import com.example.food_ordering_mobile_app.models.order.ListOrderResponse;
 import com.example.food_ordering_mobile_app.ui.common.CustomHeaderView;
 import com.example.food_ordering_mobile_app.utils.Resource;
 import com.example.food_ordering_mobile_app.viewmodels.OrderViewModel;
@@ -66,9 +65,9 @@ public class OrdersFragment extends Fragment {
         orderCurrentAdapter = new OrderCurrentAdapter(getContext(), orderCurrentList);
         orderCurrentRecyclerView.setAdapter(orderCurrentAdapter);
 
-        orderViewModel.getCurrentOrderResponse().observe(getViewLifecycleOwner(), new Observer<Resource<ListOrderResponse>>() {
+        orderViewModel.getCurrentOrderResponse().observe(getViewLifecycleOwner(), new Observer<Resource<ApiResponse<List<Order>>>>() {
             @Override
-            public void onChanged(Resource<ListOrderResponse> resource) {
+            public void onChanged(Resource<ApiResponse<List<Order>>> resource) {
                 switch (resource.getStatus()) {
                     case LOADING:
                         swipeRefreshLayout.setRefreshing(true);
@@ -101,9 +100,9 @@ public class OrdersFragment extends Fragment {
         orderHistoryAdapter = new OrderHistoryAdapter(requireActivity(), getContext(), orderHistoryList);
         orderHistoryRecyclerView.setAdapter(orderHistoryAdapter);
 
-        orderViewModel.getHistoryOrderResponse().observe(getViewLifecycleOwner(), new Observer<Resource<ListOrderResponse>>() {
+        orderViewModel.getHistoryOrderResponse().observe(getViewLifecycleOwner(), new Observer<Resource<ApiResponse<List<Order>>>>() {
             @Override
-            public void onChanged(Resource<ListOrderResponse> resource) {
+            public void onChanged(Resource<ApiResponse<List<Order>>> resource) {
                 switch (resource.getStatus()) {
                     case LOADING:
                         swipeRefreshLayout.setRefreshing(true);

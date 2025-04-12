@@ -2,7 +2,16 @@ package com.example.food_ordering_mobile_app.network;
 
 import android.content.Context;
 
+import com.example.food_ordering_mobile_app.models.chat.Message;
+import com.example.food_ordering_mobile_app.models.chat.MessageDeserializer;
+import com.example.food_ordering_mobile_app.models.dish.Dish;
+import com.example.food_ordering_mobile_app.models.dish.DishDeserializer;
+import com.example.food_ordering_mobile_app.models.store.Store;
+import com.example.food_ordering_mobile_app.models.store.StoreDeserializer;
+import com.example.food_ordering_mobile_app.utils.CleanJsonConverterFactory;
 import com.example.food_ordering_mobile_app.utils.PersistentCookieStore;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.net.CookieHandler;
 import java.net.CookieManager;
@@ -42,11 +51,18 @@ public class RetrofitClient {
         initCookieManager(context);
         initHttpClient(context);
 
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(Dish.class, new DishDeserializer())
+                .registerTypeAdapter(Store.class, new StoreDeserializer())
+                .registerTypeAdapter(Message.class, new MessageDeserializer())
+                .create();
+
         if (retrofit == null) {
             retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
                     .client(client)
-                    .addConverterFactory(GsonConverterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create(gson))
+                    .addConverterFactory(CleanJsonConverterFactory.create(gson))
                     .build();
         }
         return retrofit;

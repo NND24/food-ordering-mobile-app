@@ -114,6 +114,6 @@ public class CategoryFilterActivity extends AppCompatActivity {
     }
 
     public void closeFilter(View view) {
-        onBackPressed();
+        finish();
     }
 }

@@ -8,41 +8,36 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
-import com.example.food_ordering_mobile_app.models.MessageResponse;
-import com.example.food_ordering_mobile_app.models.dish.Dish;
-import com.example.food_ordering_mobile_app.models.dish.DishImage;
-import com.example.food_ordering_mobile_app.models.rating.ListRatingResponse;
+import com.example.food_ordering_mobile_app.models.ApiResponse;
 import com.example.food_ordering_mobile_app.models.rating.Rating;
-import com.example.food_ordering_mobile_app.models.rating.RatingDetailResponse;
+import com.example.food_ordering_mobile_app.models.rating.RatingDetail;
 import com.example.food_ordering_mobile_app.repository.RatingRepository;
 import com.example.food_ordering_mobile_app.utils.Resource;
 
 import java.util.List;
 import java.util.Map;
 
-import retrofit2.http.Body;
-
 public class RatingViewModel extends AndroidViewModel {
     private final RatingRepository ratingRepository;
 
-    private final MutableLiveData<Resource<ListRatingResponse>> allStoreRatingResponse = new MutableLiveData<>();
-    public LiveData<Resource<ListRatingResponse>> getAllStoreRatingResponse() {
+    private final MutableLiveData<Resource<ApiResponse<List<Rating>>>> allStoreRatingResponse = new MutableLiveData<>();
+    public LiveData<Resource<ApiResponse<List<Rating>>>> getAllStoreRatingResponse() {
         return allStoreRatingResponse;
     }
-    private final MutableLiveData<Resource<RatingDetailResponse>> detailRatingResponse = new MutableLiveData<>();
-    public LiveData<Resource<RatingDetailResponse>> getDetailRatingResponse() {
+    private final MutableLiveData<Resource<RatingDetail>> detailRatingResponse = new MutableLiveData<>();
+    public LiveData<Resource<RatingDetail>> getDetailRatingResponse() {
         return detailRatingResponse;
     }
     private final MutableLiveData<Resource<String>> addStoreRatingResponse = new MutableLiveData<>();
     public LiveData<Resource<String>> getAddStoreRatingResponse() {
         return addStoreRatingResponse;
     }
-    private final MutableLiveData<Resource<MessageResponse>> editStoreRatingResponse = new MutableLiveData<>();
-    public LiveData<Resource<MessageResponse>> getEditStoreRatingResponse() {
+    private final MutableLiveData<Resource<ApiResponse<String>>> editStoreRatingResponse = new MutableLiveData<>();
+    public LiveData<Resource<ApiResponse<String>>> getEditStoreRatingResponse() {
         return editStoreRatingResponse;
     }
-    private final MutableLiveData<Resource<MessageResponse>> deleteStoreRatingResponse = new MutableLiveData<>();
-    public LiveData<Resource<MessageResponse>> getDeleteStoreRatingResponse() {
+    private final MutableLiveData<Resource<ApiResponse<String>>> deleteStoreRatingResponse = new MutableLiveData<>();
+    public LiveData<Resource<ApiResponse<String>>> getDeleteStoreRatingResponse() {
         return deleteStoreRatingResponse;
     }
 
@@ -52,10 +47,10 @@ public class RatingViewModel extends AndroidViewModel {
     }
 
     public void getAllStoreRating(String storeId, Map<String, String> queryParams) {
-        LiveData<Resource<ListRatingResponse>> result = ratingRepository.getAllStoreRating(storeId, queryParams);
-        result.observeForever(new Observer<Resource<ListRatingResponse>>() {
+        LiveData<Resource<ApiResponse<List<Rating>>>> result = ratingRepository.getAllStoreRating(storeId, queryParams);
+        result.observeForever(new Observer<Resource<ApiResponse<List<Rating>>>>() {
             @Override
-            public void onChanged(Resource<ListRatingResponse> resource) {
+            public void onChanged(Resource<ApiResponse<List<Rating>>> resource) {
                 Log.d("RatingViewModel", "getCurrentUser: " + resource);
                 allStoreRatingResponse.setValue(resource);
             }
@@ -63,10 +58,10 @@ public class RatingViewModel extends AndroidViewModel {
     }
 
     public void getDetailRating(String ratingId) {
-        LiveData<Resource<RatingDetailResponse>> result = ratingRepository.getDetailRating(ratingId);
-        result.observeForever(new Observer<Resource<RatingDetailResponse>>() {
+        LiveData<Resource<RatingDetail>> result = ratingRepository.getDetailRating(ratingId);
+        result.observeForever(new Observer<Resource<RatingDetail>>() {
             @Override
-            public void onChanged(Resource<RatingDetailResponse> resource) {
+            public void onChanged(Resource<RatingDetail> resource) {
                 detailRatingResponse.setValue(resource);
             }
         });
@@ -84,20 +79,20 @@ public class RatingViewModel extends AndroidViewModel {
     }
 
     public void editStoreRating(String ratingId, Map<String, Object> data) {
-        LiveData<Resource<MessageResponse>> result = ratingRepository.editStoreRating(ratingId, data);
-        result.observeForever(new Observer<Resource<MessageResponse>>() {
+        LiveData<Resource<ApiResponse<String>>> result = ratingRepository.editStoreRating(ratingId, data);
+        result.observeForever(new Observer<Resource<ApiResponse<String>>>() {
             @Override
-            public void onChanged(Resource<MessageResponse> resource) {
+            public void onChanged(Resource<ApiResponse<String>> resource) {
                 editStoreRatingResponse.setValue(resource);
             }
         });
     }
 
     public void deleteStoreRating(String ratingId) {
-        LiveData<Resource<MessageResponse>> result = ratingRepository.deleteStoreRating(ratingId);
-        result.observeForever(new Observer<Resource<MessageResponse>>() {
+        LiveData<Resource<ApiResponse<String>>> result = ratingRepository.deleteStoreRating(ratingId);
+        result.observeForever(new Observer<Resource<ApiResponse<String>>>() {
             @Override
-            public void onChanged(Resource<MessageResponse> resource) {
+            public void onChanged(Resource<ApiResponse<String>> resource) {
                 deleteStoreRatingResponse.setValue(resource);
             }
         });

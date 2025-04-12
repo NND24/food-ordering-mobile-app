@@ -6,7 +6,7 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.food_ordering_mobile_app.models.notification.ListNotificationResponse;
+import com.example.food_ordering_mobile_app.models.ApiResponse;
 import com.example.food_ordering_mobile_app.models.notification.Notification;
 import com.example.food_ordering_mobile_app.network.RetrofitClient;
 import com.example.food_ordering_mobile_app.network.services.NotificationService;
@@ -19,6 +19,7 @@ import org.json.JSONObject;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -43,13 +44,13 @@ public class NotificationRepository {
         }
     }
 
-    public LiveData<Resource<ListNotificationResponse>> getAllNotifications() {
-        MutableLiveData<Resource<ListNotificationResponse>> result = new MutableLiveData<>();
+    public LiveData<Resource<ApiResponse<List<Notification>>>> getAllNotifications() {
+        MutableLiveData<Resource<ApiResponse<List<Notification>>>> result = new MutableLiveData<>();
         result.setValue(Resource.loading(null));
 
-        notificationService.getAllNotifications().enqueue(new Callback<ListNotificationResponse>() {
+        notificationService.getAllNotifications().enqueue(new Callback<ApiResponse<List<Notification>>>() {
             @Override
-            public void onResponse(Call<ListNotificationResponse> call, Response<ListNotificationResponse> response) {
+            public void onResponse(Call<ApiResponse<List<Notification>>> call, Response<ApiResponse<List<Notification>>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Log.d("NotificationRepository", "getAllNotifications: " + response.body());
                     result.setValue(Resource.success("Lay thong tin thành công!", response.body()));
@@ -66,7 +67,7 @@ public class NotificationRepository {
             }
 
             @Override
-            public void onFailure(Call<ListNotificationResponse> call, Throwable t) {
+            public void onFailure(Call<ApiResponse<List<Notification>>> call, Throwable t) {
                 result.setValue(Resource.error("Lỗi kết nối: " + t.getMessage(), null));
             }
         });
@@ -74,13 +75,13 @@ public class NotificationRepository {
         return result;
     }
 
-    public LiveData<Resource<ListNotificationResponse>> updateNotificationStatus(String id) {
-        MutableLiveData<Resource<ListNotificationResponse>> result = new MutableLiveData<>();
+    public LiveData<Resource<ApiResponse<List<Notification>>>> updateNotificationStatus(String id) {
+        MutableLiveData<Resource<ApiResponse<List<Notification>>>> result = new MutableLiveData<>();
         result.setValue(Resource.loading(null));
 
-        notificationService.updateNotificationStatus(id).enqueue(new Callback<ListNotificationResponse>() {
+        notificationService.updateNotificationStatus(id).enqueue(new Callback<ApiResponse<List<Notification>>>() {
             @Override
-            public void onResponse(Call<ListNotificationResponse> call, Response<ListNotificationResponse> response) {
+            public void onResponse(Call<ApiResponse<List<Notification>>> call, Response<ApiResponse<List<Notification>>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Log.d("NotificationRepository", "updateNotificationStatus: " + response.body());
                     result.setValue(Resource.success("Lay thong tin thành công!", response.body()));
@@ -97,7 +98,7 @@ public class NotificationRepository {
             }
 
             @Override
-            public void onFailure(Call<ListNotificationResponse> call, Throwable t) {
+            public void onFailure(Call<ApiResponse<List<Notification>>> call, Throwable t) {
                 result.setValue(Resource.error("Lỗi kết nối: " + t.getMessage(), null));
             }
         });

@@ -107,6 +107,6 @@ public class SortByActivity extends AppCompatActivity {
     }
 
     public void closeFilter(View view) {
-        onBackPressed();
+        finish();
     }
 }

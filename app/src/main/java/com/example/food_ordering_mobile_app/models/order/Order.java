@@ -1,16 +1,18 @@
 package com.example.food_ordering_mobile_app.models.order;
 
+import com.example.food_ordering_mobile_app.models.store.Store;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Order {
+public class Order implements Serializable {
     @SerializedName("_id")
     private String id;
     private String customerName;
     private String customerPhonenumber;
     private String note;
-    private OrderStore store;
+    private Store store;
     private List<OrderItem> items;
     private ShipLocation shipLocation;
     private String status;
@@ -48,11 +50,11 @@ public class Order {
         this.note = note;
     }
 
-    public OrderStore getStore() {
+    public Store getStore() {
         return store;
     }
 
-    public void setStore(OrderStore store) {
+    public void setStore(Store store) {
         this.store = store;
     }
 

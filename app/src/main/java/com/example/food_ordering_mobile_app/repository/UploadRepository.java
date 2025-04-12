@@ -9,7 +9,7 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.food_ordering_mobile_app.models.dish.DishImage;
+import com.example.food_ordering_mobile_app.models.Image;
 import com.example.food_ordering_mobile_app.network.RetrofitClient;
 import com.example.food_ordering_mobile_app.network.services.UploadService;
 import com.example.food_ordering_mobile_app.utils.PersistentCookieStore;
@@ -77,8 +77,8 @@ public class UploadRepository {
         return result;
     }
 
-    public LiveData<Resource<List<DishImage>>> uploadMultipleImages(List<Uri> imageUris, Context context) {
-        MutableLiveData<Resource<List<DishImage>>> result = new MutableLiveData<>();
+    public LiveData<Resource<List<Image>>> uploadMultipleImages(List<Uri> imageUris, Context context) {
+        MutableLiveData<Resource<List<Image>>> result = new MutableLiveData<>();
         result.setValue(Resource.loading(null));
 
         List<MultipartBody.Part> parts = new ArrayList<>();
@@ -90,9 +90,9 @@ public class UploadRepository {
             parts.add(body);
         }
 
-        uploadService.uploadImages(parts).enqueue(new Callback<List<DishImage>>() {
+        uploadService.uploadImages(parts).enqueue(new Callback<List<Image>>() {
             @Override
-            public void onResponse(Call<List<DishImage>> call, Response<List<DishImage>> response) {
+            public void onResponse(Call<List<Image>> call, Response<List<Image>> response) {
                 if (response.isSuccessful()) {
                     Log.d("UploadSuccess", "Response: " + response.body());
                     result.setValue(Resource.success("Upload thành công", response.body()));
@@ -103,7 +103,7 @@ public class UploadRepository {
             }
 
             @Override
-            public void onFailure(Call<List<DishImage>> call, Throwable t) {
+            public void onFailure(Call<List<Image>> call, Throwable t) {
                 Log.d("UploadFailure", "Error Message: " + t.getMessage());
                 result.setValue(Resource.error("Lỗi kết nối: " + t.getMessage(), null));
             }

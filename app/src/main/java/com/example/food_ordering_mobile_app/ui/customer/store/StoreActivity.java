@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.SpannableStringBuilder;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,27 +28,18 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.example.food_ordering_mobile_app.R;
 import com.example.food_ordering_mobile_app.adapters.DishBigAdapter;
-import com.example.food_ordering_mobile_app.adapters.DishAdapter;
 import com.example.food_ordering_mobile_app.adapters.DishGroupByCategoryAdapter;
-import com.example.food_ordering_mobile_app.adapters.FavoriteAdapter;
 import com.example.food_ordering_mobile_app.adapters.RatingShortAdapter;
-import com.example.food_ordering_mobile_app.models.MessageResponse;
+import com.example.food_ordering_mobile_app.models.ApiResponse;
 import com.example.food_ordering_mobile_app.models.cart.Cart;
 import com.example.food_ordering_mobile_app.models.cart.CartItem;
-import com.example.food_ordering_mobile_app.models.cart.ListCartResponse;
+import com.example.food_ordering_mobile_app.models.dish.Dish;
 import com.example.food_ordering_mobile_app.models.dish.DishGroupByCategory;
-import com.example.food_ordering_mobile_app.models.dish.DishStore;
-import com.example.food_ordering_mobile_app.models.dish.ListDishResponse;
 import com.example.food_ordering_mobile_app.models.dish.Topping;
 import com.example.food_ordering_mobile_app.models.favorite.Favorite;
-import com.example.food_ordering_mobile_app.models.favorite.FavoriteResponse;
-import com.example.food_ordering_mobile_app.models.rating.ListRatingResponse;
 import com.example.food_ordering_mobile_app.models.rating.Rating;
-import com.example.food_ordering_mobile_app.models.foodType.FoodType;
 import com.example.food_ordering_mobile_app.models.store.Store;
-import com.example.food_ordering_mobile_app.models.store.StoreResponse;
 import com.example.food_ordering_mobile_app.ui.customer.cart.CartDetailActivity;
-import com.example.food_ordering_mobile_app.ui.customer.dish.DishActivity;
 import com.example.food_ordering_mobile_app.ui.customer.rating.RatingActivity;
 import com.example.food_ordering_mobile_app.utils.Functions;
 import com.example.food_ordering_mobile_app.utils.Resource;
@@ -78,7 +68,7 @@ public class StoreActivity extends AppCompatActivity {
     private List<DishGroupByCategory> dishGroupByCategoryList;
     private RecyclerView dishBigRecyclerView;
     private DishBigAdapter dishBigAdapter;
-    private List<DishStore> dishBigList;
+    private List<Dish> dishBigList;
     private RecyclerView reviewRecyclerView;
     private RatingShortAdapter reviewAdapter;
     private List<Rating> reviewList;
@@ -136,9 +126,9 @@ public class StoreActivity extends AppCompatActivity {
         setupShortRating();
         setupUserFavorite();
 
-        favoriteViewModel.getRemoveFavoriteResponse().observe(this, new Observer<Resource<MessageResponse>>() {
+        favoriteViewModel.getRemoveFavoriteResponse().observe(this, new Observer<Resource<ApiResponse<String>>>() {
             @Override
-            public void onChanged(Resource<MessageResponse> resource) {
+            public void onChanged(Resource<ApiResponse<String>> resource) {
                 switch (resource.getStatus()) {
                     case LOADING:
                         swipeRefreshLayout.setRefreshing(true);
@@ -154,9 +144,9 @@ public class StoreActivity extends AppCompatActivity {
             }
         });
 
-        favoriteViewModel.getAddFavoriteResponse().observe(this, new Observer<Resource<MessageResponse>>() {
+        favoriteViewModel.getAddFavoriteResponse().observe(this, new Observer<Resource<ApiResponse<String>>>() {
             @Override
-            public void onChanged(Resource<MessageResponse> resource) {
+            public void onChanged(Resource<ApiResponse<String>> resource) {
                 switch (resource.getStatus()) {
                     case LOADING:
                         swipeRefreshLayout.setRefreshing(true);
@@ -205,9 +195,9 @@ public class StoreActivity extends AppCompatActivity {
         }
 
         storeViewModel.getStoreInformation(storeId);
-        storeViewModel.getStoreInformationResponse().observe(this, new Observer<Resource<StoreResponse>>() {
+        storeViewModel.getStoreInformationResponse().observe(this, new Observer<Resource<ApiResponse<Store>>>() {
             @Override
-            public void onChanged(Resource<StoreResponse> resource) {
+            public void onChanged(Resource<ApiResponse<Store>> resource) {
                 switch (resource.getStatus()) {
                     case LOADING:
                         swipeRefreshLayout.setRefreshing(true);
@@ -303,9 +293,9 @@ public class StoreActivity extends AppCompatActivity {
         });
         dishBigRecyclerView.setAdapter(dishBigAdapter);
 
-        dishViewModel.getAllBigDishResponse().observe(this, new Observer<Resource<ListDishResponse>>() {
+        dishViewModel.getAllBigDishResponse().observe(this, new Observer<Resource<ApiResponse<List<Dish>>>>() {
             @Override
-            public void onChanged(Resource<ListDishResponse> resource) {
+            public void onChanged(Resource<ApiResponse<List<Dish>>> resource) {
                 switch (resource.getStatus()) {
                     case LOADING:
                         swipeRefreshLayout.setRefreshing(true);
@@ -324,7 +314,7 @@ public class StoreActivity extends AppCompatActivity {
             }
         });
 
-        List<DishStore> savedListDish = SharedPreferencesHelper.getInstance(getApplicationContext()).getSavedListDish();
+        List<Dish> savedListDish = SharedPreferencesHelper.getInstance(getApplicationContext()).getSavedListDish();
         if (savedListDish != null && !savedListDish.isEmpty()) {
             dishBigList.clear();
             dishBigList.addAll(savedListDish);
@@ -342,9 +332,9 @@ public class StoreActivity extends AppCompatActivity {
 
 
 
-        dishViewModel.getAllDishResponse().observe(this, new Observer<Resource<ListDishResponse>>() {
+        dishViewModel.getAllDishResponse().observe(this, new Observer<Resource<ApiResponse<List<Dish>>>>() {
             @Override
-            public void onChanged(Resource<ListDishResponse> resource) {
+            public void onChanged(Resource<ApiResponse<List<Dish>>> resource) {
                 switch (resource.getStatus()) {
                     case LOADING:
                         swipeRefreshLayout.setRefreshing(true);
@@ -352,7 +342,7 @@ public class StoreActivity extends AppCompatActivity {
                     case SUCCESS:
                         swipeRefreshLayout.setRefreshing(false);
                         dishGroupByCategoryList.clear();
-                        List<DishStore> dishes = resource.getData().getData();
+                        List<Dish> dishes = resource.getData().getData();
                         dishGroupByCategoryList.addAll(Functions.groupDishesByCategory(dishes));
                         dishGroupByCategoryAdapter.notifyDataSetChanged();
                         break;
@@ -372,9 +362,9 @@ public class StoreActivity extends AppCompatActivity {
         reviewAdapter = new RatingShortAdapter(this, reviewList);
         reviewRecyclerView.setAdapter(reviewAdapter);
 
-        ratingViewModel.getAllStoreRatingResponse().observe(this, new Observer<Resource<ListRatingResponse>>() {
+        ratingViewModel.getAllStoreRatingResponse().observe(this, new Observer<Resource<ApiResponse<List<Rating>>>>() {
             @Override
-            public void onChanged(Resource<ListRatingResponse> resource) {
+            public void onChanged(Resource<ApiResponse<List<Rating>>> resource) {
                 switch (resource.getStatus()) {
                     case LOADING:
                         swipeRefreshLayout.setRefreshing(true);
@@ -410,9 +400,9 @@ public class StoreActivity extends AppCompatActivity {
 
     private void setupUserFavorite() {
         favoriteList = new ArrayList<>();
-        favoriteViewModel.getUserFavoriteResponse().observe(this, new Observer<Resource<FavoriteResponse>>() {
+        favoriteViewModel.getUserFavoriteResponse().observe(this, new Observer<Resource<ApiResponse<Favorite>>>() {
             @Override
-            public void onChanged(Resource<FavoriteResponse> resource) {
+            public void onChanged(Resource<ApiResponse<Favorite>> resource) {
                 switch (resource.getStatus()) {
                     case LOADING:
                         swipeRefreshLayout.setRefreshing(true);
@@ -468,9 +458,9 @@ public class StoreActivity extends AppCompatActivity {
 
     private void setupUserCart() {
         cartList = new ArrayList<>();
-        cartViewModel.getUserCartResponse().observe(this, new Observer<Resource<ListCartResponse>>() {
+        cartViewModel.getUserCartResponse().observe(this, new Observer<Resource<ApiResponse<List<Cart>>>>() {
             @Override
-            public void onChanged(Resource<ListCartResponse> resource) {
+            public void onChanged(Resource<ApiResponse<List<Cart>>> resource) {
                 switch (resource.getStatus()) {
                     case LOADING:
                         swipeRefreshLayout.setRefreshing(true);
