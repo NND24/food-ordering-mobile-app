@@ -24,9 +24,9 @@ public interface AuthService {
     Call<String> forgotPassword(@Body Map<String, String> data);
     @POST("/api/v1/auth/check-otp")
     Call<String> checkOTP(@Body Map<String, String> data);
-    @POST("/api/v1/auth/logout")
-    Call<String> logout();
 
+    @GET("/api/v1/auth/logout")
+    Call<String> logout();
     @GET("/api/v1/auth/refresh/mobile")
     Call<User> refreshTokenMobile(@Query("refreshToken") String refreshToken);
 

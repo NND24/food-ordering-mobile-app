@@ -58,6 +58,7 @@ public class DetailMessageActivity extends AppCompatActivity {
     private String chatId;
     private static final int PICK_IMAGES_REQUEST = 1;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,7 +75,6 @@ public class DetailMessageActivity extends AppCompatActivity {
         sendImage = findViewById(R.id.sendImage);
 
         chatId = getIntent().getStringExtra("chatId") != null ? getIntent().getStringExtra("chatId") : "";
-
 
         uploadViewModel = new ViewModelProvider(this).get(UploadViewModel.class);
         chatViewModel = new ViewModelProvider(this).get(ChatViewModel.class);
@@ -246,7 +246,6 @@ public class DetailMessageActivity extends AppCompatActivity {
                                 chatRecyclerView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                             }
                         });
-
 
                         break;
                     case ERROR:

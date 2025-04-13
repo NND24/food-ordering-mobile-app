@@ -1,8 +1,10 @@
 package com.example.food_ordering_mobile_app.ui.customer.orders;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -39,6 +41,7 @@ public class OrderDetailActivity extends AppCompatActivity {
     private TextView tvStoreName, tvStoreDescription, tvProvisionalTotal, tvFee, tvCustomerName, tvCustomerPhonenumber, tvCustomerAddress;
     private ImageView ivStoreAvatar;
     private String orderId;
+    private Button btnTrackOrder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +59,7 @@ public class OrderDetailActivity extends AppCompatActivity {
         tvCustomerName = findViewById(R.id.tvCustomerName);
         tvCustomerPhonenumber = findViewById(R.id.tvCustomerPhonenumber);
         tvCustomerAddress = findViewById(R.id.tvCustomerAddress);
+        btnTrackOrder = findViewById(R.id.btnTrackOrder);
 
         orderId = getIntent().getStringExtra("orderId");
 
@@ -64,6 +68,12 @@ public class OrderDetailActivity extends AppCompatActivity {
         orderViewModel = new ViewModelProvider(this).get(OrderViewModel.class);
 
         setupOrderDetail();
+
+        btnTrackOrder.setOnClickListener(v -> {
+            Intent intent = new Intent(OrderDetailActivity.this, TrackOrderActivity.class);
+            intent.putExtra("orderId", orderId);
+            startActivity(intent);
+        });
     }
 
     private void setupOrderDetail() {
@@ -127,7 +137,6 @@ public class OrderDetailActivity extends AppCompatActivity {
                         tvFee.setText(String.format("%.0f", totalCartPrice));
 
                         break;
-
                     case ERROR:
                         swipeRefreshLayout.setRefreshing(false);
                         break;

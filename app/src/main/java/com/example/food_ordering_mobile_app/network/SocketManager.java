@@ -200,6 +200,33 @@ public class SocketManager {
         }
     }
 
+    public static void joinOrder(String orderId) {
+        if (mSocket != null && mSocket.connected()) {
+            mSocket.emit("joinOrder", orderId);
+            Log.d("SocketManager", "Đã tham gia order: " + orderId);
+        }
+    }
+
+    public static void leaveOrder(String orderId) {
+        if (mSocket != null && mSocket.connected()) {
+            mSocket.emit("leaveOrder", orderId);
+            Log.d("SocketManager", "Đã rời order: " + orderId);
+        }
+    }
+
+    public static void sendLocation(JSONObject location) {
+        if (mSocket != null && mSocket.connected()) {
+            mSocket.emit("sendLocation", location);
+            Log.d("SocketManager", "Đã gửi tin nhắn: " + location.toString());
+        }
+    }
+
+    public static void setOnLocationUpdatedListener(Emitter.Listener listener) {
+        messageListener = listener;
+        if (mSocket != null) {
+            mSocket.on("updateLocation", listener);
+        }
+    }
 
     // Đóng kết nối
     public static void disconnectSocket() {

@@ -32,6 +32,12 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".ui.customer.orders.SeeRouteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.customer.orders.TrackOrderActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.customer.rating.EditRatingActivity"
             android:exported="false" />
         <activity

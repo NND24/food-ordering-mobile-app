@@ -3,6 +3,7 @@ package com.example.food_ordering_mobile_app.network;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -62,7 +63,7 @@ public class TokenAuthenticator implements Authenticator {
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Xoá toàn bộ backstack
             context.startActivity(intent);
 
-            return null; // Không có refresh token thì không làm gì
+            return null;
         }
 
         retrofit2.Response<User> tokenResponse = authService.refreshTokenMobile(refreshToken).execute();

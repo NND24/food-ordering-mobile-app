@@ -163,7 +163,6 @@ public class HomeFragment extends Fragment {
                         break;
                     case ERROR:
                         swipeRefreshLayout.setRefreshing(false);
-                        Log.d("HomeFragment", "Error loading data: " + resource.getMessage());
                         break;
                 }
             }
