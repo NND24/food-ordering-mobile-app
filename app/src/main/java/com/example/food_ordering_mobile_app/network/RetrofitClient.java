@@ -2,8 +2,6 @@ package com.example.food_ordering_mobile_app.network;
 
 import android.content.Context;
 
-import com.example.food_ordering_mobile_app.models.chat.Message;
-import com.example.food_ordering_mobile_app.models.chat.MessageDeserializer;
 import com.example.food_ordering_mobile_app.models.dish.Dish;
 import com.example.food_ordering_mobile_app.models.dish.DishDeserializer;
 import com.example.food_ordering_mobile_app.models.store.Store;
@@ -26,7 +24,6 @@ public class RetrofitClient {
         return new GsonBuilder()
                 .registerTypeAdapter(Dish.class, new DishDeserializer())
                 .registerTypeAdapter(Store.class, new StoreDeserializer())
-                .registerTypeAdapter(Message.class, new MessageDeserializer())
                 .create();
     }
 

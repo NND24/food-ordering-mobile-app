@@ -113,6 +113,7 @@ public class ChatRepository {
                         JSONObject jsonObject = new JSONObject(errorMessage);
                         String message = jsonObject.getString("message");
                         result.setValue(Resource.error(message, null));
+                        Log.d("ChatRepository", "getAllChats error: " + errorMessage);
                     } catch (Exception e) {
                         result.setValue(Resource.error("Lỗi không xác định!", null));
                     }
@@ -144,6 +145,7 @@ public class ChatRepository {
                         JSONObject jsonObject = new JSONObject(errorMessage);
                         String message = jsonObject.getString("message");
                         result.setValue(Resource.error(message, null));
+                        Log.d("ChatRepository", "getAllMessages error: " + errorMessage);
                     } catch (Exception e) {
                         result.setValue(Resource.error("Lỗi không xác định!", null));
                     }
@@ -152,6 +154,7 @@ public class ChatRepository {
 
             @Override
             public void onFailure(Call<MessageResponse> call, Throwable t) {
+                Log.d("ChatRepository", "getAllMessages error: " + t.getMessage());
                 result.setValue(Resource.error("Lỗi kết nối: " + t.getMessage(), null));
             }
         });

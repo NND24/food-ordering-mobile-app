@@ -46,6 +46,7 @@ public class OrderRepository {
                         JSONObject jsonObject = new JSONObject(errorMessage);
                         String message = jsonObject.getString("message");
                         result.setValue(Resource.error(message, null));
+                        Log.d("OrderRepository", "getCurrentUser Error: " + errorMessage);
                     } catch (Exception e) {
                         result.setValue(Resource.error("Lỗi không xác định!", null));
                     }
@@ -54,6 +55,7 @@ public class OrderRepository {
 
             @Override
             public void onFailure(Call<ApiResponse<List<Order>>> call, Throwable t) {
+                Log.d("OrderRepository", "getCurrentUser Error: " + t.getMessage());
                 result.setValue(Resource.error("Lỗi kết nối: " + t.getMessage(), null));
             }
         });

@@ -1,6 +1,7 @@
 package com.example.food_ordering_mobile_app.models.order;
 
 import com.example.food_ordering_mobile_app.models.store.Store;
+import com.example.food_ordering_mobile_app.models.user.Shipper;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -13,6 +14,7 @@ public class Order implements Serializable {
     private String customerPhonenumber;
     private String note;
     private Store store;
+    private Shipper shipper;
     private List<OrderItem> items;
     private ShipLocation shipLocation;
     private String status;
@@ -88,6 +90,14 @@ public class Order implements Serializable {
 
     public void setPaymentMethod(String paymentMethod) {
         this.paymentMethod = paymentMethod;
+    }
+
+    public Shipper getShipper() {
+        return shipper;
+    }
+
+    public void setShipper(Shipper shipper) {
+        this.shipper = shipper;
     }
 
     @Override

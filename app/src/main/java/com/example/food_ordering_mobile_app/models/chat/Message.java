@@ -11,7 +11,7 @@ import java.util.Date;
 public class Message implements Serializable {
     @SerializedName("_id")
     private String id;
-    private User sender;
+    private String sender;
     private String content;
     private Image image;
     private String chat;
@@ -25,11 +25,11 @@ public class Message implements Serializable {
         this.id = id;
     }
 
-    public User getSender() {
+    public String getSender() {
         return sender;
     }
 
-    public void setSender(User sender) {
+    public void setSender(String sender) {
         this.sender = sender;
     }
 

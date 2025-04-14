@@ -14,8 +14,10 @@ import com.example.food_ordering_mobile_app.R;
 import com.example.food_ordering_mobile_app.models.order.OrderItem;
 import com.example.food_ordering_mobile_app.models.order.OrderTopping;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class OrderSummaryAdapter extends RecyclerView.Adapter<OrderSummaryAdapter.ViewHolder> {
     private Context context;
@@ -55,7 +57,8 @@ public class OrderSummaryAdapter extends RecyclerView.Adapter<OrderSummaryAdapte
         double totalPrice = (dishPrice + totalToppingPrice) * item.getQuantity();
 
         // Hiển thị tổng giá
-        holder.tvDishPrice.setText(String.format("%.0f", totalPrice));
+        NumberFormat formatter = NumberFormat.getInstance(new Locale("vi", "VN"));
+        holder.tvDishPrice.setText(String.valueOf(formatter.format(totalPrice)));
 
         // Xử lý hiển thị topping
         if (item.getToppings().isEmpty()) {

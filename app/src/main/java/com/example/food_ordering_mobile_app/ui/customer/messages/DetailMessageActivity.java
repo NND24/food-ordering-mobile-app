@@ -125,8 +125,8 @@ public class DetailMessageActivity extends AppCompatActivity {
                     case LOADING:
                         break;
                     case SUCCESS:
-                        messageList.add(resource.getData().getData());
-                        messageAdapter.notifyItemInserted(messageList.size() - 1);
+//                        messageList.add(resource.getData().getData());
+//                        messageAdapter.notifyItemInserted(messageList.size() - 1);
 
                         chatRecyclerView.post(new Runnable() {
                             @Override

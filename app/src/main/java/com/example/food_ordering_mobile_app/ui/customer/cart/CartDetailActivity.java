@@ -54,9 +54,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class CartDetailActivity extends AppCompatActivity {
@@ -248,9 +250,10 @@ public class CartDetailActivity extends AppCompatActivity {
                         }
 
                         // Hiển thị tổng giá tiền
-                        tvProvisionalTotal.setText(String.format("%.0f", totalCartPrice));
-                        tvFee.setText(String.format("%.0f", totalCartPrice));
-                        tvTotalPrice.setText(String.format("%.0f", totalCartPrice));
+                        NumberFormat formatter = NumberFormat.getInstance(new Locale("vi", "VN"));
+                        tvProvisionalTotal.setText(String.valueOf(formatter.format(totalCartPrice)));
+                        tvFee.setText(String.valueOf(formatter.format(totalCartPrice)));
+                        tvTotalPrice.setText(String.valueOf(formatter.format(totalCartPrice)));
 
                         break;
                     case ERROR:
