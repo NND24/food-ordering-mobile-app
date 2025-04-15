@@ -86,18 +86,39 @@
         </LinearLayout>
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btnTrackOrder"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingVertical="10dp"
-        android:layout_marginBottom="1dp"
-        android:layout_marginLeft="1dp"
-        android:layout_marginRight="1dp"
-        android:background="@drawable/custom_button_track_order"
-        android:text="@string/track_order_progress"
-        android:textColor="@color/onPrimary"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:textAllCaps="false" />
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnCancelOrder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/custom_button_reorder"
+            android:paddingVertical="10dp"
+            android:layout_marginBottom="1dp"
+            android:layout_marginLeft="1dp"
+            android:text="Hủy đơn hàng"
+            android:textColor="@color/onPrimary"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_weight="1"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/btnTrackOrder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/custom_button_rating"
+            android:paddingVertical="10dp"
+            android:layout_marginBottom="1dp"
+            android:layout_marginRight="1dp"
+            android:text="Xem tiến trình"
+            android:textColor="@color/onPrimary"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_weight="1"
+            android:textAllCaps="false" />
+    </LinearLayout>
 </LinearLayout>

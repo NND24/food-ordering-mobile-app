@@ -7,6 +7,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface OrderService {
@@ -15,4 +16,6 @@ public interface OrderService {
     @GET("/api/v1/order/{id}")
     Call<ApiResponse<Order>> getOrderDetail(@Path("id") String orderId);
 
+    @PUT("/api/v1/order/{id}/cancel-order")
+    Call<ApiResponse<String>> cancelOrder(@Path("id") String orderId);
 }

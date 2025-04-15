@@ -30,6 +30,10 @@ public class OrderViewModel extends AndroidViewModel {
     public LiveData<Resource<ApiResponse<Order>>> getOrderDetailResponse() {
         return orderDetailResponse;
     }
+    private final MutableLiveData<Resource<ApiResponse<String>>> cancelOrderResponse = new MutableLiveData<>();
+    public LiveData<Resource<ApiResponse<String>>> getCancelOrderResponse() {
+        return cancelOrderResponse;
+    }
 
     public OrderViewModel(Application application) {
         super(application);
@@ -61,8 +65,17 @@ public class OrderViewModel extends AndroidViewModel {
         result.observeForever(new Observer<Resource<ApiResponse<Order>>>() {
             @Override
             public void onChanged(Resource<ApiResponse<Order>> resource) {
-                Log.d("OrderViewModel", "getOrderDetail: " + resource);
                 orderDetailResponse.setValue(resource);
+            }
+        });
+    }
+
+    public void cancelOrder(String orderId) {
+        LiveData<Resource<ApiResponse<String>>> result = orderRepository.cancelOrder(orderId);
+        result.observeForever(new Observer<Resource<ApiResponse<String>>>() {
+            @Override
+            public void onChanged(Resource<ApiResponse<String>> resource) {
+                cancelOrderResponse.setValue(resource);
             }
         });
     }

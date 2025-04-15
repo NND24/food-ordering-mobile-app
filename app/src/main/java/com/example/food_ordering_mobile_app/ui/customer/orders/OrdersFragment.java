@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -56,13 +57,33 @@ public class OrdersFragment extends Fragment {
         setupCurrentOrder();
         setupHistoryOrder();
 
+        orderViewModel.getCancelOrderResponse().observe(getViewLifecycleOwner(), new Observer<Resource<ApiResponse<String>>>() {
+            @Override
+            public void onChanged(Resource<ApiResponse<String>> resource) {
+                switch (resource.getStatus()) {
+                    case LOADING:
+                        swipeRefreshLayout.setRefreshing(true);
+                        break;
+                    case SUCCESS:
+                        swipeRefreshLayout.setRefreshing(false);
+                        Toast.makeText(getContext(), "Hủy đơn hàng thành công", Toast.LENGTH_SHORT).show();
+
+                        break;
+                    case ERROR:
+                        swipeRefreshLayout.setRefreshing(false);
+                        Toast.makeText(getContext(), "Hủy đơn hàng thất bại. Đơn hàng đã được chuẩn bị hoặc đã bị hủy trước đó bạn không thể hủy đơn", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+        });
+
         return view;
     }
 
     private void setupCurrentOrder() {
         orderCurrentRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         orderCurrentList = new ArrayList<>();
-        orderCurrentAdapter = new OrderCurrentAdapter(getContext(), orderCurrentList);
+        orderCurrentAdapter = new OrderCurrentAdapter(requireActivity(),getContext(), orderCurrentList);
         orderCurrentRecyclerView.setAdapter(orderCurrentAdapter);
 
         orderViewModel.getCurrentOrderResponse().observe(getViewLifecycleOwner(), new Observer<Resource<ApiResponse<List<Order>>>>() {

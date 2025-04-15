@@ -1,6 +1,8 @@
 package com.example.food_ordering_mobile_app.adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
@@ -10,10 +12,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -24,15 +29,18 @@ import com.example.food_ordering_mobile_app.models.order.Order;
 import com.example.food_ordering_mobile_app.models.order.OrderItem;
 import com.example.food_ordering_mobile_app.ui.customer.orders.OrderDetailActivity;
 import com.example.food_ordering_mobile_app.ui.customer.store.StoreActivity;
+import com.example.food_ordering_mobile_app.viewmodels.CartViewModel;
+import com.example.food_ordering_mobile_app.viewmodels.OrderViewModel;
 
 import java.util.List;
 
 public class OrderCurrentAdapter extends RecyclerView.Adapter<OrderCurrentAdapter.ViewHolder> {
     private Context context;
-
     private List<Order> orderList;
+    private FragmentActivity fragment;
 
-    public OrderCurrentAdapter(Context context, List<Order> orderList) {
+    public OrderCurrentAdapter(FragmentActivity fragment, Context context, List<Order> orderList) {
+        this.fragment = fragment;
         this.context = context;
         this.orderList = orderList;
     }
@@ -82,6 +90,25 @@ public class OrderCurrentAdapter extends RecyclerView.Adapter<OrderCurrentAdapte
             context.startActivity(intent);
         });
 
+        OrderViewModel orderViewModel = new ViewModelProvider(fragment).get(OrderViewModel.class);
+
+        holder.btnCancelOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AlertDialog.Builder(v.getContext())
+                        .setTitle("Xác nhận")
+                        .setMessage("Bạn có chắc chắn muốn hủy đơn hàng này không?")
+                        .setPositiveButton("Hủy đơn", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                orderViewModel.cancelOrder(order.getId());
+                            }
+                        })
+                        .setNegativeButton("Hủy", null)
+                        .show();
+            }
+        });
+
         holder.storeInfoContainer.setOnClickListener(v -> {
             Intent intent = new Intent(context, StoreActivity.class);
             intent.putExtra("storeId", order.getStore().getId());
@@ -97,7 +124,7 @@ public class OrderCurrentAdapter extends RecyclerView.Adapter<OrderCurrentAdapte
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvStoreName, tvQuantity, tvAddress, tvDescription;
         ImageView imStoreAvatar;
-        Button btnTrackOrder;
+        Button btnTrackOrder, btnCancelOrder;
         LinearLayout storeInfoContainer;
 
         public ViewHolder(@NonNull View itemView) {
@@ -107,6 +134,7 @@ public class OrderCurrentAdapter extends RecyclerView.Adapter<OrderCurrentAdapte
             tvAddress = itemView.findViewById(R.id.tvAddress);
             imStoreAvatar = itemView.findViewById(R.id.imStoreAvatar);
             btnTrackOrder = itemView.findViewById(R.id.btnTrackOrder);
+            btnCancelOrder = itemView.findViewById(R.id.btnCancelOrder);
             tvDescription = itemView.findViewById(R.id.tvDescription);
             storeInfoContainer = itemView.findViewById(R.id.storeInfoContainer);
         }

@@ -2,6 +2,7 @@ package com.example.food_ordering_mobile_app.ui.customer;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.food_ordering_mobile_app.R;
 import com.example.food_ordering_mobile_app.adapters.ViewpagerAdapter;
@@ -17,6 +18,8 @@ import androidx.activity.EdgeToEdge;
 public class MainCustomerActivity extends AppCompatActivity {
     ViewPager mViewPager;
     BottomNavigationView mBottomNavigationView;
+    private long backPressedTime;
+    private Toast backPressedToast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,5 +91,20 @@ public class MainCustomerActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (backPressedTime + 2000 > System.currentTimeMillis()) {
+            // Nếu thời gian cách nhau dưới 2 giây, thoát ứng dụng
+            super.onBackPressed();
+            return;
+        } else {
+            // Nếu lần nhấn đầu tiên, hiển thị thông báo
+            backPressedToast = Toast.makeText(getApplicationContext(), "Nhấn lại lần nữa để thoát", Toast.LENGTH_SHORT);
+            backPressedToast.show();
+        }
+
+        backPressedTime = System.currentTimeMillis(); // Cập nhật thời gian lần nhấn nút back
     }
 }

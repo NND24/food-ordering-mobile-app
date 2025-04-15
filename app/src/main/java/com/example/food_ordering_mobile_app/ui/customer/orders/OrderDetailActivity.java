@@ -126,6 +126,7 @@ public class OrderDetailActivity extends AppCompatActivity {
                 }
             }
         });
+
     }
 
     private void setupOrderDetail() {

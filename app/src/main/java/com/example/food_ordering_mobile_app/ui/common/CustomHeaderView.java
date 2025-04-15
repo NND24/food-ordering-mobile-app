@@ -25,7 +25,9 @@ import com.example.food_ordering_mobile_app.viewmodels.CartViewModel;
 import com.example.food_ordering_mobile_app.viewmodels.NotificationViewModel;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class CustomHeaderView extends LinearLayout {
     private TextView textView, unreadNotificationCount;
@@ -69,7 +71,6 @@ public class CustomHeaderView extends LinearLayout {
 
         cartViewModel = new ViewModelProvider((ViewModelStoreOwner) context).get(CartViewModel.class);
         notificationViewModel = new ViewModelProvider((ViewModelStoreOwner) context).get(NotificationViewModel.class);
-
 
         // Khi nhấn vào Notification Button, chuyển đến NotificationActivity
         btnNotification.setOnClickListener(v -> {
@@ -121,9 +122,12 @@ public class CustomHeaderView extends LinearLayout {
     }
 
     private void setUpUserNotification() {
-        if (isNotificationObserverSet) return;
+        if (isNotificationObserverSet) return;  // Đảm bảo chỉ thiết lập observer 1 lần
 
+        // Kết nối socket
         SocketManager.connectSocket(getContext(), notificationViewModel);
+
+        // Đặt observer cho thông báo
         notificationViewModel.getNotificationsResponse().observe(lifecycleOwner , new Observer<Resource<List<Notification>>>() {
             @Override
             public void onChanged(Resource<List<Notification>> resource) {
@@ -139,24 +143,34 @@ public class CustomHeaderView extends LinearLayout {
                 }
             }
         });
+
+        // Đánh dấu observer đã được thiết lập
+        isNotificationObserverSet = true;
     }
 
     private void updateUnreadNotificationCount(List<Notification> notifications) {
         int unreadCount = 0;
+        Set<String> seenNotificationIds = new HashSet<>(); // Set to track seen notifications
 
         for (Notification notification : notifications) {
-            if ("unread".equals(notification.getStatus())) {
+            if ("unread".equals(notification.getStatus()) && !seenNotificationIds.contains(notification.getId())) {
                 unreadCount++;
+                seenNotificationIds.add(notification.getId()); // Mark this notification as seen
             }
         }
 
-        if (unreadCount > 0) {
-            unreadNotificationBadge.setVisibility(VISIBLE);
-            unreadNotificationCount.setText(String.valueOf(unreadCount));
-        } else {
-            unreadNotificationBadge.setVisibility(GONE);
+        // Kiểm tra xem số lượng đã thay đổi không
+        if (unreadCount != Integer.parseInt(unreadNotificationCount.getText().toString())) {
+            if (unreadCount > 0) {
+                unreadNotificationBadge.setVisibility(VISIBLE);
+                unreadNotificationCount.setText(String.valueOf(unreadCount));
+            } else {
+                unreadNotificationBadge.setVisibility(GONE);
+            }
         }
     }
+
+
 
     // Hàm để set tên vào tvName từ bên ngoài
     public void setName(String name) {

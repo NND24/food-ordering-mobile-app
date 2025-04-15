@@ -49,7 +49,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/notifications"
+                    android:text="Chỉnh sửa địa chỉ"
                     android:textSize="24dp"
                     android:textStyle="bold"
                     android:textColor="@color/onPrimary"/>
@@ -152,7 +152,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Address"
+                        android:text="Địa chỉ"
                         android:textSize="12sp"
                         android:textColor="@color/blackColor"/>
                 </LinearLayout>
@@ -185,7 +185,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Detail Address"
+                        android:text="Địa chỉ chi tiết"
                         android:textSize="12sp"
                         android:textColor="@color/blackColor"/>
                 </LinearLayout>
@@ -218,7 +218,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Note for shipper"
+                    android:text="Ghi chú cho tài xế"
                     android:textColor="@color/blackColor"
                     android:textSize="12sp" />
 
@@ -247,7 +247,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Contact name"
+                        android:text="Tên người liên lạc"
                         android:textSize="12sp"
                         android:textColor="@color/blackColor"/>
                 </LinearLayout>
@@ -276,7 +276,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Contact phonenumber"
+                        android:text="Số điện thoại liên lạc"
                         android:textSize="12sp"
                         android:textColor="@color/blackColor"/>
                 </LinearLayout>

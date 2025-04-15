@@ -40,6 +40,7 @@ public class AccountFragment extends Fragment {
     private Button btnLogout, goToSettingBtn, btnChangePassword, btnLocation;
     private LinearLayout profileContainer;
     private CustomHeaderView customHeaderView;
+    private SharedPreferencesHelper sharedPreferencesHelper;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -61,29 +62,31 @@ public class AccountFragment extends Fragment {
 
         // Initialize AuthViewModel
         authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
+        sharedPreferencesHelper = SharedPreferencesHelper.getInstance(requireContext());
+
 
         btnLogout.setOnClickListener(v -> handleLogout());
 
         // Observe login response
-        authViewModel.getLogoutResponse().observe(getViewLifecycleOwner(), new Observer<Resource<String>>() {
-            @Override
-            public void onChanged(Resource<String> resource) {
-                switch (resource.getStatus()) {
-                    case LOADING:
-                        // Show progress bar
-                        break;
-                    case SUCCESS:
-                        Toast.makeText(getContext(), "Đăng xuất thành công!", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(getContext(), LoginActivity.class);
-                        startActivity(intent);
-                        break;
-                    case ERROR:
-                        String errorMessage = resource.getMessage();
-                        Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
-                        break;
-                }
-            }
-        });
+//        authViewModel.getLogoutResponse().observe(getViewLifecycleOwner(), new Observer<Resource<String>>() {
+//            @Override
+//            public void onChanged(Resource<String> resource) {
+//                switch (resource.getStatus()) {
+//                    case LOADING:
+//                        // Show progress bar
+//                        break;
+//                    case SUCCESS:
+//                        Toast.makeText(getContext(), "Đăng xuất thành công!", Toast.LENGTH_SHORT).show();
+//                        Intent intent = new Intent(getContext(), LoginActivity.class);
+//                        startActivity(intent);
+//                        break;
+//                    case ERROR:
+//                        String errorMessage = resource.getMessage();
+//                        Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
+//                        break;
+//                }
+//            }
+//        });
 
         profileContainer.setOnClickListener(v -> {
             Intent intent = new Intent(requireContext(), ProfileActivity.class);
@@ -135,8 +138,12 @@ public class AccountFragment extends Fragment {
                 .setTitle("Xác nhận")
                 .setMessage("Bạn có chắc chắn muốn đăng xuất?")
                 .setPositiveButton("Đăng xuất", (dialog, which) -> {
-                    // Nếu người dùng chọn "Đăng xuất"
-                    authViewModel.logout(requireContext());
+                    sharedPreferencesHelper.clearAll(); // Xoá hết access/refresh token
+
+                    // Chuyển sang LoginActivity (bắt buộc phải chạy trong main thread)
+                    Intent intent = new Intent(getContext(), LoginActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Xoá toàn bộ backstack
+                    getContext().startActivity(intent);
                 })
                 .setNegativeButton("Hủy", (dialog, which) -> {
                     // Nếu người dùng chọn "Hủy", đóng hộp thoại

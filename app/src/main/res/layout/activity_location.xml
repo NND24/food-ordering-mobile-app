@@ -72,7 +72,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Add home address"
+                android:text="Thêm địa chỉ nhà"
                 android:textStyle="bold"
                 android:textSize="17sp"
                 android:textColor="@color/colorLink"/>
@@ -176,7 +176,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Add company address"
+                android:text="Thêm địa chỉ công ty"
                 android:textStyle="bold"
                 android:textSize="17sp"
                 android:textColor="@color/colorLink"/>
@@ -294,7 +294,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Add new"
+                    android:text="Thêm địa chỉ mới"
                     android:textColor="@color/colorLink"
                     android:textSize="17sp"
                     android:textStyle="bold"/>

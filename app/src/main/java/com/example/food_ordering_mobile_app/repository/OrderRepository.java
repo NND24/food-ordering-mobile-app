@@ -93,4 +93,35 @@ public class OrderRepository {
 
         return result;
     }
+
+    public LiveData<Resource<ApiResponse<String>>> cancelOrder(String orderId) {
+        MutableLiveData<Resource<ApiResponse<String>>> result = new MutableLiveData<>();
+        result.setValue(Resource.loading(null));
+
+        orderService.cancelOrder(orderId).enqueue(new Callback<ApiResponse<String>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<String>> call, Response<ApiResponse<String>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Log.d("OrderRepository", "getOrderDetail: " + response.body());
+                    result.setValue(Resource.success("Lay thong tin thành công!", response.body()));
+                } else {
+                    try {
+                        String errorMessage = response.errorBody().string();
+                        JSONObject jsonObject = new JSONObject(errorMessage);
+                        String message = jsonObject.getString("message");
+                        result.setValue(Resource.error(message, null));
+                    } catch (Exception e) {
+                        result.setValue(Resource.error("Lỗi không xác định!", null));
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<String>> call, Throwable t) {
+                result.setValue(Resource.error("Lỗi kết nối: " + t.getMessage(), null));
+            }
+        });
+
+        return result;
+    }
 }
