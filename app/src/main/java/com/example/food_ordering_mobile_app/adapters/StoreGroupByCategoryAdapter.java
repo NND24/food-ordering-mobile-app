@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.food_ordering_mobile_app.R;
+import com.example.food_ordering_mobile_app.models.store.Store;
 import com.example.food_ordering_mobile_app.models.store.StoreGroupByCategory;
 import com.example.food_ordering_mobile_app.ui.customer.store.StoreActivity;
 
@@ -40,8 +41,13 @@ public class StoreGroupByCategoryAdapter extends RecyclerView.Adapter<StoreGroup
         StoreGroupByCategory category = categoryList.get(position);
         holder.categoryName.setText(category.getCategory().getName());
 
+        List<Store> limitedStores = category.getStores().size() > 5
+                ? category.getStores().subList(0, 5)
+                : category.getStores();
+
         if (holder.storeAdapter == null) {
-            holder.storeAdapter = new StoreAdapter(context, category.getStores(), store -> {
+            holder.storeAdapter = new StoreAdapter(context, limitedStores, store -> {
+
                 Intent intent = new Intent(context, StoreActivity.class);
                 intent.putExtra("storeId", store.getId());
                 context.startActivity(intent);
@@ -50,7 +56,7 @@ public class StoreGroupByCategoryAdapter extends RecyclerView.Adapter<StoreGroup
             holder.restaurantRecyclerView.setAdapter(holder.storeAdapter);
             holder.restaurantRecyclerView.setRecycledViewPool(viewPool);
         } else {
-            holder.storeAdapter.updateData(category.getStores());
+            holder.storeAdapter.updateData(limitedStores);
         }
     }
 

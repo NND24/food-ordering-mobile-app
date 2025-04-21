@@ -11,6 +11,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -55,6 +56,10 @@ public class SearchActivity extends AppCompatActivity {
     private Map<String, String> queryParams = new HashMap<>();
     private int filterAmount = 0;
     private CustomHeaderView customHeaderView;
+    private int currentPage = 1;
+    private boolean isLoading = false;
+    private boolean isLastPage = false;
+    private final int pageSize = 20;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +106,10 @@ public class SearchActivity extends AppCompatActivity {
         btnSearch.setOnClickListener(v -> {
             String query = etSearch.getText().toString().trim();
             name = query;
+
+            currentPage = 1;
+            isLastPage = false;
+
             fetchStores();
         });
 
@@ -136,24 +145,61 @@ public class SearchActivity extends AppCompatActivity {
         searchStoreAdapter = new StoreAdapter(this, searchStores, store -> goToActivity(StoreActivity.class));
         searchStoreRecyclerView.setAdapter(searchStoreAdapter);
 
+        searchStoreRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                if (layoutManager != null) {
+                    int visibleItemCount = layoutManager.getChildCount();
+                    int totalItemCount = layoutManager.getItemCount();
+                    int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+
+                    if (!isLoading && !isLastPage) {
+                        if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
+                                && firstVisibleItemPosition >= 0
+                                && totalItemCount >= pageSize) {
+                            // Tải trang tiếp theo
+                            currentPage++;
+                            fetchStores();
+                        }
+                    }
+                }
+            }
+        });
+
         fetchStores();
 
         storeViewModel.getSearchStoreResponse().observe(this, resource -> {
             switch (resource.getStatus()) {
                 case LOADING:
-                    swipeRefreshLayout.setRefreshing(true);
+                    if (currentPage == 1) swipeRefreshLayout.setRefreshing(true);
                     break;
                 case SUCCESS:
                     swipeRefreshLayout.setRefreshing(false);
-                    searchStores.clear();
-                    searchStores.addAll(resource.getData().getData());
+                    isLoading = false;
+
+                    List<Store> newData = resource.getData().getData();
+
+                    if (currentPage == 1) {
+                        searchStores.clear();
+                    }
+
+                    if (newData.size() < pageSize) {
+                        isLastPage = true;
+                    }
+
+                    searchStores.addAll(newData);
                     searchStoreAdapter.notifyDataSetChanged();
                     break;
                 case ERROR:
                     swipeRefreshLayout.setRefreshing(false);
+                    isLoading = false;
                     break;
             }
         });
+
     }
 
     @Override
@@ -232,11 +278,12 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void fetchStores() {
+        isLoading = true;
         queryParams.put("name", name);
         queryParams.put("category", TextUtils.join(",", selectedFoodTypes));
         queryParams.put("sort", sort.isEmpty() ? "standout" : sort);
-        queryParams.put("limit", "20");
-        queryParams.put("page", "1");
+        queryParams.put("limit", String.valueOf(pageSize));
+        queryParams.put("page", String.valueOf(currentPage));
 
         storeViewModel.getSearchStore(queryParams);
     }

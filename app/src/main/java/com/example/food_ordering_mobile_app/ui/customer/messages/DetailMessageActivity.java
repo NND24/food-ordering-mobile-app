@@ -216,10 +216,8 @@ public class DetailMessageActivity extends AppCompatActivity {
             public void onChanged(Resource<MessageResponse> resource) {
                 switch (resource.getStatus()) {
                     case LOADING:
-                        swipeRefreshLayout.setRefreshing(true);
                         break;
                     case SUCCESS:
-                        swipeRefreshLayout.setRefreshing(false);
                         messageList.clear();
                         messageList.addAll(resource.getData().getMessages());
 
@@ -249,7 +247,6 @@ public class DetailMessageActivity extends AppCompatActivity {
 
                         break;
                     case ERROR:
-                        swipeRefreshLayout.setRefreshing(false);
                         Log.d("ChatFragment", "getAllMessagesResponse Error: " + resource.getMessage());
                         break;
                 }
