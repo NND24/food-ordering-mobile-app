@@ -58,7 +58,6 @@ public class AccountFragment extends Fragment {
         customHeaderView = view.findViewById(R.id.customHeaderView);
 
         customHeaderView.setLifecycleOwner(this);
-        customHeaderView.setText("Tài khoản");
 
         // Initialize AuthViewModel
         authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);

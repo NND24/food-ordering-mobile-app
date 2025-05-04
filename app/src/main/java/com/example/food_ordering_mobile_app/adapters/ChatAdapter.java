@@ -42,11 +42,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
         void onChatClick(Chat chat);
     }
 
-    public ChatAdapter(Context context, List<Chat> chatList) {
-        this.context = context;
-        this.chatList = chatList;
-    }
-
     public ChatAdapter(FragmentActivity fragment, Context context, List<Chat> chatList, OnChatClickListener onChatClickListener) {
         this.fragment = fragment;
         this.context = context;
@@ -66,7 +61,44 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
     public void onBindViewHolder(@NonNull ChatViewHolder holder, int position) {
         Chat chat = chatList.get(position);
 
-        holder.tvUserName.setText(chat.getUsers().get(1).getName());
+        if(chat.getStore() != null) {
+            holder.tvUserName.setText(chat.getStore().getName());
+
+            String userAvatarUrl = chat.getStore().getAvatar() != null ? chat.getStore().getAvatar().getUrl() : null;
+            Glide.with(context)
+                    .asBitmap()
+                    .load(userAvatarUrl)
+                    .override(60, 60)
+                    .centerCrop()
+                    .into(new BitmapImageViewTarget(holder.ivUserAvatar) {
+                        @Override
+                        protected void setResource(Bitmap resource) {
+                            RoundedBitmapDrawable roundedDrawable =
+                                    RoundedBitmapDrawableFactory.create(context.getResources(), resource);
+                            roundedDrawable.setCornerRadius(6);
+                            holder.ivUserAvatar.setImageDrawable(roundedDrawable);
+                        }
+                    });
+        } else {
+            holder.tvUserName.setText(chat.getUsers().get(1).getName());
+
+            String userAvatarUrl = chat.getUsers().get(1).getAvatar() != null ? chat.getUsers().get(1).getAvatar().getUrl() : null;
+            Glide.with(context)
+                    .asBitmap()
+                    .load(userAvatarUrl)
+                    .override(60, 60)
+                    .centerCrop()
+                    .into(new BitmapImageViewTarget(holder.ivUserAvatar) {
+                        @Override
+                        protected void setResource(Bitmap resource) {
+                            RoundedBitmapDrawable roundedDrawable =
+                                    RoundedBitmapDrawableFactory.create(context.getResources(), resource);
+                            roundedDrawable.setCornerRadius(6);
+                            holder.ivUserAvatar.setImageDrawable(roundedDrawable);
+                        }
+                    });
+        }
+
         if (chat.getLatestMessage() != null && chat.getLatestMessage().getContent() != null && !chat.getLatestMessage().getContent().isEmpty()) {
             holder.tvLatestMessage.setText(chat.getLatestMessage().getContent());
         } else {
@@ -92,22 +124,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
         }
 
         holder.tvCreatedTime.setText(formattedDate);
-
-        String userAvatarUrl = chat.getUsers().get(1).getAvatar() != null ? chat.getUsers().get(1).getAvatar().getUrl() : null;
-        Glide.with(context)
-                .asBitmap()
-                .load(userAvatarUrl)
-                .override(60, 60)
-                .centerCrop()
-                .into(new BitmapImageViewTarget(holder.ivUserAvatar) {
-                    @Override
-                    protected void setResource(Bitmap resource) {
-                        RoundedBitmapDrawable roundedDrawable =
-                                RoundedBitmapDrawableFactory.create(context.getResources(), resource);
-                        roundedDrawable.setCornerRadius(6);
-                        holder.ivUserAvatar.setImageDrawable(roundedDrawable);
-                    }
-                });
 
         holder.itemView.setOnClickListener(v -> {
             if (onChatClickListener != null) {

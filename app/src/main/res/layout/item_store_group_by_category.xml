@@ -8,28 +8,28 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp">
 
         <TextView
             android:id="@+id/categoryName"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:textSize="24sp"
             android:textStyle="bold"
-            android:textColor="@color/onPrimary"/>
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:textColor="@color/onPrimary"
+            android:maxLines="1"
+            android:ellipsize="end" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:textColor="@color/primaryColor"
-            android:text="Xem tất cả"/>
+            android:text="Xem tất cả" />
     </LinearLayout>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/restaurantRecyclerView"

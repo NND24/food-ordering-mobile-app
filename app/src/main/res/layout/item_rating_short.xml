@@ -30,7 +30,8 @@
                 android:singleLine="true"
                 android:text="Cafe is so good"
                 android:textColor="@color/onPrimary"
-                android:textSize="17sp" />
+                android:textSize="17sp"
+                />
         </LinearLayout>
 
         <LinearLayout

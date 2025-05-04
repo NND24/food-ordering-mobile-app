@@ -1,5 +1,6 @@
 package com.example.food_ordering_mobile_app.models.chat;
 
+import com.example.food_ordering_mobile_app.models.store.Store;
 import com.example.food_ordering_mobile_app.models.user.User;
 import com.google.gson.annotations.SerializedName;
 
@@ -11,6 +12,7 @@ public class Chat implements Serializable {
     @SerializedName("_id")
     private String id;
     private List<User> users;
+    private Store store;
     private Message latestMessage;
     private Timestamp updatedAt;
 
@@ -44,5 +46,13 @@ public class Chat implements Serializable {
 
     public void setUpdatedAt(Timestamp updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public Store getStore() {
+        return store;
+    }
+
+    public void setStore(Store store) {
+        this.store = store;
     }
 }

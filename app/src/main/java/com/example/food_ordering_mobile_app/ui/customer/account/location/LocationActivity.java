@@ -73,7 +73,6 @@ public class LocationActivity extends AppCompatActivity {
         isFromCartDetailActivity = getIntent().getBooleanExtra("isFromCartDetailActivity", false);
 
         customHeaderView.setLifecycleOwner(this);
-        customHeaderView.setText("Địa chỉ");
 
         // Initialize ViewModel
         locationViewModel = new ViewModelProvider(this).get(LocationViewModel.class);

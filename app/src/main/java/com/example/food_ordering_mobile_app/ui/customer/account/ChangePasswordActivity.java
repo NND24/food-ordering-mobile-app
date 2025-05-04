@@ -47,8 +47,6 @@ public class ChangePasswordActivity extends AppCompatActivity {
         btnResetPassword = findViewById(R.id.btnResetPassword);
         customHeaderView = findViewById(R.id.customHeaderView);
 
-        customHeaderView.setText("Đổi mật khẩu");
-
         // Initialize ViewModel
         authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
 

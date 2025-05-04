@@ -34,15 +34,10 @@
                 android:text="Restaurant Name"
                 android:textColor="@color/onPrimary"
                 android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tvDescription"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="4"
-                android:textColor="@color/onSecondary"
-                android:textSize="16sp" />
+                android:textStyle="bold"
+                android:maxLines="1"
+                android:ellipsize="end"
+                />
 
             <LinearLayout
                 android:layout_width="match_parent"

@@ -51,8 +51,8 @@ public class ChatViewModel extends AndroidViewModel {
         chatRepository = new ChatRepository(application);
     }
 
-    public void createChat(String id) {
-        LiveData<Resource<Chat>> result = chatRepository.createChat(id);
+    public void createChat(String id, String storeId) {
+        LiveData<Resource<Chat>> result = chatRepository.createChat(id, storeId);
         result.observeForever(new Observer<Resource<Chat>>() {
             @Override
             public void onChanged(Resource<Chat> resource) {

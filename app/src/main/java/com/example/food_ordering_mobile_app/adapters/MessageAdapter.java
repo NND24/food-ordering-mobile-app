@@ -41,7 +41,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public int getItemViewType(int position) {
         User savedUser = SharedPreferencesHelper.getInstance(context).getCurrentUser();
 
-        if (messageList.get(position).getSender().equals(savedUser.getId())) {
+        if (messageList.get(position).getSender().getId().equals(savedUser.getId())) {
             return VIEW_TYPE_SENT; // Tin nhắn do chính mình gửi
         } else {
             return VIEW_TYPE_RECEIVED; // Tin nhắn người khác gửi

@@ -67,7 +67,7 @@ public class CartDetailActivity extends AppCompatActivity {
     private RecyclerView orderSummaryRecyclerView;
     private CartSummaryAdapter cartSummaryAdapter;
     private List<CartItem> cartItemList;
-    private TextView tvStoreName, tvStoreDescription, tvProvisionalTotal, tvFee, tvTotalPrice, tvLocationName, tvDeliveryAddress;
+    private TextView tvStoreName, tvStoreDescription, tvProvisionalTotal, tvTotalPrice, tvLocationName, tvDeliveryAddress;
     private ImageView ivStoreAvatar;
     private Button btnCompleteCart;
     private LinearLayout btnAddDetailAddress, location_container, btnChooseCurrentLocation, storeInfoContainer;
@@ -90,7 +90,6 @@ public class CartDetailActivity extends AppCompatActivity {
         tvStoreDescription = findViewById(R.id.tvStoreDescription);
         ivStoreAvatar = findViewById(R.id.ivStoreAvatar);
         tvProvisionalTotal = findViewById(R.id.tvProvisionalTotal);
-        tvFee = findViewById(R.id.tvFee);
         tvTotalPrice = findViewById(R.id.tvTotalPrice);
         btnCompleteCart = findViewById(R.id.btnCompleteCart);
         btnAddDetailAddress = findViewById(R.id.btnAddDetailAddress);
@@ -252,7 +251,6 @@ public class CartDetailActivity extends AppCompatActivity {
                         // Hiển thị tổng giá tiền
                         NumberFormat formatter = NumberFormat.getInstance(new Locale("vi", "VN"));
                         tvProvisionalTotal.setText(String.valueOf(formatter.format(totalCartPrice)));
-                        tvFee.setText(String.valueOf(formatter.format(totalCartPrice)));
                         tvTotalPrice.setText(String.valueOf(formatter.format(totalCartPrice)));
 
                         break;

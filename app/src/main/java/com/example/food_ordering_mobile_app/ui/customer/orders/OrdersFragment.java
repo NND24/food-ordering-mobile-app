@@ -48,7 +48,6 @@ public class OrdersFragment extends Fragment {
         customHeaderView = view.findViewById(R.id.customHeaderView);
 
         customHeaderView.setLifecycleOwner(this);
-        customHeaderView.setText("Đơn hàng");
 
         swipeRefreshLayout.setOnRefreshListener(this::refreshData);
 

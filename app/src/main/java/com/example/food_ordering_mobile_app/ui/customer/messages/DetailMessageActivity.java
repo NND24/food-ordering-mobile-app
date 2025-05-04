@@ -28,6 +28,7 @@ import com.example.food_ordering_mobile_app.R;
 import com.example.food_ordering_mobile_app.adapters.MessageAdapter;
 import com.example.food_ordering_mobile_app.models.ApiResponse;
 import com.example.food_ordering_mobile_app.models.Image;
+import com.example.food_ordering_mobile_app.models.chat.Chat;
 import com.example.food_ordering_mobile_app.models.chat.Message;
 import com.example.food_ordering_mobile_app.models.chat.MessageResponse;
 import com.example.food_ordering_mobile_app.network.SocketManager;
@@ -57,7 +58,6 @@ public class DetailMessageActivity extends AppCompatActivity {
     private TextView tvUserName, tvTime;
     private String chatId;
     private static final int PICK_IMAGES_REQUEST = 1;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -221,15 +221,26 @@ public class DetailMessageActivity extends AppCompatActivity {
                         messageList.clear();
                         messageList.addAll(resource.getData().getMessages());
 
-                        tvUserName.setText(resource.getData().getChat().getUsers().get(1).getName());
+                        Chat chat = resource.getData().getChat();
+
+                        if(chat.getStore() != null) {
+                            tvUserName.setText(chat.getStore().getName());
+
+                            String avatarUrl = chat.getStore().getAvatar() != null
+                                    ? chat.getStore().getAvatar().getUrl()
+                                    : null;
+                            loadRoundedImage(avatarUrl, ivUserAvatar);
+                        } else {
+                            tvUserName.setText(chat.getUsers().get(1).getName());
+
+                            String avatarUrl = chat.getUsers().get(1).getAvatar() != null
+                                    ? resource.getData().getChat().getUsers().get(1).getAvatar().getUrl()
+                                    : null;
+                            loadRoundedImage(avatarUrl, ivUserAvatar);
+                        }
 
 //                        long timeDiff = System.currentTimeMillis() - resource.getData().getChat().getLatestMessage().getUpdatedAt().getTime();
 //                        tvTime.setText(formatTimeAgo(timeDiff));
-
-                        String avatarUrl = resource.getData().getChat().getUsers().get(1).getAvatar() != null
-                                ? resource.getData().getChat().getUsers().get(1).getAvatar().getUrl()
-                                : null;
-                        loadRoundedImage(avatarUrl, ivUserAvatar);
 
                         messageAdapter.notifyDataSetChanged();
 

@@ -20,11 +20,8 @@ public class IntroduceActivity extends AppCompatActivity {
     private ViewPager mSlideViewPager;
     private LinearLayout mDotLayout;
     private SliderAdapter sliderAdapter;
-
     private TextView[] mDots;
-
     private int currentPage;
-
     AppCompatButton nextBtn;
     TextView skipBtn;
 

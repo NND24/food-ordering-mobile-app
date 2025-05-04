@@ -32,7 +32,6 @@ import com.example.food_ordering_mobile_app.models.chat.Chat;
 import com.example.food_ordering_mobile_app.models.order.Order;
 import com.example.food_ordering_mobile_app.models.order.OrderItem;
 import com.example.food_ordering_mobile_app.models.order.OrderTopping;
-import com.example.food_ordering_mobile_app.models.user.User;
 import com.example.food_ordering_mobile_app.ui.customer.messages.DetailMessageActivity;
 import com.example.food_ordering_mobile_app.utils.Resource;
 import com.example.food_ordering_mobile_app.viewmodels.ChatViewModel;
@@ -50,7 +49,7 @@ public class OrderDetailActivity extends AppCompatActivity {
     private RecyclerView orderSummaryRecyclerView;
     private OrderSummaryAdapter orderSummaryAdapter;
     private List<OrderItem> orderItemList;
-    private TextView tvStoreName, tvStoreDescription, tvProvisionalTotal, tvFee, tvCustomerName, tvCustomerPhonenumber, tvCustomerAddress, tvOrderStatus, textView5, tvShipperName;
+    private TextView tvStoreName, tvStoreDescription, tvProvisionalTotal, tvCustomerName, tvCustomerPhonenumber, tvCustomerAddress, tvOrderStatus, textView5, tvShipperName;
     private ImageView ivStoreAvatar, ivShipperAvatar, ivStoreProgress, ivShipperProgress, ivDoneProgress;
     private String orderId;
     private Button btnTrackOrder;
@@ -70,7 +69,6 @@ public class OrderDetailActivity extends AppCompatActivity {
         tvStoreDescription = findViewById(R.id.tvStoreDescription);
         ivStoreAvatar = findViewById(R.id.ivStoreAvatar);
         tvProvisionalTotal = findViewById(R.id.tvProvisionalTotal);
-        tvFee = findViewById(R.id.tvFee);
         tvCustomerName = findViewById(R.id.tvCustomerName);
         tvCustomerPhonenumber = findViewById(R.id.tvCustomerPhonenumber);
         tvCustomerAddress = findViewById(R.id.tvCustomerAddress);
@@ -152,7 +150,7 @@ public class OrderDetailActivity extends AppCompatActivity {
                         tvCustomerAddress.setText(order.getShipLocation().getAddress());
 
                         btnChatWithStore.setOnClickListener(v -> {
-                            chatViewModel.createChat(order.getStore().getOwner());
+                            chatViewModel.createChat(order.getStore().getOwner(), order.getStore().getId());
                         });
 
 
@@ -238,7 +236,7 @@ public class OrderDetailActivity extends AppCompatActivity {
                             });
 
                             btnChatWithShipper.setOnClickListener(v -> {
-                                chatViewModel.createChat(order.getShipper().getId());
+                                chatViewModel.createChat(order.getShipper().getId(), null);
                             });
 
                             String shipperAvatarUrl = order.getShipper().getAvatar() != null ? order.getShipper().getAvatar().getUrl() : null;
@@ -299,7 +297,6 @@ public class OrderDetailActivity extends AppCompatActivity {
                         // Hiển thị tổng giá tiền
                         NumberFormat formatter = NumberFormat.getInstance(new Locale("vi", "VN"));
                         tvProvisionalTotal.setText(String.valueOf(formatter.format(totalCartPrice)));
-                        tvFee.setText(String.valueOf(formatter.format(totalCartPrice)));
 
                         break;
                     case ERROR:

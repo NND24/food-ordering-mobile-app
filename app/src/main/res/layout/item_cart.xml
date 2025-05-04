@@ -50,7 +50,10 @@
                 android:layout_weight="1"
                 android:textColor="@color/onPrimary"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:maxLines="1"
+                android:ellipsize="end"
+                />
 
             <Space
                 android:layout_width="20dp"
@@ -139,7 +142,10 @@
                 android:layout_marginLeft="4dp"
                 android:text="Cafe"
                 android:textColor="@color/onSecondary"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

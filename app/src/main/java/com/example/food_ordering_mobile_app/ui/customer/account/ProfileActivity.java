@@ -87,8 +87,6 @@ public class ProfileActivity extends AppCompatActivity {
         layoutOther.setOnClickListener(v -> radioGroupGender.check(R.id.radioOther));
         customHeaderView = findViewById(R.id.customHeaderView);
 
-        customHeaderView.setText("Thông tin cá nhân");
-
         swipeRefreshLayout.setOnRefreshListener(this::refreshData);
 
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);

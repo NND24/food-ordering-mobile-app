@@ -33,11 +33,11 @@ public class ChatRepository {
         sharedPreferencesHelper = new SharedPreferencesHelper(context);
     }
 
-    public LiveData<Resource<Chat>> createChat(String id) {
+    public LiveData<Resource<Chat>> createChat(String id, String storeId) {
         MutableLiveData<Resource<Chat>> result = new MutableLiveData<>();
         result.setValue(Resource.loading(null));
 
-        chatService.createChat(id).enqueue(new Callback<Chat>() {
+        chatService.createChat(id, storeId).enqueue(new Callback<Chat>() {
             @Override
             public void onResponse(Call<Chat> call, Response<Chat> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -122,6 +122,7 @@ public class ChatRepository {
 
             @Override
             public void onFailure(Call<List<Chat>> call, Throwable t) {
+                Log.d("ChatRepository", "getAllChats error: " + t.getMessage());
                 result.setValue(Resource.error("Lỗi kết nối: " + t.getMessage(), null));
             }
         });

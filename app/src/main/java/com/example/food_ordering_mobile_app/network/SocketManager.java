@@ -38,7 +38,7 @@ public class SocketManager {
                 return;
             }
 
-            mSocket = IO.socket("http://192.168.0.57:5000");
+            mSocket = IO.socket("https://food-ordering-server-nr2h.onrender.com");
             mSocket.connect();
 
             mSocket.on(Socket.EVENT_CONNECT, args -> {

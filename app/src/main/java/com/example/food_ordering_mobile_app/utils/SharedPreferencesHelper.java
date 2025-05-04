@@ -134,6 +134,26 @@ public class SharedPreferencesHelper {
         return null;
     }
 
+    public void saveProvince(String name, double lat, double lon) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("province_name", name);
+        editor.putFloat("province_lat", (float) lat);
+        editor.putFloat("province_lon", (float) lon);
+        editor.apply();
+    }
+
+    public String getProvinceName() {
+        return sharedPreferences.getString("province_name", "Hồ Chí Minh");
+    }
+
+    public double getProvinceLat() {
+        return sharedPreferences.getFloat("province_lat", 10.762622f);
+    }
+
+    public double getProvinceLon() {
+        return sharedPreferences.getFloat("province_lon", 106.660172f);
+    }
+
     public void clearUserData() {
         editor.clear();
         editor.apply();

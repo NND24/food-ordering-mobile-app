@@ -8,6 +8,7 @@ import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -21,9 +22,9 @@ public interface CartService {
     Call<Cart> getDetailCart(@Path("cartId") String cartId);
     @POST("/api/v1/cart/update")
     Call<Cart> updateCart(@Body Map<String, Object> data);
-    @POST("/api/v1/cart/clear/item/{storeId}")
+    @DELETE("/api/v1/cart/clear/item/{storeId}")
     Call<ApiResponse<String>> clearCartItem(@Path("storeId") String cartId);
-    @POST("/api/v1/cart/clear/")
+    @DELETE("/api/v1/cart/clear/")
     Call<ApiResponse<String>> clearCart();
     @POST("/api/v1/cart/complete")
     Call<ApiResponse<String>> completeCart(@Body Map<String, Object> data);

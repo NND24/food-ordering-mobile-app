@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingHorizontal="20dp"
+        android:paddingHorizontal="10dp"
         android:paddingVertical="10dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -75,7 +75,7 @@
                 android:id="@+id/foodTypeRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="20dp"
+                android:paddingHorizontal="10dp"
                 android:paddingVertical="10dp"/>
 
             <LinearLayout
@@ -87,7 +87,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
-                    android:paddingHorizontal="20dp"
+                    android:paddingHorizontal="10dp"
                     android:paddingBottom="10dp">
 
                     <TextView
@@ -123,7 +123,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:paddingHorizontal="20dp"
+                android:paddingHorizontal="10dp"
                 android:paddingVertical="10dp">
 
                 <LinearLayout
@@ -164,7 +164,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:paddingHorizontal="20dp"
+                android:paddingHorizontal="10dp"
                 android:paddingVertical="10dp">
 
                 <androidx.recyclerview.widget.RecyclerView

@@ -43,7 +43,6 @@ public class ChatFragment extends Fragment {
         customHeaderView = view.findViewById(R.id.customHeaderView);
 
         customHeaderView.setLifecycleOwner(getViewLifecycleOwner());
-        customHeaderView.setText("Tin nhắn");
 
         chatViewModel = new ViewModelProvider(requireActivity()).get(ChatViewModel.class);
 
@@ -93,9 +92,11 @@ public class ChatFragment extends Fragment {
                         chatList.clear();
                         chatList.addAll(resource.getData());
                         chatAdapter.notifyDataSetChanged();
+                        Log.d("ChatRepository", "getAllChats: " + resource.getData());
                         break;
                     case ERROR:
                         swipeRefreshLayout.setRefreshing(false);
+                        Log.d("ChatRepository", "getAllChats error: " + resource.getData());
                         break;
                 }
             }

@@ -2,7 +2,6 @@ package com.example.food_ordering_mobile_app.ui.customer.home;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,7 +55,6 @@ public class HomeFragment extends Fragment {
     private UserViewModel userViewModel;
     private FoodTypeViewModel foodTypeViewModel;
     private StoreViewModel storeViewModel;
-    private NotificationViewModel notificationViewModel;
     private FoodTypeAdapter foodTypeAdapter;
     private List<FoodType> foodTypes;
     private RecyclerView foodTypeRecyclerView;
@@ -126,7 +124,6 @@ public class HomeFragment extends Fragment {
         userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
         foodTypeViewModel = new ViewModelProvider(requireActivity()).get(FoodTypeViewModel.class);
         storeViewModel = new ViewModelProvider(requireActivity()).get(StoreViewModel.class);
-        notificationViewModel = new ViewModelProvider(this).get(NotificationViewModel.class);
 
         // Lấy dữ liệu người dùng từ SharedPreferences
         User savedUser = SharedPreferencesHelper.getInstance(requireContext()).getCurrentUser();
@@ -274,12 +271,18 @@ public class HomeFragment extends Fragment {
             storeBigCardAdapter.notifyDataSetChanged();
         }
 
+        SharedPreferencesHelper prefs = SharedPreferencesHelper.getInstance(getContext());
+        double savedLat = prefs.getProvinceLat();
+        double savedLon = prefs.getProvinceLon();
+
         Map<String, String> queryParams = new HashMap<>();
         queryParams.put("name", "");
         queryParams.put("category", "");
         queryParams.put("sort", "rating");
         queryParams.put("limit", "3");
         queryParams.put("page", "1");
+        queryParams.put("lat", String.valueOf(savedLat));
+        queryParams.put("lon", String.valueOf(savedLon));
 
         storeViewModel.getRatingStore(queryParams);
     }
@@ -325,12 +328,18 @@ public class HomeFragment extends Fragment {
             standoutStoreAdapter.notifyDataSetChanged();
         }
 
+        SharedPreferencesHelper prefs = SharedPreferencesHelper.getInstance(getContext());
+        double savedLat = prefs.getProvinceLat();
+        double savedLon = prefs.getProvinceLon();
+
         Map<String, String> queryParams = new HashMap<>();
         queryParams.put("name", "");
         queryParams.put("category", "");
         queryParams.put("sort", "standout");
         queryParams.put("limit", "5");
         queryParams.put("page", "1");
+        queryParams.put("lat", String.valueOf(savedLat));
+        queryParams.put("lon", String.valueOf(savedLon));
 
         storeViewModel.getStandoutStore(queryParams);
     }
@@ -376,18 +385,22 @@ public class HomeFragment extends Fragment {
         userViewModel.getCurrentUser();
         setupFoodTypes();
 
+        SharedPreferencesHelper prefs = SharedPreferencesHelper.getInstance(getContext());
+        double savedLat = prefs.getProvinceLat();
+        double savedLon = prefs.getProvinceLon();
+
         Map<String, String> queryParams = new HashMap<>();
         queryParams.put("name", "");
         queryParams.put("category", "");
         queryParams.put("sort", "standout");
         queryParams.put("limit", "5");
         queryParams.put("page", "1");
+        queryParams.put("lat", String.valueOf(savedLat));
+        queryParams.put("lon", String.valueOf(savedLon));
 
         storeViewModel.getStandoutStore(queryParams);
 
         setupRatingStores();
         setupStores();
     }
-
-
 }

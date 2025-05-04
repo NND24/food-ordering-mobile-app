@@ -10,6 +10,7 @@ public class ToppingGroup implements Serializable {
     private String id;
     private String name;
     private String store;
+    private Boolean onlyOnce;
     private List<Topping> toppings;
 
     public String getId() {
@@ -42,5 +43,13 @@ public class ToppingGroup implements Serializable {
 
     public void setToppings(List<Topping> toppings) {
         this.toppings = toppings;
+    }
+
+    public Boolean getOnlyOnce() {
+        return onlyOnce;
+    }
+
+    public void setOnlyOnce(Boolean onlyOnce) {
+        this.onlyOnce = onlyOnce;
     }
 }

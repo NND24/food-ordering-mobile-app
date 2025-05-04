@@ -40,7 +40,6 @@ public class ChooseProvinceActivity extends AppCompatActivity {
         suggestionsRecyclerView = findViewById(R.id.suggestionsRecyclerView);
         tvProvinceName = findViewById(R.id.tvProvinceName);
 
-
         // Dữ liệu mẫu về các tỉnh
         provinceList = ProvinceList.getProvinces();
 

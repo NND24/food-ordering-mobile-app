@@ -58,7 +58,6 @@ public class OrderCurrentAdapter extends RecyclerView.Adapter<OrderCurrentAdapte
         Order order = orderList.get(position);
 
         holder.tvStoreName.setText(order.getStore().getName());
-        holder.tvDescription.setText(order.getStore().getDescription());
 
         int totalQuantity = 0;
         for (OrderItem item : order.getItems()) {
@@ -122,7 +121,7 @@ public class OrderCurrentAdapter extends RecyclerView.Adapter<OrderCurrentAdapte
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvStoreName, tvQuantity, tvAddress, tvDescription;
+        TextView tvStoreName, tvQuantity, tvAddress;
         ImageView imStoreAvatar;
         Button btnTrackOrder, btnCancelOrder;
         LinearLayout storeInfoContainer;
@@ -135,7 +134,6 @@ public class OrderCurrentAdapter extends RecyclerView.Adapter<OrderCurrentAdapte
             imStoreAvatar = itemView.findViewById(R.id.imStoreAvatar);
             btnTrackOrder = itemView.findViewById(R.id.btnTrackOrder);
             btnCancelOrder = itemView.findViewById(R.id.btnCancelOrder);
-            tvDescription = itemView.findViewById(R.id.tvDescription);
             storeInfoContainer = itemView.findViewById(R.id.storeInfoContainer);
         }
     }

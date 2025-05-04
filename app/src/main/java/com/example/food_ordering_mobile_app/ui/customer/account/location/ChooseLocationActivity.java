@@ -455,7 +455,6 @@ public class ChooseLocationActivity extends AppCompatActivity implements MapEven
         }).start();
     }
 
-
     public void goBack(View view) {
         finish();
     }

@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_weight="1"
-        android:paddingStart="15dp">
+        android:paddingStart="8dp">
 
         <TextView
             android:id="@+id/tvStoreName"
@@ -28,7 +28,10 @@
             android:text="Restaurant Name"
             android:textSize="20sp"
             android:textColor="@color/onPrimary"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:maxLines="2"
+            android:ellipsize="end"
+            />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -40,7 +43,10 @@
                 android:layout_height="wrap_content"
                 android:text="Cafe"
                 android:textSize="16sp"
-                android:textColor="@color/onSecondary" />
+                android:textColor="@color/onSecondary"
+                android:maxLines="1"
+                android:ellipsize="end"
+                />
         </LinearLayout>
 
         <LinearLayout

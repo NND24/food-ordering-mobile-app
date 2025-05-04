@@ -303,8 +303,12 @@ public class StoreActivity extends AppCompatActivity {
                     case SUCCESS:
                         swipeRefreshLayout.setRefreshing(false);
                         dishBigList.clear();
-                        dishBigList.addAll(resource.getData().getData());
-                        SharedPreferencesHelper.getInstance(getApplicationContext()).saveListDish(resource.getData().getData());
+
+                        List<Dish> fullList = resource.getData().getData();
+                        List<Dish> subList = fullList.size() > 4 ? fullList.subList(0, 4) : fullList;
+
+                        dishBigList.addAll(subList);
+                        SharedPreferencesHelper.getInstance(getApplicationContext()).saveListDish(subList);
                         dishBigAdapter.notifyDataSetChanged();
                         break;
                     case ERROR:
@@ -317,7 +321,8 @@ public class StoreActivity extends AppCompatActivity {
         List<Dish> savedListDish = SharedPreferencesHelper.getInstance(getApplicationContext()).getSavedListDish();
         if (savedListDish != null && !savedListDish.isEmpty()) {
             dishBigList.clear();
-            dishBigList.addAll(savedListDish);
+            List<Dish> subList = savedListDish.size() > 4 ? savedListDish.subList(0, 4) : savedListDish;
+            dishBigList.addAll(subList);
             dishBigAdapter.notifyDataSetChanged();
         }
 
@@ -329,8 +334,6 @@ public class StoreActivity extends AppCompatActivity {
         dishGroupByCategoryList = new ArrayList<>();
         dishGroupByCategoryAdapter = new DishGroupByCategoryAdapter(this,this, dishGroupByCategoryList);
         dishRecyclerView.setAdapter(dishGroupByCategoryAdapter);
-
-
 
         dishViewModel.getAllDishResponse().observe(this, new Observer<Resource<ApiResponse<List<Dish>>>>() {
             @Override

@@ -278,12 +278,18 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void fetchStores() {
+        SharedPreferencesHelper prefs = SharedPreferencesHelper.getInstance(this);
+        double savedLat = prefs.getProvinceLat();
+        double savedLon = prefs.getProvinceLon();
+
         isLoading = true;
         queryParams.put("name", name);
         queryParams.put("category", TextUtils.join(",", selectedFoodTypes));
         queryParams.put("sort", sort.isEmpty() ? "standout" : sort);
         queryParams.put("limit", String.valueOf(pageSize));
         queryParams.put("page", String.valueOf(currentPage));
+        queryParams.put("lat", String.valueOf(savedLat));
+        queryParams.put("lon", String.valueOf(savedLon));
 
         storeViewModel.getSearchStore(queryParams);
     }

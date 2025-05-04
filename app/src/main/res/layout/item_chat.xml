@@ -34,7 +34,9 @@
             android:layout_weight="1"
             android:textSize="20sp"
             android:textColor="@color/onPrimary"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:maxLines="2"
+            android:ellipsize="end"/>
 
             <Space
                 android:layout_width="20dp"

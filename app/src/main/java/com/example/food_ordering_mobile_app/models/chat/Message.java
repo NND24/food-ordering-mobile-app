@@ -6,12 +6,10 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.Date;
-
 public class Message implements Serializable {
     @SerializedName("_id")
     private String id;
-    private String sender;
+    private User sender;
     private String content;
     private Image image;
     private String chat;
@@ -25,11 +23,11 @@ public class Message implements Serializable {
         this.id = id;
     }
 
-    public String getSender() {
+    public User getSender() {
         return sender;
     }
 
-    public void setSender(String sender) {
+    public void setSender(User sender) {
         this.sender = sender;
     }
 
