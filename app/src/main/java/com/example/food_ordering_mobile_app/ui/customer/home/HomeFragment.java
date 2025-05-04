@@ -295,6 +295,7 @@ public class HomeFragment extends Fragment {
             intent.putExtra("storeId", store.getId());
             this.getContext().startActivity(intent);
         });
+
         standoutStoreRecyclerView.setAdapter(standoutStoreAdapter);
 
         SnapHelper snapHelper = new LinearSnapHelper();
