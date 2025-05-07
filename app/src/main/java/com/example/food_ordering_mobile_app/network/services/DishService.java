@@ -12,10 +12,10 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 
 public interface DishService {
-    @GET("/api/v1/store/{store_id}/dish")
+    @GET("/api/v1/customer/store/{store_id}/dish")
     Call<ApiResponse<List<Dish>>> getAllDish(@Path("store_id") String storeId);
-    @GET("/api/v1/store/dish/{dish_id}")
+    @GET("/api/v1/customer/store/dish/{dish_id}")
     Call<ApiResponse<Dish>> getDish(@Path("dish_id") String dishId);
-    @GET("/api/v1/store/dish/{dish_id}/topping")
+    @GET("/api/v1/customer/store/dish/{dish_id}/topping")
     Call<ApiResponse<List<ToppingGroup>>> getToppingFromDish(@Path("dish_id") String dishId);
 }

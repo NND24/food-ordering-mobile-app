@@ -12,9 +12,9 @@ import retrofit2.http.Path;
 import retrofit2.http.QueryMap;
 
 public interface StoreService {
-    @GET("/api/v1/store/")
+    @GET("/api/v1/customer/store/")
     Call<ApiResponse<List<Store>>> getAllStore(@QueryMap Map<String, String> options);
 
-    @GET("/api/v1/store/{store_id}")
+    @GET("/api/v1/customer/store/{store_id}")
     Call<ApiResponse<Store>> getStoreInformation(@Path("store_id") String storeId);
 }
