@@ -17,6 +17,7 @@ import com.example.food_ordering_mobile_app.utils.SharedPreferencesHelper;
 
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,13 +34,14 @@ public class ChatRepository {
         sharedPreferencesHelper = new SharedPreferencesHelper(context);
     }
 
-    public LiveData<Resource<Chat>> createChat(String id, String storeId) {
-        MutableLiveData<Resource<Chat>> result = new MutableLiveData<>();
+    public LiveData<Resource<String>> createChat(String id, String storeId) {
+        MutableLiveData<Resource<String>> result = new MutableLiveData<>();
         result.setValue(Resource.loading(null));
-
-        chatService.createChat(id, storeId).enqueue(new Callback<Chat>() {
+        Map<String, String> data = new HashMap<>();
+        data.put("storeId", storeId);
+        chatService.createChat(id, data).enqueue(new Callback<String>() {
             @Override
-            public void onResponse(Call<Chat> call, Response<Chat> response) {
+            public void onResponse(Call<String> call, Response<String> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Log.d("ChatRepository", "createChat: " + response.body());
                     result.setValue(Resource.success("Lay thong tin thành công!", response.body()));
@@ -56,7 +58,7 @@ public class ChatRepository {
             }
 
             @Override
-            public void onFailure(Call<Chat> call, Throwable t) {
+            public void onFailure(Call<String> call, Throwable t) {
                 result.setValue(Resource.error("Lỗi kết nối: " + t.getMessage(), null));
             }
         });

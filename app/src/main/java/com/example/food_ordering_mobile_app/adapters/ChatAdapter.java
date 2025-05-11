@@ -23,6 +23,8 @@ import com.example.food_ordering_mobile_app.R;
 import com.example.food_ordering_mobile_app.models.chat.Chat;
 import com.example.food_ordering_mobile_app.models.chat.Message;
 import com.example.food_ordering_mobile_app.models.rating.Rating;
+import com.example.food_ordering_mobile_app.models.user.User;
+import com.example.food_ordering_mobile_app.utils.SharedPreferencesHelper;
 import com.example.food_ordering_mobile_app.viewmodels.ChatViewModel;
 import com.example.food_ordering_mobile_app.viewmodels.RatingViewModel;
 
@@ -80,23 +82,45 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
                         }
                     });
         } else {
-            holder.tvUserName.setText(chat.getUsers().get(1).getName());
+            User savedUser = SharedPreferencesHelper.getInstance(context).getCurrentUser();
 
-            String userAvatarUrl = chat.getUsers().get(1).getAvatar() != null ? chat.getUsers().get(1).getAvatar().getUrl() : null;
-            Glide.with(context)
-                    .asBitmap()
-                    .load(userAvatarUrl)
-                    .override(60, 60)
-                    .centerCrop()
-                    .into(new BitmapImageViewTarget(holder.ivUserAvatar) {
-                        @Override
-                        protected void setResource(Bitmap resource) {
-                            RoundedBitmapDrawable roundedDrawable =
-                                    RoundedBitmapDrawableFactory.create(context.getResources(), resource);
-                            roundedDrawable.setCornerRadius(6);
-                            holder.ivUserAvatar.setImageDrawable(roundedDrawable);
-                        }
-                    });
+            if(savedUser.getId().equals(chat.getUsers().get(0).getId())) {
+                holder.tvUserName.setText(chat.getUsers().get(1).getName());
+
+                String userAvatarUrl = chat.getUsers().get(1).getAvatar() != null ? chat.getUsers().get(1).getAvatar().getUrl() : null;
+                Glide.with(context)
+                        .asBitmap()
+                        .load(userAvatarUrl)
+                        .override(60, 60)
+                        .centerCrop()
+                        .into(new BitmapImageViewTarget(holder.ivUserAvatar) {
+                            @Override
+                            protected void setResource(Bitmap resource) {
+                                RoundedBitmapDrawable roundedDrawable =
+                                        RoundedBitmapDrawableFactory.create(context.getResources(), resource);
+                                roundedDrawable.setCornerRadius(6);
+                                holder.ivUserAvatar.setImageDrawable(roundedDrawable);
+                            }
+                        });
+            } else {
+                holder.tvUserName.setText(chat.getUsers().get(0).getName());
+
+                String userAvatarUrl = chat.getUsers().get(0).getAvatar() != null ? chat.getUsers().get(0).getAvatar().getUrl() : null;
+                Glide.with(context)
+                        .asBitmap()
+                        .load(userAvatarUrl)
+                        .override(60, 60)
+                        .centerCrop()
+                        .into(new BitmapImageViewTarget(holder.ivUserAvatar) {
+                            @Override
+                            protected void setResource(Bitmap resource) {
+                                RoundedBitmapDrawable roundedDrawable =
+                                        RoundedBitmapDrawableFactory.create(context.getResources(), resource);
+                                roundedDrawable.setCornerRadius(6);
+                                holder.ivUserAvatar.setImageDrawable(roundedDrawable);
+                            }
+                        });
+            }
         }
 
         if (chat.getLatestMessage() != null && chat.getLatestMessage().getContent() != null && !chat.getLatestMessage().getContent().isEmpty()) {

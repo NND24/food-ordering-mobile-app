@@ -102,7 +102,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 .setMessage("Bạn có chắc chắn muốn xóa tin nhắn này không?")
                 .setPositiveButton("Có", (dialog, which) -> {
                     chatViewModel.deleteMessage(message.getId());
-                    SocketManager.deleteMessage(message.getChat());
+                    SocketManager.deleteMessage(message.getId());
                 })
                 .setNegativeButton("Không", null)
                 .show();

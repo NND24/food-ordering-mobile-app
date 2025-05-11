@@ -146,7 +146,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         // Send data to ViewModel
-        authViewModel.register(name, email, password, phonenumber, gender);
+        authViewModel.register(name, email, phonenumber, gender, password);
     }
 
     public void redirectToLoginPage(View view) {

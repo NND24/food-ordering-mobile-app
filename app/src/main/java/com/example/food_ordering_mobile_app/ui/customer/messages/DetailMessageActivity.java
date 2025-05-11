@@ -31,8 +31,10 @@ import com.example.food_ordering_mobile_app.models.Image;
 import com.example.food_ordering_mobile_app.models.chat.Chat;
 import com.example.food_ordering_mobile_app.models.chat.Message;
 import com.example.food_ordering_mobile_app.models.chat.MessageResponse;
+import com.example.food_ordering_mobile_app.models.user.User;
 import com.example.food_ordering_mobile_app.network.SocketManager;
 import com.example.food_ordering_mobile_app.utils.Resource;
+import com.example.food_ordering_mobile_app.utils.SharedPreferencesHelper;
 import com.example.food_ordering_mobile_app.viewmodels.ChatViewModel;
 import com.example.food_ordering_mobile_app.viewmodels.UploadViewModel;
 import com.google.gson.Gson;
@@ -58,6 +60,7 @@ public class DetailMessageActivity extends AppCompatActivity {
     private TextView tvUserName, tvTime;
     private String chatId;
     private static final int PICK_IMAGES_REQUEST = 1;
+    User savedUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +78,8 @@ public class DetailMessageActivity extends AppCompatActivity {
         sendImage = findViewById(R.id.sendImage);
 
         chatId = getIntent().getStringExtra("chatId") != null ? getIntent().getStringExtra("chatId") : "";
+
+        savedUser = SharedPreferencesHelper.getInstance(this).getCurrentUser();
 
         uploadViewModel = new ViewModelProvider(this).get(UploadViewModel.class);
         chatViewModel = new ViewModelProvider(this).get(ChatViewModel.class);
@@ -231,12 +236,21 @@ public class DetailMessageActivity extends AppCompatActivity {
                                     : null;
                             loadRoundedImage(avatarUrl, ivUserAvatar);
                         } else {
-                            tvUserName.setText(chat.getUsers().get(1).getName());
+                            if(savedUser.getId().equals(chat.getUsers().get(0).getId())) {
+                                tvUserName.setText(chat.getUsers().get(1).getName());
 
-                            String avatarUrl = chat.getUsers().get(1).getAvatar() != null
-                                    ? resource.getData().getChat().getUsers().get(1).getAvatar().getUrl()
-                                    : null;
-                            loadRoundedImage(avatarUrl, ivUserAvatar);
+                                String avatarUrl = chat.getUsers().get(1).getAvatar() != null
+                                        ? resource.getData().getChat().getUsers().get(1).getAvatar().getUrl()
+                                        : null;
+                                loadRoundedImage(avatarUrl, ivUserAvatar);
+                            } else {
+                                tvUserName.setText(chat.getUsers().get(0).getName());
+
+                                String avatarUrl = chat.getUsers().get(0).getAvatar() != null
+                                        ? resource.getData().getChat().getUsers().get(0).getAvatar().getUrl()
+                                        : null;
+                                loadRoundedImage(avatarUrl, ivUserAvatar);
+                            }
                         }
 
 //                        long timeDiff = System.currentTimeMillis() - resource.getData().getChat().getLatestMessage().getUpdatedAt().getTime();

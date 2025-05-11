@@ -21,8 +21,8 @@ import java.util.Map;
 public class ChatViewModel extends AndroidViewModel {
     private final ChatRepository chatRepository;
 
-    private final MutableLiveData<Resource<Chat>> createChatResponse = new MutableLiveData<>();
-    public LiveData<Resource<Chat>> getCreateChatResponse() {
+    private final MutableLiveData<Resource<String>> createChatResponse = new MutableLiveData<>();
+    public LiveData<Resource<String>> getCreateChatResponse() {
         return createChatResponse;
     }
     private final MutableLiveData<Resource<ApiResponse<Message>>> sendMessageResponse = new MutableLiveData<>();
@@ -52,10 +52,10 @@ public class ChatViewModel extends AndroidViewModel {
     }
 
     public void createChat(String id, String storeId) {
-        LiveData<Resource<Chat>> result = chatRepository.createChat(id, storeId);
-        result.observeForever(new Observer<Resource<Chat>>() {
+        LiveData<Resource<String>> result = chatRepository.createChat(id, storeId);
+        result.observeForever(new Observer<Resource<String>>() {
             @Override
-            public void onChanged(Resource<Chat> resource) {
+            public void onChanged(Resource<String> resource) {
                 createChatResponse.setValue(resource);
             }
         });

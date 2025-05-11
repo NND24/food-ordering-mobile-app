@@ -104,18 +104,17 @@ public class OrderDetailActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        chatViewModel.getCreateChatResponse().observe(this, new Observer<Resource<Chat>>() {
+        chatViewModel.getCreateChatResponse().observe(this, new Observer<Resource<String>>() {
             @Override
-            public void onChanged(Resource<Chat> resource) {
+            public void onChanged(Resource<String> resource) {
                 switch (resource.getStatus()) {
                     case LOADING:
                         swipeRefreshLayout.setRefreshing(true);
                         break;
                     case SUCCESS:
                         swipeRefreshLayout.setRefreshing(false);
-                        Chat chat = resource.getData();
                         Intent intent = new Intent(OrderDetailActivity.this, DetailMessageActivity.class);
-                        intent.putExtra("chatId", chat.getId());
+                        intent.putExtra("chatId", resource.getData());
                         startActivity(intent);
                         break;
                     case ERROR:
