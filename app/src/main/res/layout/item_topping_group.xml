@@ -18,7 +18,9 @@
             android:text="Them"
             android:textColor="@color/onPrimary"
             android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:maxLines="1"
+            android:ellipsize="end" />
 
 <!--        <TextView-->
 <!--            android:layout_width="wrap_content"-->

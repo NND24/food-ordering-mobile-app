@@ -3,13 +3,14 @@ package com.example.food_ordering_mobile_app.models.dish;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class FoodCategory implements Serializable {
     @SerializedName("_id")
     private String id;
     private String name;
     private String store;
-    private String dish;
+    private List<String> dishes;
 
     public String getId() {
         return id;
@@ -35,11 +36,11 @@ public class FoodCategory implements Serializable {
         this.store = store;
     }
 
-    public String getDish() {
-        return dish;
+    public List<String> getDishes() {
+        return dishes;
     }
 
-    public void setDish(String dish) {
-        this.dish = dish;
+    public void setDishes(List<String> dishes) {
+        this.dishes = dishes;
     }
 }

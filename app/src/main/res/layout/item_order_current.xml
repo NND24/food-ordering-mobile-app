@@ -59,25 +59,17 @@
                     android:layout_marginLeft="4dp"
                     android:textColor="@color/onSecondary"
                     android:textSize="16sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=" • "
-                    android:textColor="@color/primaryColor"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:id="@+id/tvAddress"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="123 Quoc Lo 14"
-                    android:textColor="@color/onSecondary"
-                    android:textSize="16sp"
-                    android:maxLines="1"
-                    android:ellipsize="end" />
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/tvAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="123 Quoc Lo 14"
+                android:textColor="@color/onSecondary"
+                android:textSize="16sp"
+                android:maxLines="1"
+                android:ellipsize="end" />
         </LinearLayout>
     </LinearLayout>
 

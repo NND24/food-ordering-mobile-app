@@ -9,6 +9,6 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 
 public interface FoodTypeService {
-    @GET("/api/v1/foodType")
+    @GET("/api/v1/foodType/")
     Call<List<FoodType>> getAllFoodTypes();
 }

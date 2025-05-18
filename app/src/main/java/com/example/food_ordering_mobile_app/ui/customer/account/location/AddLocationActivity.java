@@ -79,9 +79,9 @@ public class AddLocationActivity extends AppCompatActivity {
 
         btnSaveLocation.setOnClickListener(v -> handleAddLocation());
 
-        locationViewModel.getAddLocationResponse().observe(this, new Observer<Resource<String>>() {
+        locationViewModel.getAddLocationResponse().observe(this, new Observer<Resource<Location>>() {
             @Override
-            public void onChanged(Resource<String> resource) {
+            public void onChanged(Resource<Location> resource) {
                 switch (resource.getStatus()) {
                     case LOADING:
                         break;

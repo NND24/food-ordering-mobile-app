@@ -2,6 +2,7 @@ package com.example.food_ordering_mobile_app.ui.customer.home;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -214,10 +215,12 @@ public class HomeFragment extends Fragment {
                         foodTypes.addAll(resource.getData());
                         foodTypeAdapter.notifyDataSetChanged();
 
+                        Log.d("HomeFragment", "getAllFoodTypesResponse: " + resource);
                         SharedPreferencesHelper.getInstance(requireContext()).saveFoodTypes(resource.getData());
                         break;
                     case ERROR:
                         swipeRefreshLayout.setRefreshing(false);
+                        Log.d("HomeFragment", "getAllFoodTypesResponse error: " + resource);
                         break;
                 }
             }

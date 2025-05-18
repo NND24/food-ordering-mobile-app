@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.SpannableStringBuilder;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -172,9 +173,11 @@ public class StoreActivity extends AppCompatActivity {
                     case SUCCESS:
                         swipeRefreshLayout.setRefreshing(false);
                         setupUserCart();
+                        Log.e("StoreActivity", "getUpdateCartResponse " + resource.getMessage());
                         break;
                     case ERROR:
                         swipeRefreshLayout.setRefreshing(false);
+                        Log.e("StoreActivity", "getUpdateCartResponse error " + resource.getMessage());
                         break;
                 }
             }

@@ -76,7 +76,7 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.ViewHolder> {
 
     private void updateCart(Dish dish, int quantity) {
         Map<String, Object> data = new HashMap<>();
-        data.put("storeId", dish.getStore());
+        data.put("storeId", dish.getStore().getId());
         data.put("dishId", dish.getId());
         data.put("quantity", quantity);
         cartViewModel.updateCart(data);

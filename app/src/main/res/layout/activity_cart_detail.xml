@@ -112,7 +112,9 @@
                         android:text="Phở Nam Định"
                         android:textColor="@color/onPrimary"
                         android:textSize="24dp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:maxLines="1"
+                        android:ellipsize="end" />
 
                     <TextView
                         android:id="@+id/tvStoreDescription"
@@ -120,7 +122,9 @@
                         android:layout_height="wrap_content"
                         android:text="Khoảng cách đến chỗ bạn "
                         android:textColor="@color/secondaryColor"
-                        android:textSize="16dp" />
+                        android:textSize="16dp"
+                        android:maxLines="1"
+                        android:ellipsize="end" />
 
                 </LinearLayout>
             </LinearLayout>

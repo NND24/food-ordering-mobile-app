@@ -177,9 +177,9 @@ public class LocationActivity extends AppCompatActivity {
             }
         });
 
-        locationViewModel.getUpdateLocationResponse().observe(this, new Observer<Resource<String>>() {
+        locationViewModel.getUpdateLocationResponse().observe(this, new Observer<Resource<Location>>() {
             @Override
-            public void onChanged(Resource<String> resource) {
+            public void onChanged(Resource<Location> resource) {
                 switch (resource.getStatus()) {
                     case LOADING:
                         swipeRefreshLayout.setRefreshing(true);
@@ -195,9 +195,9 @@ public class LocationActivity extends AppCompatActivity {
             }
         });
 
-        locationViewModel.getDeleteLocationResponse().observe(this, new Observer<Resource<String>>() {
+        locationViewModel.getDeleteLocationResponse().observe(this, new Observer<Resource<Location>>() {
             @Override
-            public void onChanged(Resource<String> resource) {
+            public void onChanged(Resource<Location> resource) {
                 switch (resource.getStatus()) {
                     case LOADING:
                         swipeRefreshLayout.setRefreshing(true);

@@ -30,6 +30,7 @@ public class FoodTypeRepository {
     }
 
     public LiveData<Resource<List<FoodType>>> getAllFoodTypes() {
+        Log.d("FoodTypeRepository", "getAllFoodTypes test");
         MutableLiveData<Resource<List<FoodType>>> result = new MutableLiveData<>();
         result.setValue(Resource.loading(null));
 
@@ -45,6 +46,7 @@ public class FoodTypeRepository {
                         JSONObject jsonObject = new JSONObject(errorMessage);
                         String message = jsonObject.getString("message");
                         result.setValue(Resource.error(message, null));
+                        Log.d("FoodTypeRepository", "getAllFoodTypes error: " + errorMessage);
                     } catch (Exception e) {
                         result.setValue(Resource.error("Lỗi không xác định!", null));
                     }
@@ -53,6 +55,7 @@ public class FoodTypeRepository {
 
             @Override
             public void onFailure(Call<List<FoodType>> call, Throwable t) {
+                Log.d("FoodTypeRepository", "getAllFoodTypes error: " + t.getMessage());
                 result.setValue(Resource.error("Lỗi kết nối: " + t.getMessage(), null));
             }
         });

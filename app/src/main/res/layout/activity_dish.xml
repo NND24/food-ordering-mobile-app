@@ -166,21 +166,21 @@
 
 <!--                        </LinearLayout>-->
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@color/primaryBorderColor" />
+<!--                        <TextView-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="1dp"-->
+<!--                            android:background="@color/primaryBorderColor" />-->
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="6dp"
-                            android:onClick="openNoteModel"
-                            android:paddingHorizontal="10dp"
-                            android:paddingVertical="10dp"
-                            android:text="Viec thực hiện yêu cầu còn phụ thuộc vào khả năng của quán"
-                            android:textColor="@color/onSecondary"
-                            android:textSize="14sp" />
+<!--                        <TextView-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginLeft="6dp"-->
+<!--                            android:onClick="openNoteModel"-->
+<!--                            android:paddingHorizontal="10dp"-->
+<!--                            android:paddingVertical="10dp"-->
+<!--                            android:text="Viec thực hiện yêu cầu còn phụ thuộc vào khả năng của quán"-->
+<!--                            android:textColor="@color/onSecondary"-->
+<!--                            android:textSize="14sp" />-->
 
                         <TextView
                             android:layout_width="match_parent"

@@ -99,7 +99,7 @@ public class AddRatingActivity extends AppCompatActivity {
                         Toast.makeText(AddRatingActivity.this, "Đánh giá đã được gửi!", Toast.LENGTH_SHORT).show();
                         break;
                     case ERROR:
-                        Toast.makeText(AddRatingActivity.this, "Lỗi khi upload ảnh", Toast.LENGTH_SHORT).show();
+
                         break;
                 }
             }
@@ -274,7 +274,6 @@ public class AddRatingActivity extends AppCompatActivity {
                             submitRating(uploadedImageUrls);
                             break;
                         case ERROR:
-                            Toast.makeText(AddRatingActivity.this, "Lỗi khi upload ảnh", Toast.LENGTH_SHORT).show();
                             break;
                         default:
                             break;

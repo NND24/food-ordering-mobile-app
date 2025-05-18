@@ -3,6 +3,7 @@ package com.example.food_ordering_mobile_app.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,9 +70,10 @@ public class DishBigAdapter extends RecyclerView.Adapter<DishBigAdapter.ViewHold
 
     private void updateCart(Dish dish, int quantity) {
         Map<String, Object> data = new HashMap<>();
-        data.put("storeId", dish.getStore());
+        data.put("storeId", dish.getStore().getId());
         data.put("dishId", dish.getId());
         data.put("quantity", quantity);
+        Log.d("DishBigAdapter", "updateCart: " +data);
         cartViewModel.updateCart(data);
     }
 

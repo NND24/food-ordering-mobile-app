@@ -49,7 +49,7 @@ public class OrderDetailActivity extends AppCompatActivity {
     private RecyclerView orderSummaryRecyclerView;
     private OrderSummaryAdapter orderSummaryAdapter;
     private List<OrderItem> orderItemList;
-    private TextView tvStoreName, tvStoreDescription, tvProvisionalTotal, tvCustomerName, tvCustomerPhonenumber, tvCustomerAddress, tvOrderStatus, textView5, tvShipperName;
+    private TextView tvStoreName, tvStoreDescription, tvProvisionalTotal, tvCustomerName, tvCustomerPhonenumber, tvCustomerAddress, tvOrderStatus, textView5, tvShipperName, tvVehicleName, tvVehicleNumber;
     private ImageView ivStoreAvatar, ivShipperAvatar, ivStoreProgress, ivShipperProgress, ivDoneProgress;
     private String orderId;
     private Button btnTrackOrder;
@@ -88,6 +88,8 @@ public class OrderDetailActivity extends AppCompatActivity {
         btnCallWithShipper = findViewById(R.id.btnCallWithShipper);
         btnChatWithShipper = findViewById(R.id.btnChatWithShipper);
         btnChatWithStore = findViewById(R.id.btnChatWithStore);
+        tvVehicleName = findViewById(R.id.tvVehicleName);
+        tvVehicleNumber = findViewById(R.id.tvVehicleNumber);
 
         orderId = getIntent().getStringExtra("orderId");
 
@@ -221,6 +223,8 @@ public class OrderDetailActivity extends AppCompatActivity {
                             shipper_info_container.setVisibility(View.VISIBLE);
 
                             tvShipperName.setText(order.getShipper().getName());
+                            tvVehicleName.setText(order.getShipper().getVehicle().getName());
+                            tvVehicleNumber.setText(order.getShipper().getVehicle().getNumber());
 
                             btnCallWithShipper.setOnClickListener(v -> {
                                 String phoneNumber = order.getShipper().getPhonenumber();

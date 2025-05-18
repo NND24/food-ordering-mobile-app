@@ -29,13 +29,13 @@ public class LocationRepository {
         sharedPreferencesHelper = new SharedPreferencesHelper(context);
     }
 
-    public LiveData<Resource<String>> addLocation(Location location) {
-        MutableLiveData<Resource<String>> result = new MutableLiveData<>();
+    public LiveData<Resource<Location>> addLocation(Location location) {
+        MutableLiveData<Resource<Location>> result = new MutableLiveData<>();
         result.setValue(Resource.loading(null));
 
-        locationService.addLocation(location).enqueue(new Callback<String>() {
+        locationService.addLocation(location).enqueue(new Callback<Location>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
+            public void onResponse(Call<Location> call, Response<Location> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Log.d("LocationRepository", "addLocation: " + response.body());
                     result.setValue(Resource.success("Lay thong tin thành công!", response.body()));
@@ -59,7 +59,7 @@ public class LocationRepository {
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(Call<Location> call, Throwable t) {
                 Log.d("LocationRepository", "addLocation Error: " + t.getMessage());
                 result.setValue(Resource.error("Lỗi kết nối: " + t.getMessage(), null));
             }
@@ -129,13 +129,13 @@ public class LocationRepository {
         return result;
     }
 
-    public LiveData<Resource<String>> updateLocation(String id, Location location) {
-        MutableLiveData<Resource<String>> result = new MutableLiveData<>();
+    public LiveData<Resource<Location>> updateLocation(String id, Location location) {
+        MutableLiveData<Resource<Location>> result = new MutableLiveData<>();
         result.setValue(Resource.loading(null));
 
-        locationService.updateLocation(id, location).enqueue(new Callback<String>() {
+        locationService.updateLocation(id, location).enqueue(new Callback<Location>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
+            public void onResponse(Call<Location> call, Response<Location> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Log.d("LocationRepository", "getUserLocations: " + response.body());
                     result.setValue(Resource.success("Lay thong tin thành công!", response.body()));
@@ -152,7 +152,7 @@ public class LocationRepository {
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(Call<Location> call, Throwable t) {
                 result.setValue(Resource.error("Lỗi kết nối: " + t.getMessage(), null));
             }
         });
@@ -160,13 +160,13 @@ public class LocationRepository {
         return result;
     }
 
-    public LiveData<Resource<String>> deleteLocation(String id) {
-        MutableLiveData<Resource<String>> result = new MutableLiveData<>();
+    public LiveData<Resource<Location>> deleteLocation(String id) {
+        MutableLiveData<Resource<Location>> result = new MutableLiveData<>();
         result.setValue(Resource.loading(null));
 
-        locationService.deleteLocation(id).enqueue(new Callback<String>() {
+        locationService.deleteLocation(id).enqueue(new Callback<Location>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
+            public void onResponse(Call<Location> call, Response<Location> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Log.d("LocationRepository", "getUserLocations: " + response.body());
                     result.setValue(Resource.success("Lay thong tin thành công!", response.body()));
@@ -183,7 +183,7 @@ public class LocationRepository {
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(Call<Location> call, Throwable t) {
                 result.setValue(Resource.error("Lỗi kết nối: " + t.getMessage(), null));
             }
         });

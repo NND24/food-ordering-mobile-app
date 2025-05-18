@@ -183,7 +183,9 @@
                         android:layout_height="wrap_content"
                         android:text="Western food"
                         android:textColor="@color/onSecondary"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        android:maxLines="1"
+                        android:ellipsize="end" />
                 </LinearLayout>
             </LinearLayout>
 
